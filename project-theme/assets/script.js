@@ -10,7 +10,7 @@ const i18n = {
   sending: themeConfig.sending || "Надсилаємо заявку…",
   sendFailed: themeConfig.sendFailed || "Не вдалося надіслати заявку. Спробуйте ще раз.",
   uncertain: themeConfig.uncertain || "Немає підтвердження від сервера. Дані залишилися у формі — повторіть надсилання.",
-  success: themeConfig.success || "Дякуємо! Заявку №%s збережено. Наш менеджер зв’яжеться з вами.",
+  success: themeConfig.success || "Ми отримали ваш запит. Менеджер відділу продажу ЖК «Затишний Бориспіль» зв’яжеться з вами найближчим часом.",
 };
 
 const header = document.querySelector("[data-header]");
@@ -28,6 +28,7 @@ const leadInterest = document.querySelector("[data-lead-interest]");
 const leadContextOutput = document.querySelector("[data-lead-context-output]");
 const leadContextInput = document.querySelector("[data-lead-context-input]");
 const leadApartmentInput = document.querySelector("[data-lead-apartment-input]");
+const leadFormFields = document.querySelector(".lead-form-fields");
 const leadSuccess = document.querySelector("[data-lead-success]");
 const leadSuccessMessage = document.querySelector("[data-lead-success-message]");
 const leadSubmit = document.querySelector("[data-lead-submit]");
@@ -47,6 +48,8 @@ let contactReturnTarget = null;
 let leadReturnTarget = null;
 let previousBodyPaddingRight = "";
 let leadSuccessTimer = 0;
+let leadCloseTimer = 0;
+let leadResetTimer = 0;
 let pendingLead = null;
 
 const updateHeader = () => header?.classList.toggle("is-scrolled", window.scrollY > 12);
@@ -203,7 +206,13 @@ const resetLeadSuccessState = () => {
     window.clearTimeout(leadSuccessTimer);
     leadSuccessTimer = 0;
   }
+  if (leadResetTimer) {
+    window.clearTimeout(leadResetTimer);
+    leadResetTimer = 0;
+  }
   form?.classList.remove("is-success");
+  leadFormFields?.removeAttribute("inert");
+  leadFormFields?.removeAttribute("aria-hidden");
   if (leadSuccess) leadSuccess.hidden = true;
   if (leadSuccessMessage) leadSuccessMessage.textContent = "";
   if (status) {
@@ -215,6 +224,11 @@ const resetLeadSuccessState = () => {
 const openLeadDialog = (trigger) => {
   if (!leadDialog || typeof leadDialog.showModal !== "function" || leadDialog.open) return;
 
+  if (leadCloseTimer) {
+    window.clearTimeout(leadCloseTimer);
+    leadCloseTimer = 0;
+  }
+  leadDialog.classList.remove("is-visible", "is-closing");
   resetLeadSuccessState();
 
   if (trigger?.closest("[data-contact-popover]")) {
@@ -237,11 +251,25 @@ const openLeadDialog = (trigger) => {
   setMenuState(false);
   setModalScrollState(true);
   leadDialog.showModal();
-  requestAnimationFrame(() => leadClose?.focus({ preventScroll: true }));
+  requestAnimationFrame(() => {
+    leadDialog.classList.add("is-visible");
+    leadClose?.focus({ preventScroll: true });
+  });
 };
 
 const closeLeadDialog = () => {
-  if (leadDialog?.open) leadDialog.close();
+  if (!leadDialog?.open || leadDialog.classList.contains("is-closing")) return;
+  if (reducedMotionQuery.matches) {
+    leadDialog.close();
+    return;
+  }
+
+  leadDialog.classList.remove("is-visible");
+  leadDialog.classList.add("is-closing");
+  leadCloseTimer = window.setTimeout(() => {
+    leadCloseTimer = 0;
+    if (leadDialog.open) leadDialog.close();
+  }, 360);
 };
 
 leadOpeners.forEach((button) => {
@@ -250,6 +278,10 @@ leadOpeners.forEach((button) => {
   button.addEventListener("click", () => openLeadDialog(button));
 });
 leadClose?.addEventListener("click", closeLeadDialog);
+leadDialog?.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeLeadDialog();
+});
 
 let backdropPointerStarted = false;
 leadDialog?.addEventListener("pointerdown", (event) => {
@@ -261,8 +293,16 @@ leadDialog?.addEventListener("click", (event) => {
   if (shouldClose) closeLeadDialog();
 });
 leadDialog?.addEventListener("close", () => {
+  if (leadCloseTimer) {
+    window.clearTimeout(leadCloseTimer);
+    leadCloseTimer = 0;
+  }
+  leadDialog.classList.remove("is-visible", "is-closing");
   setModalScrollState(false);
-  if (form?.classList.contains("is-success")) resetLeadSuccessState();
+  if (form?.classList.contains("is-success")) {
+    form.reset();
+    resetLeadSuccessState();
+  }
   if (leadReturnTarget?.isConnected) {
     requestAnimationFrame(() => leadReturnTarget?.focus({ preventScroll: true }));
   }
@@ -491,6 +531,7 @@ form?.addEventListener("submit", async (event) => {
 
   const controls = [...form.querySelectorAll("input, select, textarea, button[type='submit']")];
   form.dataset.submitting = "true";
+  form.setAttribute("aria-busy", "true");
   controls.forEach((control) => { control.disabled = true; });
   if (status) {
     status.textContent = i18n.sending;
@@ -521,16 +562,24 @@ form?.addEventListener("submit", async (event) => {
     }
 
     if (leadSuccessMessage) {
-      leadSuccessMessage.textContent = i18n.success.replace("%s", String(result.data.lead_id));
+      leadSuccessMessage.textContent = result?.data?.message || i18n.success;
     }
-    form.reset();
     pendingLead = null;
     if (status) {
       status.textContent = "";
       status.className = "form-status";
     }
-    form.classList.add("is-success");
     if (leadSuccess) leadSuccess.hidden = false;
+    leadFormFields?.setAttribute("inert", "");
+    leadFormFields?.setAttribute("aria-hidden", "true");
+    requestAnimationFrame(() => {
+      form.classList.add("is-success");
+      leadSuccess?.focus({ preventScroll: true });
+    });
+    leadResetTimer = window.setTimeout(() => {
+      leadResetTimer = 0;
+      form.reset();
+    }, reducedMotionQuery.matches ? 0 : 300);
     leadSuccessTimer = window.setTimeout(() => {
       leadSuccessTimer = 0;
       closeLeadDialog();
@@ -544,6 +593,7 @@ form?.addEventListener("submit", async (event) => {
   } finally {
     window.clearTimeout(timeout);
     form.dataset.submitting = "false";
+    form.removeAttribute("aria-busy");
     controls.forEach((control) => { control.disabled = false; });
     if (leadSubmit) leadSubmit.disabled = false;
   }

@@ -431,12 +431,7 @@ function project_theme_submit_lead(): void {
 
 	wp_send_json_success(
 		array(
-			'lead_id' => (int) $result['lead_id'],
-			'message' => sprintf(
-				/* translators: %d: saved lead ID. */
-				__( 'Дякуємо! Заявку №%d збережено. Наш менеджер зв’яжеться з вами.', 'project-theme' ),
-				(int) $result['lead_id']
-			),
+			'message' => __( 'Ми отримали ваш запит. Менеджер відділу продажу ЖК «Затишний Бориспіль» зв’яжеться з вами найближчим часом.', 'project-theme' ),
 		)
 	);
 }
