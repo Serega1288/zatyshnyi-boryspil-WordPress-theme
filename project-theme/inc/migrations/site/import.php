@@ -173,6 +173,17 @@ function project_theme_seed_menu( string $name, array $items ): int {
 	return (int) $menu->term_id;
 }
 
+/**
+ * Add disabled notification defaults without overwriting saved credentials.
+ */
+function project_theme_seed_notification_options(): void {
+	add_option( 'zb_notify_email_enabled', 0, '', false );
+	add_option( 'zb_notify_email', sanitize_email( (string) get_option( 'admin_email', '' ) ), '', false );
+	add_option( 'zb_notify_telegram_enabled', 0, '', false );
+	add_option( 'zb_notify_chat', '', '', false );
+	add_option( 'zb_notify_topic', 0, '', false );
+}
+
 $home_id = project_theme_home_page();
 update_post_meta( $home_id, '_wp_page_template', 'page-constructor.php' );
 update_option( 'show_on_front', 'page' );
@@ -208,9 +219,21 @@ $locations['header-menu'] = $header_menu_id;
 $locations['footer-menu'] = $footer_menu_id;
 set_theme_mod( 'nav_menu_locations', $locations );
 
-if ( (int) get_option( 'zb_seed_version', 0 ) >= 1 ) {
+project_theme_seed_notification_options();
+
+$seed_version = (int) get_option( 'zb_seed_version', 0 );
+if ( $seed_version >= 1 ) {
+	if ( $seed_version < 2 ) {
+		$legacy_note = 'Демонстраційна форма: дані нікуди не надсилаються.';
+		$current_note = get_field( 'lead_form_note', 'option' );
+		if ( ! is_string( $current_note ) || '' === trim( $current_note ) || $legacy_note === trim( $current_note ) ) {
+			update_field( 'lead_form_note', 'Менеджер зв’яжеться з вами за вказаним номером телефону.', 'option' );
+		}
+		update_option( 'zb_seed_version', 2, false );
+	}
+
 	flush_rewrite_rules();
-	WP_CLI::success( 'Existing editable content preserved; page settings and menus verified.' );
+	WP_CLI::success( 'Existing editable content preserved; lead notifications, page settings and menus verified.' );
 	return;
 }
 
@@ -263,7 +286,7 @@ $options = array(
 	'lead_description'     => 'Залиште контакти — менеджер допоможе з плануванням, наявністю та умовами придбання.',
 	'lead_context_label'   => 'Ваш запит',
 	'lead_default_context' => 'Підбір квартири',
-	'lead_form_note'       => 'Демонстраційна форма: дані нікуди не надсилаються.',
+	'lead_form_note'       => 'Менеджер зв’яжеться з вами за вказаним номером телефону.',
 );
 foreach ( $options as $field_name => $value ) {
 	update_field( $field_name, $value, 'option' );
@@ -441,7 +464,7 @@ $sections = array(
 
 update_field( 'field_zb_constructor', $sections, $home_id );
 update_post_meta( $home_id, '_zb_content_import_version', 1 );
-update_option( 'zb_seed_version', 1 );
+update_option( 'zb_seed_version', 2, false );
 flush_rewrite_rules();
 
 WP_CLI::success( 'Homepage, media, editable ACF content, menus and reading settings imported.' );

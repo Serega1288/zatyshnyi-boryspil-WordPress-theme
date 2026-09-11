@@ -96,7 +96,7 @@ $lead_title           = is_string( $lead_title ) && '' !== trim( $lead_title ) ?
 $lead_description     = is_string( $lead_description ) && '' !== trim( $lead_description ) ? $lead_description : __( 'Залиште контакти — менеджер допоможе з плануванням, наявністю та умовами придбання.', 'project-theme' );
 $lead_context_label   = is_string( $lead_context_label ) && '' !== trim( $lead_context_label ) ? $lead_context_label : __( 'Ваш запит', 'project-theme' );
 $lead_default_context = is_string( $lead_default_context ) && '' !== trim( $lead_default_context ) ? $lead_default_context : __( 'Підбір квартири', 'project-theme' );
-$lead_form_note       = is_string( $lead_form_note ) && '' !== trim( $lead_form_note ) ? $lead_form_note : __( 'Демонстраційна форма: дані нікуди не надсилаються.', 'project-theme' );
+$lead_form_note       = is_string( $lead_form_note ) && '' !== trim( $lead_form_note ) ? $lead_form_note : __( 'Менеджер зв’яжеться з вами за вказаним номером телефону.', 'project-theme' );
 
 if ( ! is_array( $footer_developer_link ) ) {
 	$footer_developer_link = array(
@@ -193,12 +193,13 @@ $footer_developer_target = isset( $footer_developer_link['target'] ) && '_blank'
 					<br /><?php echo esc_html( $sales_address ); ?>
 				</p>
 			</div>
-			<form class="contact-form lead-form" data-form>
-				<div><label for="lead-name"><?php esc_html_e( 'Ваше ім’я', 'project-theme' ); ?></label><input id="lead-name" name="name" type="text" autocomplete="name" placeholder="<?php echo esc_attr__( 'Як до вас звертатися', 'project-theme' ); ?>" required /></div>
-				<div><label for="lead-phone"><?php esc_html_e( 'Номер телефону', 'project-theme' ); ?></label><input id="lead-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+380" required /></div>
-				<div>
+			<form class="contact-form lead-form" method="post" data-form data-lead-form>
+				<div class="form-honeypot" aria-hidden="true"><label for="lead-website">Website</label><input id="lead-website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+				<div><label for="lead-name"><?php esc_html_e( 'Ваше ім’я', 'project-theme' ); ?></label><input id="lead-name" name="name" type="text" maxlength="100" autocomplete="name" placeholder="<?php echo esc_attr__( 'Як до вас звертатися', 'project-theme' ); ?>" required /></div>
+				<div><label for="lead-phone"><?php esc_html_e( 'Номер телефону', 'project-theme' ); ?></label><input id="lead-phone" name="phone" type="tel" maxlength="40" inputmode="tel" autocomplete="tel" placeholder="+380" required /></div>
+				<div class="form-field--interest">
 					<label for="lead-interest"><?php esc_html_e( 'Що вас цікавить?', 'project-theme' ); ?></label>
-					<select id="lead-interest" name="interest" data-lead-interest>
+					<select id="lead-interest" name="interest" data-lead-interest required>
 						<option><?php esc_html_e( 'Квартира', 'project-theme' ); ?></option>
 						<option><?php esc_html_e( 'Паркінг', 'project-theme' ); ?></option>
 						<option><?php esc_html_e( 'Комора', 'project-theme' ); ?></option>
@@ -208,12 +209,18 @@ $footer_developer_target = isset( $footer_developer_link['target'] ) && '_blank'
 						<option><?php esc_html_e( 'Питання про комплекс', 'project-theme' ); ?></option>
 					</select>
 				</div>
-				<div class="form-field--wide"><label for="lead-message"><?php esc_html_e( 'Коментар (необов’язково)', 'project-theme' ); ?></label><textarea id="lead-message" name="message" rows="4" maxlength="1000" placeholder="<?php echo esc_attr__( 'Напишіть ваше запитання або побажання', 'project-theme' ); ?>"></textarea></div>
+				<div class="form-field--wide"><label for="lead-message"><?php esc_html_e( 'Коментар (необов’язково)', 'project-theme' ); ?></label><textarea id="lead-message" name="message" rows="4" maxlength="2000" placeholder="<?php echo esc_attr__( 'Напишіть ваше запитання або побажання', 'project-theme' ); ?>"></textarea></div>
 				<input type="hidden" name="request_context" value="<?php echo esc_attr( $lead_default_context ); ?>" data-lead-context-input />
 				<input type="hidden" name="apartment_type" value="" data-lead-apartment-input />
-				<button class="button button--clay" type="submit"><?php esc_html_e( 'Отримати консультацію', 'project-theme' ); ?></button>
+				<button class="button button--clay" type="submit" data-lead-submit><?php esc_html_e( 'Отримати консультацію', 'project-theme' ); ?></button>
 				<p class="form-note"><?php echo esc_html( $lead_form_note ); ?></p>
 				<p class="form-status" role="status" aria-live="polite" data-status></p>
+				<div class="lead-success" role="status" aria-live="polite" data-lead-success hidden>
+					<span class="lead-success-icon" aria-hidden="true">✓</span>
+					<h3><?php esc_html_e( 'Заявку прийнято!', 'project-theme' ); ?></h3>
+					<p data-lead-success-message></p>
+					<small><?php esc_html_e( 'Вікно автоматично закриється через 8 секунд.', 'project-theme' ); ?></small>
+				</div>
 			</form>
 		</div>
 	</dialog>

@@ -213,12 +213,24 @@ p { color: var(--muted); }
 .contact-copy h2 { color: #fff; }
 .contact-copy p:not(.eyebrow) { margin: 24px 0 0; color: rgba(255,255,255,.7); }
 .contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 24px; border-radius: 30px; background: #fff; }
-.contact-form > div:nth-child(3), .contact-form > .form-field--wide, .contact-form button, .form-note, .form-status { grid-column: 1 / -1; }
+.contact-form > .form-field--interest, .contact-form > .form-field--wide, .contact-form button, .form-note, .form-status, .lead-success { grid-column: 1 / -1; }
 .contact-form label { display: block; margin: 0 0 7px 3px; color: var(--green-900); font-size: .74rem; font-weight: 900; }
 .contact-form input, .contact-form select, .contact-form textarea { width: 100%; min-height: 54px; padding: 12px 15px; border: 1px solid var(--line); border-radius: 15px; color: var(--ink); background: var(--cream); }
 .contact-form textarea { min-height: 112px; resize: vertical; line-height: 1.45; }
 .form-note, .form-status { margin: 0; font-size: .73rem; text-align: center; }
 .form-status { color: var(--green-700); font-weight: 800; }
+.form-status:empty { display: none; }
+.form-status.is-progress { color: var(--clay-800); }
+.form-status.is-error { color: #a12d26; }
+.form-honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+.contact-form button:disabled { cursor: wait; opacity: .64; transform: none; }
+.lead-form.is-success > :not(.lead-success) { display: none; }
+.lead-success { display: grid; min-height: 390px; place-items: center; align-content: center; gap: 16px; padding: 30px; color: var(--green-900); text-align: center; }
+.lead-success[hidden] { display: none; }
+.lead-success-icon { display: grid; width: 76px; height: 76px; place-items: center; border-radius: 50%; color: #fff; background: var(--green-700); font-size: 2rem; font-weight: 900; box-shadow: 0 14px 32px rgba(22,61,41,.2); }
+.lead-success h3 { margin: 4px 0 0; color: var(--green-950); font-size: clamp(1.65rem, 3vw, 2.2rem); }
+.lead-success p { max-width: 440px; margin: 0; color: var(--ink); line-height: 1.55; }
+.lead-success small { color: var(--muted); }
 
 .footer { padding: 28px 0 24px; background: var(--cream); }
 .footer-shell { position: relative; overflow: hidden; border-radius: 42px; color: #fff; background: var(--green-950); box-shadow: 0 24px 60px rgba(14,47,30,.16); }

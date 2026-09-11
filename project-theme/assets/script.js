@@ -1,12 +1,16 @@
 document.documentElement.classList.add("js");
 
+const themeConfig = window.zatyshnyiTheme || {};
 const i18n = {
-  openMenu: window.zatyshnyiTheme?.openMenu || "Відкрити меню",
-  closeMenu: window.zatyshnyiTheme?.closeMenu || "Закрити меню",
-  carousel: window.zatyshnyiTheme?.carousel || "карусель",
-  defaultInterest: window.zatyshnyiTheme?.defaultInterest || "Квартира",
-  defaultContext: window.zatyshnyiTheme?.defaultContext || "Підбір квартири",
-  demoStatus: window.zatyshnyiTheme?.demoStatus || "Форму заповнено. Підключіть обробник заявок перед публікацією.",
+  openMenu: themeConfig.openMenu || "Відкрити меню",
+  closeMenu: themeConfig.closeMenu || "Закрити меню",
+  carousel: themeConfig.carousel || "карусель",
+  defaultInterest: themeConfig.defaultInterest || "Квартира",
+  defaultContext: themeConfig.defaultContext || "Підбір квартири",
+  sending: themeConfig.sending || "Надсилаємо заявку…",
+  sendFailed: themeConfig.sendFailed || "Не вдалося надіслати заявку. Спробуйте ще раз.",
+  uncertain: themeConfig.uncertain || "Немає підтвердження від сервера. Дані залишилися у формі — повторіть надсилання.",
+  success: themeConfig.success || "Дякуємо! Заявку №%s збережено. Наш менеджер зв’яжеться з вами.",
 };
 
 const header = document.querySelector("[data-header]");
@@ -24,6 +28,9 @@ const leadInterest = document.querySelector("[data-lead-interest]");
 const leadContextOutput = document.querySelector("[data-lead-context-output]");
 const leadContextInput = document.querySelector("[data-lead-context-input]");
 const leadApartmentInput = document.querySelector("[data-lead-apartment-input]");
+const leadSuccess = document.querySelector("[data-lead-success]");
+const leadSuccessMessage = document.querySelector("[data-lead-success-message]");
+const leadSubmit = document.querySelector("[data-lead-submit]");
 const mobileMenuQuery = window.matchMedia("(max-width: 900px)");
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const backToTop = document.querySelector("[data-back-to-top]");
@@ -39,6 +46,8 @@ const navigationSections = navigationLinks
 let contactReturnTarget = null;
 let leadReturnTarget = null;
 let previousBodyPaddingRight = "";
+let leadSuccessTimer = 0;
+let pendingLead = null;
 
 const updateHeader = () => header?.classList.toggle("is-scrolled", window.scrollY > 12);
 updateHeader();
@@ -189,8 +198,24 @@ const setModalScrollState = (open) => {
   }
 };
 
+const resetLeadSuccessState = () => {
+  if (leadSuccessTimer) {
+    window.clearTimeout(leadSuccessTimer);
+    leadSuccessTimer = 0;
+  }
+  form?.classList.remove("is-success");
+  if (leadSuccess) leadSuccess.hidden = true;
+  if (leadSuccessMessage) leadSuccessMessage.textContent = "";
+  if (status) {
+    status.textContent = "";
+    status.className = "form-status";
+  }
+};
+
 const openLeadDialog = (trigger) => {
   if (!leadDialog || typeof leadDialog.showModal !== "function" || leadDialog.open) return;
+
+  resetLeadSuccessState();
 
   if (trigger?.closest("[data-contact-popover]")) {
     leadReturnTarget = contactButtons.find((button) => !button.closest("[data-menu]")) || menuButton;
@@ -237,6 +262,7 @@ leadDialog?.addEventListener("click", (event) => {
 });
 leadDialog?.addEventListener("close", () => {
   setModalScrollState(false);
+  if (form?.classList.contains("is-success")) resetLeadSuccessState();
   if (leadReturnTarget?.isConnected) {
     requestAnimationFrame(() => leadReturnTarget?.focus({ preventScroll: true }));
   }
@@ -431,8 +457,94 @@ document.querySelectorAll("[data-slider-prev], [data-slider-next]").forEach((but
 
 window.addEventListener("resize", () => sliders.forEach(updateSliderControls));
 
-form?.addEventListener("submit", (event) => {
+const createRequestId = () => {
+  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (character) => {
+    const random = Math.floor(Math.random() * 16);
+    const value = character === "x" ? random : (random & 0x3) | 0x8;
+    return value.toString(16);
+  });
+};
+
+form?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  if (!form.checkValidity()) return form.reportValidity();
-  if (status) status.textContent = i18n.demoStatus;
+  if (form.dataset.submitting === "true") return;
+  if (!form.reportValidity()) return;
+
+  const data = new FormData(form);
+  const payload = {
+    name: data.get("name"),
+    phone: data.get("phone"),
+    interest: data.get("interest"),
+    message: data.get("message"),
+    request_context: data.get("request_context"),
+    apartment_type: data.get("apartment_type"),
+    website: data.get("website"),
+    source_url: window.location.href,
+    language: themeConfig.language || "uk",
+  };
+  const signature = JSON.stringify(payload);
+  if (pendingLead?.signature !== signature) {
+    pendingLead = { signature, id: createRequestId() };
+  }
+  payload.request_id = pendingLead.id;
+
+  const controls = [...form.querySelectorAll("input, select, textarea, button[type='submit']")];
+  form.dataset.submitting = "true";
+  controls.forEach((control) => { control.disabled = true; });
+  if (status) {
+    status.textContent = i18n.sending;
+    status.className = "form-status is-progress";
+  }
+
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 20000);
+
+  try {
+    if (!themeConfig.ajaxUrl || !themeConfig.leadNonce) {
+      throw new Error(themeConfig.refresh || i18n.sendFailed);
+    }
+
+    const response = await fetch(themeConfig.ajaxUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      body: new URLSearchParams({
+        action: "zb_submit_lead",
+        nonce: themeConfig.leadNonce,
+        payload: JSON.stringify(payload),
+      }),
+      signal: controller.signal,
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok || !result?.success) {
+      throw new Error(result?.data?.message || i18n.sendFailed);
+    }
+
+    if (leadSuccessMessage) {
+      leadSuccessMessage.textContent = i18n.success.replace("%s", String(result.data.lead_id));
+    }
+    form.reset();
+    pendingLead = null;
+    if (status) {
+      status.textContent = "";
+      status.className = "form-status";
+    }
+    form.classList.add("is-success");
+    if (leadSuccess) leadSuccess.hidden = false;
+    leadSuccessTimer = window.setTimeout(() => {
+      leadSuccessTimer = 0;
+      closeLeadDialog();
+    }, 8000);
+  } catch (error) {
+    const uncertain = error?.name === "AbortError" || error?.name === "TypeError";
+    if (status) {
+      status.textContent = uncertain ? i18n.uncertain : (error?.message || i18n.sendFailed);
+      status.className = "form-status is-error";
+    }
+  } finally {
+    window.clearTimeout(timeout);
+    form.dataset.submitting = "false";
+    controls.forEach((control) => { control.disabled = false; });
+    if (leadSubmit) leadSubmit.disabled = false;
+  }
 });
