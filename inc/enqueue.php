@@ -45,12 +45,21 @@ function project_theme_enqueue_assets(): void {
 		'project-theme-script',
 		'zatyshnyiTheme',
 		array(
-			'openMenu'    => __( 'Відкрити меню', 'project-theme' ),
-			'closeMenu'   => __( 'Закрити меню', 'project-theme' ),
-			'carousel'    => __( 'карусель', 'project-theme' ),
+			'openMenu'       => __( 'Відкрити меню', 'project-theme' ),
+			'closeMenu'      => __( 'Закрити меню', 'project-theme' ),
+			'carousel'       => __( 'карусель', 'project-theme' ),
 			'defaultInterest' => __( 'Квартира', 'project-theme' ),
-			'defaultContext'  => __( 'Підбір квартири', 'project-theme' ),
-			'demoStatus'  => __( 'Форму заповнено. Підключіть обробник заявок перед публікацією.', 'project-theme' ),
+			'defaultContext' => __( 'Підбір квартири', 'project-theme' ),
+			'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+			'leadNonce'      => wp_create_nonce( 'zb_submit_lead' ),
+			'language'       => 'uk',
+			'sending'        => __( 'Надсилаємо заявку…', 'project-theme' ),
+			'refresh'        => __( 'Оновіть сторінку перед надсиланням заявки.', 'project-theme' ),
+			'sendFailed'     => __( 'Не вдалося надіслати заявку. Спробуйте ще раз.', 'project-theme' ),
+			'uncertain'      => __( 'Немає підтвердження від сервера. Дані залишилися у формі — повторіть надсилання.', 'project-theme' ),
+			'successTitle'   => __( 'Заявку прийнято!', 'project-theme' ),
+			'success'        => __( 'Дякуємо! Заявку №%s збережено. Наш менеджер зв’яжеться з вами.', 'project-theme' ),
+			'successAutoClose' => __( 'Вікно автоматично закриється через 8 секунд.', 'project-theme' ),
 		)
 	);
 }

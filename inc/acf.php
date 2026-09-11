@@ -436,6 +436,117 @@ function project_theme_constructor_group(): array {
 }
 
 /**
+ * Technical notification settings displayed on the existing theme options page.
+ *
+ * This is a separate database field group so adding notifications does not
+ * overwrite editor changes made to the original global options group.
+ */
+function project_theme_notifications_group(): array {
+	return array(
+		'key'      => 'group_zb_notification_options',
+		'title'    => __( 'Сповіщення заявок', 'project-theme' ),
+		'fields'   => array(
+			array(
+				'key'       => 'field_zb_notify_tab',
+				'name'      => '',
+				'label'     => __( 'Сповіщення заявок', 'project-theme' ),
+				'type'      => 'tab',
+				'placement' => 'top',
+			),
+			array(
+				'key'       => 'field_zb_notify_intro',
+				'name'      => '',
+				'label'     => __( 'Доставка сповіщень', 'project-theme' ),
+				'type'      => 'message',
+				'message'   => __( 'Заявка спочатку зберігається в адмінці, а потім канали обробляються у фоновій черзі. Ці технічні налаштування доступні лише адміністратору.', 'project-theme' ),
+				'new_lines' => 'wpautop',
+				'esc_html'  => 1,
+			),
+			array(
+				'key'           => 'field_zb_notify_email_enabled',
+				'name'          => 'zb_notify_email_enabled',
+				'label'         => __( 'Надсилати на пошту', 'project-theme' ),
+				'type'          => 'true_false',
+				'ui'            => 1,
+				'default_value' => 0,
+				'wrapper'       => array( 'width' => '25' ),
+			),
+			array(
+				'key'          => 'field_zb_notify_email',
+				'name'         => 'zb_notify_email',
+				'label'        => __( 'Пошта для нових заявок', 'project-theme' ),
+				'type'         => 'email',
+				'instructions' => __( 'Надсилання виконує WordPress через wp_mail(). Для реальної доставки налаштуйте SMTP окремим плагіном або на сервері.', 'project-theme' ),
+				'wrapper'      => array( 'width' => '75' ),
+			),
+			array(
+				'key'       => 'field_zb_notify_telegram_message',
+				'name'      => '',
+				'label'     => __( 'Telegram-група', 'project-theme' ),
+				'type'      => 'message',
+				'message'   => __( 'Додайте бота до групи, дозвольте йому надсилати повідомлення та вкажіть токен BotFather і Chat ID. Для форум-групи можна додати ID теми.', 'project-theme' ),
+				'new_lines' => 'wpautop',
+				'esc_html'  => 1,
+			),
+			array(
+				'key'           => 'field_zb_notify_telegram_enabled',
+				'name'          => 'zb_notify_telegram_enabled',
+				'label'         => __( 'Надсилати в Telegram', 'project-theme' ),
+				'type'          => 'true_false',
+				'ui'            => 1,
+				'default_value' => 0,
+				'wrapper'       => array( 'width' => '25' ),
+			),
+			array(
+				'key'          => 'field_zb_notify_token',
+				'name'         => 'zb_notify_token',
+				'label'        => __( 'Токен Telegram-бота', 'project-theme' ),
+				'type'         => 'password',
+				'instructions' => __( 'Після збереження токен не показується. Щоб замінити його, введіть новий; порожнє поле залишає поточний токен.', 'project-theme' ),
+				'wrapper'      => array( 'width' => '75' ),
+			),
+			array(
+				'key'     => 'field_zb_notify_chat',
+				'name'    => 'zb_notify_chat',
+				'label'   => __( 'Chat ID групи', 'project-theme' ),
+				'type'    => 'text',
+				'wrapper' => array( 'width' => '50' ),
+			),
+			array(
+				'key'     => 'field_zb_notify_topic',
+				'name'    => 'zb_notify_topic',
+				'label'   => __( 'ID теми (необов’язково)', 'project-theme' ),
+				'type'    => 'number',
+				'min'     => 1,
+				'step'    => 1,
+				'wrapper' => array( 'width' => '25' ),
+			),
+			array(
+				'key'           => 'field_zb_notify_clear_token',
+				'name'          => 'zb_notify_clear_token',
+				'label'         => __( 'Видалити збережений токен', 'project-theme' ),
+				'type'          => 'true_false',
+				'ui'            => 1,
+				'default_value' => 0,
+				'wrapper'       => array( 'width' => '25' ),
+			),
+		),
+		'location' => array(
+			array(
+				array(
+					'param'    => 'options_page',
+					'operator' => '==',
+					'value'    => 'theme-settings',
+				),
+			),
+		),
+		'active'   => true,
+		'show_in_rest' => 0,
+		'style'    => 'default',
+	);
+}
+
+/**
  * Import editable definitions once. Existing database structures win.
  */
 function project_theme_import_acf_groups(): void {
@@ -448,6 +559,9 @@ function project_theme_import_acf_groups(): void {
 	}
 	if ( ! acf_get_field_group( 'group_zb_constructor' ) ) {
 		acf_import_field_group( project_theme_constructor_group() );
+	}
+	if ( ! acf_get_field_group( 'group_zb_notification_options' ) ) {
+		acf_import_field_group( project_theme_notifications_group() );
 	}
 }
 add_action( 'acf/init', 'project_theme_import_acf_groups', 20 );
