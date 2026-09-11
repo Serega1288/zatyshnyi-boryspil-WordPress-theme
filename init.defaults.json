@@ -1,0 +1,20 @@
+{
+  "composeProjectName": "zatyshnyi-boryspil",
+  "siteName": "zatyshnyi-boryspil",
+  "themeName": "Затишний Бориспіль",
+  "themeTextDomain": "project-theme",
+  "themeVersion": "1.0.0",
+  "themeAuthor": "Sergii Tomusyak",
+  "themeAuthorUri": "https://github.com/Serega1288",
+  "themeUri": "https://github.com/Serega1288/zatyshnyi-boryspil-WordPress-theme.git",
+  "themeDescription": "Односторінкова WordPress-тема житлового комплексу «Затишний Бориспіль».",
+  "themeRequiresAtLeast": "6.0",
+  "themeTestedUpTo": "7.0",
+  "themeRequiresPhp": "8.2",
+  "packageName": "project-theme",
+  "packageVersion": "1.0.0",
+  "packageDescription": "Docker-based WordPress theme for ЖК «Затишний Бориспіль».",
+  "wordpressPort": "8080",
+  "adminerPort": "8081",
+  "autoPlugins": "cyr2lat,debug-log-viewer,disable-gutenberg,disable-comments,all-in-one-wp-migration"
+}

@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ЖК «Затишний Бориспіль» — малоповерховий житловий комплекс із цегляними будинками, індивідуальним опаленням і закритою територією." />
+    <meta name="theme-color" content="#163d29" />
+    <title>ЖК «Затишний Бориспіль»</title>
+    <link rel="icon" href="assets/zatyshnyi-logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500;6..12,600;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти до основного вмісту</a>
+
+    <header class="soft-header" data-header>
+      <div class="container header-row">
+        <a class="brand" href="#top" aria-label="ЖК «Затишний Бориспіль», на початок сторінки">
+          <img src="assets/zatyshnyi-logo.svg" alt="" width="914" height="647" />
+        </a>
+        <button class="menu-button" type="button" aria-expanded="false" aria-controls="soft-nav" aria-label="Відкрити меню" data-menu-button>
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="soft-nav" id="soft-nav" aria-label="Головна навігація" data-menu>
+          <a href="#about">Про комплекс</a>
+          <a href="#advantages">Переваги</a>
+          <a href="#apartments">Квартири</a>
+          <a href="#documents">Документи</a>
+          <a href="#developer">Забудовник</a>
+          <a href="#conditions">Умови</a>
+        </nav>
+        <div class="header-actions">
+          <button class="contact-toggle" type="button" aria-label="Контакти відділу продажу" aria-expanded="false" aria-controls="sales-contacts" data-contact-button>
+            <svg class="contact-toggle-phone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.8 9.6 8 7.9 9.7c1.1 2.2 2.7 3.8 4.9 4.9l1.7-1.7 4.2 2.4-.7 3.4c-.2.9-1 1.5-1.9 1.5C9.3 20.2 3.8 14.7 3.8 7.9c0-.9.6-1.7 1.5-1.9l1.9-.4Z"/></svg>
+            <span class="contact-toggle-label">Контакти</span>
+            <svg class="contact-toggle-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 6 5 5 5-5"/></svg>
+          </button>
+          <button class="button button--clay header-button" type="button" data-open-lead data-interest="Квартира" data-context="Підбір квартири">Обрати квартиру</button>
+        </div>
+
+        <aside class="contact-popover" id="sales-contacts" aria-labelledby="sales-contacts-title" data-contact-popover hidden inert tabindex="-1">
+          <div class="contact-popover-head">
+            <div><span>Відділ продажу</span><h2 id="sales-contacts-title">Контакти</h2></div>
+            <button class="contact-popover-close" type="button" aria-label="Закрити контакти" data-contact-close>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+            </button>
+          </div>
+          <div class="contact-data-block">
+            <span>Телефони</span>
+            <strong class="contact-phone-list"><a href="tel:+380674455859">067-445-58-59</a><a href="tel:+380673292723">067-329-27-23</a></strong>
+          </div>
+          <div class="contact-data-block contact-data-block--last">
+            <span>Адреса</span>
+            <strong><a href="https://www.google.com/maps/search/?api=1&amp;query=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073" target="_blank" rel="noopener noreferrer">м. Бориспіль, вул. Коломичівська, 73</a></strong>
+          </div>
+          <button class="button button--clay contact-popover-cta" type="button" data-open-lead data-interest="Квартира" data-context="Зворотний дзвінок">Залишити заявку</button>
+        </aside>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="container hero-panel">
+          <div class="hero-copy reveal">
+            <p class="eyebrow"><span></span>Житловий комплекс у Борисполі</p>
+            <h1>Дім, де легко бути собою</h1>
+            <p class="hero-lead">Малоповерховий житловий комплекс із цегляними будинками, індивідуальним газовим опаленням, закритою територією та підземним паркінгом.</p>
+            <div class="hero-actions">
+              <a class="button button--green" href="#apartments">Обрати планування</a>
+              <button class="button button--light" type="button" data-open-lead data-interest="Питання про комплекс" data-context="Питання про комплекс">Поставити запитання</button>
+            </div>
+            <p class="developer">Забудовник <strong>«Агробудмеханізація»</strong></p>
+          </div>
+
+          <figure class="hero-image reveal reveal--delay">
+            <img src="assets/concept-front-entrance.jpg" alt="Передпроєктна візуалізація п’ятиповерхових цегляних будинків ЖК «Затишний»" width="3200" height="2133" />
+            <figcaption>Візуалізація концепції</figcaption>
+            <span class="hero-badge"><b>5</b> поверхів</span>
+          </figure>
+
+          <div class="metric-grid reveal">
+            <article><strong>3</strong><span>будинки</span></article>
+            <article><strong>8</strong><span>секцій</span></article>
+            <article><strong>5</strong><span>поверхів</span></article>
+            <article><strong>36,73 м²</strong><span>мінімальна площа</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section moments" id="about">
+        <div class="container">
+          <div class="section-intro reveal">
+            <div>
+              <p class="eyebrow"><span></span>Про комплекс</p>
+              <h2>Малоповерховий дім для спокійного життя</h2>
+            </div>
+            <p>ЖК «Затишний» — це три п’ятиповерхові будинки на вісім секцій. Будинки зводяться з червоної цегли, утеплюються мінеральною ватою та обладнуються вантажопасажирськими ліфтами.</p>
+          </div>
+
+          <div class="moment-strip" id="moments-slider" role="region" aria-label="Візуалізації комплексу" data-slider>
+            <figure class="moment moment--wide reveal">
+              <img src="assets/concept-central-courtyard.jpg" alt="Передпроєктна візуалізація центрального озелененого двору ЖК «Затишний»" loading="lazy" width="3200" height="2133" />
+              <figcaption><span>01</span>Озеленений двір</figcaption>
+            </figure>
+            <figure class="moment reveal reveal--delay-1">
+              <img src="assets/concept-aerial.jpg" alt="Передпроєктна візуалізація житлового комплексу з висоти" loading="lazy" width="3200" height="2133" />
+              <figcaption><span>02</span>Планування території</figcaption>
+            </figure>
+            <figure class="moment reveal reveal--delay-2">
+              <img src="assets/concept-facades.jpg" alt="Передпроєктна візуалізація фасадів із червоної цегли та в’їзду до паркінгу" loading="lazy" width="3200" height="2133" />
+              <figcaption><span>03</span>Цегляна архітектура</figcaption>
+            </figure>
+          </div>
+          <div class="swipe-hint">
+            <span>Гортайте, щоб побачити більше</span>
+            <div class="slider-controls" aria-label="Керування візуалізаціями">
+              <button class="slider-control" type="button" data-slider-prev="moments-slider" aria-controls="moments-slider" aria-label="Попередня візуалізація">←</button>
+              <button class="slider-control" type="button" data-slider-next="moments-slider" aria-controls="moments-slider" aria-label="Наступна візуалізація">→</button>
+            </div>
+          </div>
+
+          <div class="about-details">
+            <article class="about-territory" id="territory">
+              <div class="territory-heading reveal">
+                <p class="eyebrow"><span></span>Простір біля дому</p>
+                <h3>Усе потрібне — на території комплексу</h3>
+                <p>Велика закрита територія об’єднує простір для прогулянок і дитячих ігор із повсякденною інфраструктурою.</p>
+              </div>
+              <figure class="territory-photo reveal reveal--delay">
+                <img src="assets/concept-playground.jpg" alt="Передпроєктна візуалізація дитячого майданчика на території ЖК «Затишний»" loading="lazy" width="3200" height="2133" />
+                <figcaption><small>Візуалізація концепції</small><strong>Велика закрита територія</strong><span>Простір для прогулянок та дитячих ігор.</span></figcaption>
+              </figure>
+              <div class="territory-tags reveal"><span>Дитячий майданчик</span><span>Підземний паркінг</span><span>Мініторговий центр</span><span>Комерційні приміщення на першому поверсі</span><span>Комори можна придбати окремо</span><span>Закрита територія</span></div>
+            </article>
+
+            <article class="about-location" id="location">
+              <div class="location-copy reveal">
+                <p class="eyebrow"><span></span>Локація</p>
+                <h3><strong>1100 м</strong> до центру Борисполя</h3>
+                <p>У центральній частині міста зосереджені магазини, сервіси та необхідна повсякденна інфраструктура.</p>
+                <div class="address"><span>Точна адреса</span><strong>м. Бориспіль, вул. Коломичівська, 73</strong></div>
+                <a class="button button--outline" href="https://www.google.com/maps/dir/?api=1&amp;destination=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073" target="_blank" rel="noopener noreferrer">Прокласти маршрут до ЖК</a>
+              </div>
+              <div class="map-card map-card--compact map-card--google reveal reveal--delay">
+                <div class="map-route-summary" aria-hidden="true">
+                  <span>ЖК «Затишний»</span>
+                  <div class="map-route-distance"><i></i><strong>≈ 1,1 км</strong><i></i></div>
+                  <span>Центр Борисполя</span>
+                </div>
+                <iframe src="https://www.google.com/maps?output=embed&amp;saddr=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073&amp;daddr=%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%D1%81%D1%8C%D0%BA%D0%B0%20%D0%BC%D1%96%D1%81%D1%8C%D0%BA%D0%B0%20%D1%80%D0%B0%D0%B4%D0%B0%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%B8%D1%97%D0%B2%D1%81%D1%8C%D0%BA%D0%B8%D0%B9%20%D0%A8%D0%BB%D1%8F%D1%85%2C%2072%2C%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C&amp;dirflg=w&amp;hl=uk" title="Маршрут від ЖК «Затишний» до центру Борисполя" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section benefits" id="advantages">
+        <div class="container">
+          <div class="section-title reveal">
+            <p class="eyebrow"><span></span>Продумано для життя</p>
+            <h2>Усе важливе — вже в концепції комплексу</h2>
+          </div>
+
+          <div class="benefit-bento" id="benefits-slider" role="region" aria-label="Переваги житлового комплексу" data-slider>
+            <article class="benefit benefit--main reveal">
+              <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.8 2.5c.5 3.2-1.2 4.7-2.8 6.4-1.3 1.4-2.4 2.9-2.4 5.2A4.5 4.5 0 0 0 12 18.6a4.5 4.5 0 0 0 4.5-4.5c0-1.7-.7-3.1-1.9-4.5.1 2.2-.8 3.6-2.3 4.5.2-2.3-.9-3.6-2-4.8"/></svg></div>
+              <span>Ваш власний комфорт</span>
+              <h3>Індивідуальне газове опалення</h3>
+              <p>Газовий котел входить у вартість кожної квартири, тож ви самі керуєте температурою вдома.</p>
+              <strong>У кожній квартирі</strong>
+            </article>
+            <article class="benefit reveal reveal--delay-1">
+              <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 10h18M3 15h18M8 5v5m8-5v5m-5 0v5m-5 0v4m10-4v4"/></svg></div>
+              <h3>Червона цегла</h3>
+              <p>Будинки з утепленням мінеральною ватою.</p>
+            </article>
+            <article class="benefit benefit--sage reveal reveal--delay-2">
+              <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v17M3 21h18M9 6h2m2 0h2M9 10h2m2 0h2M9 14h2m2 0h2M10 21v-3h4v3"/></svg></div>
+              <h3>Лише п’ять поверхів</h3>
+              <p>Зручний малоповерховий формат.</p>
+            </article>
+            <article class="benefit benefit--clay reveal">
+              <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 8 3v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3Z"/><path d="m8.8 12 2.1 2.1 4.5-4.5"/></svg></div>
+              <h3>Закрита територія</h3>
+              <p>Великий простір для комфорту мешканців.</p>
+            </article>
+            <article class="benefit reveal reveal--delay-1">
+              <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 17V7.2h3.4a3.1 3.1 0 0 1 0 6.2H9.5m0-6.2v6.2"/></svg></div>
+              <h3>Підземний паркінг</h3>
+              <p>Зручне місце для автомобіля на території ЖК.</p>
+            </article>
+            <article class="benefit benefit--sand reveal reveal--delay-2">
+              <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 7 8-4 8 4-8 4-8-4Zm0 0v10l8 4 8-4V7M12 11v10"/></svg></div>
+              <h3>Окремі комори</h3>
+              <p>Додатковий простір можна придбати окремо.</p>
+            </article>
+          </div>
+          <div class="swipe-hint">
+            <span>Гортайте переваги</span>
+            <div class="slider-controls" aria-label="Керування перевагами">
+              <button class="slider-control" type="button" data-slider-prev="benefits-slider" aria-controls="benefits-slider" aria-label="Попередня перевага">←</button>
+              <button class="slider-control" type="button" data-slider-next="benefits-slider" aria-controls="benefits-slider" aria-label="Наступна перевага">→</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section apartments" id="apartments">
+        <div class="container">
+          <div class="section-intro section-intro--apartments reveal">
+            <div>
+              <p class="eyebrow"><span></span>Оберіть свій формат</p>
+              <h2>Квартири для різних сценаріїв життя</h2>
+            </div>
+            <div class="apartment-tabs" aria-label="Швидкий перехід до типів квартир" data-apartment-tabs>
+              <a href="#apartment-1" aria-current="true" data-apartment-tab>1 кімната</a>
+              <a href="#apartment-2" data-apartment-tab>2 кімнати</a>
+              <a href="#apartment-3" data-apartment-tab>3 кімнати</a>
+            </div>
+          </div>
+
+          <div class="apartment-list" id="apartments-slider" role="region" aria-label="Типи квартир" data-slider>
+            <article class="apartment-row reveal" id="apartment-1">
+              <div class="room-pill"><strong>1</strong><span>кімната</span></div>
+              <svg class="plan" viewBox="0 0 260 180" role="img" aria-label="Умовна схема однокімнатної квартири"><rect x="10" y="10" width="240" height="160" rx="10"/><path d="M105 10v95H10M105 70h75v100M180 70h70M180 125h70"/><path class="door" d="M105 105a34 34 0 0 0-34 34M180 125a30 30 0 0 1 30 30"/></svg>
+              <div class="apartment-copy"><span>Однокімнатні квартири</span><h3>36,73–46,80 м²</h3><p>Компактний простір для першого власного житла.</p><small>Актуальну наявність уточнюйте</small></div>
+              <button class="button button--clay apartment-card-cta" type="button" data-open-lead data-interest="Квартира" data-apartment-type="1-кімнатна квартира" data-context="Однокімнатні квартири · 36,73–46,80 м²">Уточнити наявність</button>
+            </article>
+
+            <article class="apartment-row reveal" id="apartment-2">
+              <div class="room-pill"><strong>2</strong><span>кімнати</span></div>
+              <svg class="plan" viewBox="0 0 260 180" role="img" aria-label="Умовна схема двокімнатної квартири"><rect x="10" y="10" width="240" height="160" rx="10"/><path d="M95 10v160M175 10v105M95 95h80M175 60h75M175 115h75"/><path class="door" d="M95 95a30 30 0 0 1-30 30M175 115a28 28 0 0 0 28 28"/></svg>
+              <div class="apartment-copy"><span>Двокімнатні квартири</span><h3>55,44–60,70 м²</h3><p>Збалансоване планування для пари або молодої родини.</p><small>Актуальну наявність уточнюйте</small></div>
+              <button class="button button--clay apartment-card-cta" type="button" data-open-lead data-interest="Квартира" data-apartment-type="2-кімнатна квартира" data-context="Двокімнатні квартири · 55,44–60,70 м²">Уточнити наявність</button>
+            </article>
+
+            <article class="apartment-row reveal" id="apartment-3">
+              <div class="room-pill"><strong>3</strong><span>кімнати</span></div>
+              <svg class="plan" viewBox="0 0 260 180" role="img" aria-label="Умовна схема трикімнатної квартири"><rect x="10" y="10" width="240" height="160" rx="10"/><path d="M85 10v160M165 10v160M85 75h80M165 55h85M165 120h85"/><path class="door" d="M85 75a28 28 0 0 1-28 28M165 120a28 28 0 0 0 28 28"/></svg>
+              <div class="apartment-copy"><span>Трикімнатні квартири</span><h3>83,26–85,99 м²</h3><p>Просторий формат для комфортного сімейного життя.</p><small>Актуальну наявність уточнюйте</small></div>
+              <button class="button button--clay apartment-card-cta" type="button" data-open-lead data-interest="Квартира" data-apartment-type="3-кімнатна квартира" data-context="Трикімнатні квартири · 83,26–85,99 м²">Уточнити наявність</button>
+            </article>
+          </div>
+          <div class="swipe-hint">
+            <span>Гортайте планування</span>
+            <div class="slider-controls" aria-label="Керування плануваннями">
+              <button class="slider-control" type="button" data-slider-prev="apartments-slider" aria-controls="apartments-slider" aria-label="Попереднє планування">←</button>
+              <button class="slider-control" type="button" data-slider-next="apartments-slider" aria-controls="apartments-slider" aria-label="Наступне планування">→</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section finish">
+        <div class="container finish-panel">
+          <figure class="finish-image reveal">
+            <img src="assets/apartment-finish.png" alt="Візуалізація квартири у стані під чистове оздоблення" loading="lazy" width="1024" height="1024" />
+            <figcaption>Візуалізація · під чистове оздоблення</figcaption>
+          </figure>
+          <div class="finish-content reveal reveal--delay">
+            <p class="eyebrow"><span></span>До ремонту вже ближче</p>
+            <h2>Базові роботи виконані</h2>
+            <div class="ceiling-chip"><span>Висота стелі</span><strong>2,80 м</strong></div>
+            <ul class="spec-grid">
+              <li>Індивідуальне газове опалення</li><li>Газовий котел у вартості</li>
+              <li>Лазерна стяжка підлоги</li><li>Штукатурка стін</li>
+              <li>Розведена електрика по квартирі</li><li>Встановлені лічильники</li>
+              <li>Радіатори під кожним вікном</li><li>Двокамерні склопакети</li>
+              <li>Шестикамерний профіль</li><li>Утеплення мінеральною ватою</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section documents" id="documents">
+        <div class="container">
+          <div class="section-intro reveal">
+            <div><p class="eyebrow"><span></span>Документи</p><h2>Відкрито про будівництво</h2></div>
+            <p>Тут буде зібрана дозвільна та проєктна документація щодо будівництва ЖК «Затишний».</p>
+          </div>
+          <div class="document-track" id="documents-slider" role="region" aria-label="Категорії документів" data-slider>
+            <article class="document-card reveal">
+              <div class="document-number" aria-hidden="true">01</div>
+              <span class="document-type">Дозвільні матеріали</span>
+              <h3>Документи на будівництво</h3>
+              <p>Дозвільні матеріали щодо виконання будівельних робіт.</p>
+              <small>Файл буде додано після отримання від замовника</small>
+            </article>
+            <article class="document-card reveal reveal--delay-1">
+              <div class="document-number" aria-hidden="true">02</div>
+              <span class="document-type">Земельна ділянка</span>
+              <h3>Правовстановлювальні документи</h3>
+              <p>Правовстановлювальні та супровідні матеріали.</p>
+              <small>Файл буде додано після отримання від замовника</small>
+            </article>
+            <article class="document-card document-card--accent reveal reveal--delay-2">
+              <div class="document-number" aria-hidden="true">03</div>
+              <span class="document-type">Проєктні матеріали</span>
+              <h3>Містобудівна документація</h3>
+              <p>Матеріали, що визначають параметри та реалізацію проєкту.</p>
+              <small>Файл буде додано після отримання від замовника</small>
+            </article>
+          </div>
+          <div class="document-footer reveal">
+            <div class="swipe-hint">
+              <span>Гортайте документи</span>
+              <div class="slider-controls" aria-label="Керування документами">
+                <button class="slider-control" type="button" data-slider-prev="documents-slider" aria-controls="documents-slider" aria-label="Попередній документ">←</button>
+                <button class="slider-control" type="button" data-slider-next="documents-slider" aria-controls="documents-slider" aria-label="Наступний документ">→</button>
+              </div>
+            </div>
+            <button class="button button--outline" type="button" data-open-lead data-interest="Документи" data-context="Документи на будівництво">Запросити документи</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section builder" id="developer">
+        <div class="container builder-panel">
+          <div class="builder-copy reveal">
+            <p class="eyebrow eyebrow--light"><span></span>Забудовник</p>
+            <span class="builder-label">ПрАТ «Агробудмеханізація»</span>
+            <h2>Відповідальність за результат</h2>
+            <p>ЖК «Затишний» у Борисполі реалізує багатопрофільна будівельна компанія «Агробудмеханізація».</p>
+            <a class="button button--white" href="https://agrobudmeh.com.ua/" target="_blank" rel="noopener noreferrer">Сайт забудовника <span aria-hidden="true">↗</span></a>
+          </div>
+          <aside class="builder-assurance reveal reveal--delay" aria-label="Надійність забудовника">
+            <span>Надійність у строках</span>
+            <strong>Вчасне введення об’єктів</strong>
+            <p>За інформацією забудовника, завершені ним об’єкти вводилися в експлуатацію у заявлені строки.</p>
+            <a href="https://agrobudmeh.com.ua/o-kompanii.html" target="_blank" rel="noopener noreferrer">Докладніше про компанію <span aria-hidden="true">→</span></a>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section conditions" id="conditions">
+        <div class="container conditions-panel reveal">
+          <div class="conditions-copy"><p class="eyebrow eyebrow--light"><span></span>Гнучкі умови</p><h2>Власна квартира — крок за кроком</h2><p>Розтермінування безпосередньо від забудовника.</p><button class="button button--white" type="button" data-open-lead data-interest="Умови придбання" data-context="Умови придбання та розтермінування">Дізнатися умови</button></div>
+          <div class="conditions-stats">
+            <article><span>Перший внесок</span><strong><small>від</small><b>30%</b></strong></article>
+            <article><span>Розтермінування</span><strong><small>до</small><b>24</b><em>міс.</em></strong></article>
+            <article><span>Актуальна вартість</span><strong class="conditions-value--text">За запитом</strong></article>
+          </div>
+          <p class="conditions-note">Державні програми та сертифікати уточнюйте у відділі продажу відповідно до етапу введення будинку в експлуатацію.</p>
+        </div>
+      </section>
+
+      <section class="section contact" id="contact">
+        <div class="container contact-panel">
+          <div class="contact-copy reveal"><p class="eyebrow eyebrow--light"><span></span>Відділ продажу</p><h2>Знайдемо планування для вашої родини</h2><p>Залиште контакти — розповімо про доступні квартири та умови розтермінування.</p></div>
+          <div class="contact-action reveal reveal--delay">
+            <span>Персональна консультація</span>
+            <strong>Підберемо квартиру під ваші потреби</strong>
+            <p>Уточніть доступні планування, актуальну наявність та умови розтермінування.</p>
+            <button class="button button--clay" type="button" data-open-lead data-interest="Квартира" data-context="Підбір квартири">Залишити заявку</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <img src="assets/zatyshnyi-logo.svg" alt="Логотип ЖК «Затишний Бориспіль»" width="914" height="647" />
+            <p>Житловий комплекс для спокійного сімейного життя у Борисполі.</p>
+            <button class="button button--clay footer-cta" type="button" data-open-lead data-interest="Квартира" data-context="Підбір квартири">Обрати квартиру</button>
+          </div>
+          <div class="footer-group footer-sales"><h3>Відділ продажу</h3><a class="footer-phone" href="tel:+380674455859">067-445-58-59</a><a class="footer-phone" href="tel:+380673292723">067-329-27-23</a></div>
+          <div class="footer-group"><h3>Адреса</h3><a href="https://www.google.com/maps/search/?api=1&amp;query=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073" target="_blank" rel="noopener noreferrer">м. Бориспіль,<br />вул. Коломичівська, 73</a><a class="footer-map-link" href="https://www.google.com/maps/search/?api=1&amp;query=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073" target="_blank" rel="noopener noreferrer">Відкрити на карті <span aria-hidden="true">↗</span></a></div>
+          <nav class="footer-group footer-nav" aria-label="Навігація у футері"><h3>Навігація</h3><a href="#about">Про комплекс</a><a href="#apartments">Квартири</a><a href="#documents">Документи</a><a href="#developer">Забудовник</a><a href="#conditions">Умови придбання</a></nav>
+        </div>
+        <div class="footer-bottom"><span>© 2026 ЖК «Затишний Бориспіль»</span><a href="https://agrobudmeh.com.ua/o-kompanii.html" target="_blank" rel="noopener noreferrer">Забудовник: Агробудмеханізація <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </footer>
+
+    <button class="back-to-top" type="button" aria-label="Повернутися на початок сторінки" aria-hidden="true" tabindex="-1" data-back-to-top>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 10 6-6 6 6M12 4v16" /></svg>
+    </button>
+
+    <dialog class="lead-dialog" id="lead-dialog" aria-labelledby="lead-dialog-title" aria-describedby="lead-dialog-description" data-lead-dialog>
+      <div class="lead-dialog-shell">
+        <button class="dialog-close" type="button" aria-label="Закрити форму" data-close-lead>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+        <div class="lead-dialog-copy">
+          <p class="eyebrow eyebrow--light"><span></span>Консультація</p>
+          <h2 id="lead-dialog-title">Поговорімо про вашу майбутню квартиру</h2>
+          <p id="lead-dialog-description">Залиште контакти — менеджер допоможе з плануванням, наявністю та умовами придбання.</p>
+          <div class="lead-context"><span>Ваш запит</span><strong data-lead-context-output>Підбір квартири</strong></div>
+          <p class="lead-contact-note">Відділ продажу: <a href="tel:+380674455859">067-445-58-59</a>, <a href="tel:+380673292723">067-329-27-23</a><br />м. Бориспіль, вул. Коломичівська, 73</p>
+        </div>
+        <form class="contact-form lead-form" data-form>
+          <div><label for="lead-name">Ваше ім’я</label><input id="lead-name" name="name" type="text" autocomplete="name" placeholder="Як до вас звертатися" required /></div>
+          <div><label for="lead-phone">Номер телефону</label><input id="lead-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+380" required /></div>
+          <div><label for="lead-interest">Що вас цікавить?</label><select id="lead-interest" name="interest" data-lead-interest><option>Квартира</option><option>Паркінг</option><option>Комора</option><option>Комерційне приміщення</option><option>Документи</option><option>Умови придбання</option><option>Питання про комплекс</option></select></div>
+          <div class="form-field--wide"><label for="lead-message">Коментар (необов’язково)</label><textarea id="lead-message" name="message" rows="4" maxlength="1000" placeholder="Напишіть ваше запитання або побажання"></textarea></div>
+          <input type="hidden" name="request_context" value="Підбір квартири" data-lead-context-input />
+          <input type="hidden" name="apartment_type" value="" data-lead-apartment-input />
+          <button class="button button--clay" type="submit">Отримати консультацію</button>
+          <p class="form-note">Демонстраційна форма: дані нікуди не надсилаються.</p>
+          <p class="form-status" role="status" aria-live="polite" data-status></p>
+        </form>
+      </div>
+    </dialog>
+  </body>
+</html>
