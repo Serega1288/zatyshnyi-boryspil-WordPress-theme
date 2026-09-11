@@ -1,0 +1,172 @@
+<?php
+/**
+ * About, territory and location section.
+ *
+ * @package ProjectTheme
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! function_exists( 'get_sub_field' ) ) {
+	return;
+}
+
+$section_id              = project_theme_section_id( (string) get_sub_field( 'section_id' ), 'about' );
+$eyebrow                 = (string) get_sub_field( 'eyebrow' );
+$title                    = (string) get_sub_field( 'title' );
+$intro                    = (string) get_sub_field( 'intro' );
+$gallery                  = get_sub_field( 'gallery' );
+$gallery                  = is_array( $gallery ) ? $gallery : array();
+$gallery_hint             = (string) get_sub_field( 'gallery_hint' );
+$moments_slider_id        = project_theme_unique_dom_id( 'moments-slider' );
+$territory_requested_id   = (string) get_sub_field( 'territory_id' );
+$territory_id             = project_theme_unique_dom_id( '' !== trim( $territory_requested_id ) ? $territory_requested_id : 'territory' );
+$territory_eyebrow        = (string) get_sub_field( 'territory_eyebrow' );
+$territory_title          = (string) get_sub_field( 'territory_title' );
+$territory_description    = (string) get_sub_field( 'territory_description' );
+$territory_image_id       = (int) get_sub_field( 'territory_image' );
+$territory_image_alt      = (string) get_sub_field( 'territory_image_alt' );
+$territory_image_html     = project_theme_image_html( $territory_image_id, $territory_image_alt, array( 'loading' => 'lazy' ) );
+$territory_caption_kicker = (string) get_sub_field( 'territory_caption_kicker' );
+$territory_caption_title  = (string) get_sub_field( 'territory_caption_title' );
+$territory_caption_text   = (string) get_sub_field( 'territory_caption_text' );
+$territory_tags           = get_sub_field( 'territory_tags' );
+$territory_tags           = is_array( $territory_tags ) ? $territory_tags : array();
+$location_requested_id    = (string) get_sub_field( 'location_id' );
+$location_id              = project_theme_unique_dom_id( '' !== trim( $location_requested_id ) ? $location_requested_id : 'location' );
+$location_eyebrow         = (string) get_sub_field( 'location_eyebrow' );
+$location_distance        = (string) get_sub_field( 'location_distance' );
+$location_title_suffix    = (string) get_sub_field( 'location_title_suffix' );
+$location_description     = (string) get_sub_field( 'location_description' );
+$address_label            = (string) get_sub_field( 'address_label' );
+$address_text             = (string) get_sub_field( 'address_text' );
+$route_link               = project_theme_link( get_sub_field( 'route_link' ) );
+$map_from_label           = (string) get_sub_field( 'map_from_label' );
+$map_distance             = (string) get_sub_field( 'map_distance' );
+$map_to_label             = (string) get_sub_field( 'map_to_label' );
+$map_embed_url            = (string) get_sub_field( 'map_embed_url' );
+$map_title                = (string) get_sub_field( 'map_title' );
+$has_territory_caption    = '' !== $territory_caption_kicker || '' !== $territory_caption_title || '' !== $territory_caption_text;
+?>
+<section class="section moments" id="<?php echo esc_attr( $section_id ); ?>">
+	<div class="container">
+		<div class="section-intro reveal">
+			<div>
+				<?php if ( '' !== $eyebrow ) : ?>
+					<p class="eyebrow"><span></span><?php echo esc_html( $eyebrow ); ?></p>
+				<?php endif; ?>
+				<?php if ( '' !== $title ) : ?>
+					<h2><?php echo esc_html( $title ); ?></h2>
+				<?php endif; ?>
+			</div>
+			<?php if ( '' !== $intro ) : ?>
+				<p><?php echo esc_html( $intro ); ?></p>
+			<?php endif; ?>
+		</div>
+
+		<?php if ( $gallery ) : ?>
+			<div class="moment-strip" id="<?php echo esc_attr( $moments_slider_id ); ?>" role="region" aria-label="<?php echo esc_attr__( 'Візуалізації комплексу', 'project-theme' ); ?>" data-slider>
+				<?php foreach ( $gallery as $gallery_index => $gallery_item ) : ?>
+					<?php
+					if ( ! is_array( $gallery_item ) ) {
+						continue;
+					}
+					$gallery_image_id   = isset( $gallery_item['image'] ) ? (int) $gallery_item['image'] : 0;
+					$gallery_image_alt  = isset( $gallery_item['image_alt'] ) ? (string) $gallery_item['image_alt'] : '';
+					$gallery_caption    = isset( $gallery_item['caption'] ) ? (string) $gallery_item['caption'] : '';
+					$gallery_image_html = project_theme_image_html( $gallery_image_id, $gallery_image_alt, array( 'loading' => 'lazy' ) );
+					$gallery_classes    = array( 'moment' );
+					if ( ! empty( $gallery_item['is_wide'] ) ) {
+						$gallery_classes[] = 'moment--wide';
+					}
+					$gallery_classes[] = 'reveal';
+					$delay_index       = (int) $gallery_index % 3;
+					if ( 1 === $delay_index ) {
+						$gallery_classes[] = 'reveal--delay-1';
+					} elseif ( 2 === $delay_index ) {
+						$gallery_classes[] = 'reveal--delay-2';
+					}
+					?>
+					<figure class="<?php echo esc_attr( implode( ' ', $gallery_classes ) ); ?>">
+						<?php echo $gallery_image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated by project_theme_image_html(). ?>
+						<?php if ( '' !== $gallery_caption ) : ?>
+							<figcaption><span><?php echo esc_html( str_pad( (string) ( (int) $gallery_index + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span><?php echo esc_html( $gallery_caption ); ?></figcaption>
+						<?php endif; ?>
+					</figure>
+				<?php endforeach; ?>
+			</div>
+			<div class="swipe-hint">
+				<span><?php echo esc_html( $gallery_hint ); ?></span>
+				<div class="slider-controls" aria-label="<?php echo esc_attr__( 'Керування візуалізаціями', 'project-theme' ); ?>">
+					<button class="slider-control" type="button" data-slider-prev="<?php echo esc_attr( $moments_slider_id ); ?>" aria-controls="<?php echo esc_attr( $moments_slider_id ); ?>" aria-label="<?php echo esc_attr__( 'Попередня візуалізація', 'project-theme' ); ?>">←</button>
+					<button class="slider-control" type="button" data-slider-next="<?php echo esc_attr( $moments_slider_id ); ?>" aria-controls="<?php echo esc_attr( $moments_slider_id ); ?>" aria-label="<?php echo esc_attr__( 'Наступна візуалізація', 'project-theme' ); ?>">→</button>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<div class="about-details">
+			<article class="about-territory" id="<?php echo esc_attr( $territory_id ); ?>">
+				<div class="territory-heading reveal">
+					<?php if ( '' !== $territory_eyebrow ) : ?>
+						<p class="eyebrow"><span></span><?php echo esc_html( $territory_eyebrow ); ?></p>
+					<?php endif; ?>
+					<?php if ( '' !== $territory_title ) : ?>
+						<h3><?php echo esc_html( $territory_title ); ?></h3>
+					<?php endif; ?>
+					<?php if ( '' !== $territory_description ) : ?>
+						<p><?php echo esc_html( $territory_description ); ?></p>
+					<?php endif; ?>
+				</div>
+				<?php if ( '' !== $territory_image_html || $has_territory_caption ) : ?>
+					<figure class="territory-photo reveal reveal--delay">
+						<?php echo $territory_image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated by project_theme_image_html(). ?>
+						<?php if ( $has_territory_caption ) : ?>
+							<figcaption><?php if ( '' !== $territory_caption_kicker ) : ?><small><?php echo esc_html( $territory_caption_kicker ); ?></small><?php endif; ?><?php if ( '' !== $territory_caption_title ) : ?><strong><?php echo esc_html( $territory_caption_title ); ?></strong><?php endif; ?><?php if ( '' !== $territory_caption_text ) : ?><span><?php echo esc_html( $territory_caption_text ); ?></span><?php endif; ?></figcaption>
+						<?php endif; ?>
+					</figure>
+				<?php endif; ?>
+				<?php if ( $territory_tags ) : ?>
+					<div class="territory-tags reveal">
+						<?php foreach ( $territory_tags as $territory_tag ) : ?>
+							<?php if ( is_array( $territory_tag ) && isset( $territory_tag['text'] ) && '' !== (string) $territory_tag['text'] ) : ?>
+								<span><?php echo esc_html( (string) $territory_tag['text'] ); ?></span>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</article>
+
+			<article class="about-location" id="<?php echo esc_attr( $location_id ); ?>">
+				<div class="location-copy reveal">
+					<?php if ( '' !== $location_eyebrow ) : ?>
+						<p class="eyebrow"><span></span><?php echo esc_html( $location_eyebrow ); ?></p>
+					<?php endif; ?>
+					<?php if ( '' !== $location_distance || '' !== $location_title_suffix ) : ?>
+						<h3><?php if ( '' !== $location_distance ) : ?><strong><?php echo esc_html( $location_distance ); ?></strong><?php endif; ?><?php if ( '' !== $location_distance && '' !== $location_title_suffix ) : ?> <?php endif; ?><?php echo esc_html( $location_title_suffix ); ?></h3>
+					<?php endif; ?>
+					<?php if ( '' !== $location_description ) : ?>
+						<p><?php echo esc_html( $location_description ); ?></p>
+					<?php endif; ?>
+					<?php if ( '' !== $address_label || '' !== $address_text ) : ?>
+						<div class="address"><?php if ( '' !== $address_label ) : ?><span><?php echo esc_html( $address_label ); ?></span><?php endif; ?><?php if ( '' !== $address_text ) : ?><strong><?php echo esc_html( $address_text ); ?></strong><?php endif; ?></div>
+					<?php endif; ?>
+					<?php if ( '' !== $route_link['url'] && '' !== $route_link['title'] ) : ?>
+						<a class="button button--outline" href="<?php echo esc_url( $route_link['url'] ); ?>"<?php if ( '' !== $route_link['target'] ) : ?> target="<?php echo esc_attr( $route_link['target'] ); ?>"<?php endif; ?><?php if ( '_blank' === $route_link['target'] ) : ?> rel="noopener noreferrer"<?php endif; ?>><?php echo esc_html( $route_link['title'] ); ?></a>
+					<?php endif; ?>
+				</div>
+				<div class="map-card map-card--compact map-card--google reveal reveal--delay">
+					<div class="map-route-summary" aria-hidden="true">
+						<span><?php echo esc_html( $map_from_label ); ?></span>
+						<div class="map-route-distance"><i></i><strong><?php echo esc_html( $map_distance ); ?></strong><i></i></div>
+						<span><?php echo esc_html( $map_to_label ); ?></span>
+					</div>
+					<?php if ( '' !== $map_embed_url ) : ?>
+						<iframe src="<?php echo esc_url( $map_embed_url ); ?>" title="<?php echo esc_attr( $map_title ); ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+					<?php endif; ?>
+				</div>
+			</article>
+		</div>
+	</div>
+</section>
