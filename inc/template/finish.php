@@ -19,6 +19,7 @@ $ceiling_label = (string) get_sub_field( 'ceiling_label' );
 $ceiling_value = (string) get_sub_field( 'ceiling_value' );
 $specs         = get_sub_field( 'specs' );
 $specs         = is_array( $specs ) ? $specs : array();
+$spec_row_count = max( 1, (int) ceil( count( $specs ) / 2 ) );
 ?>
 <section class="section finish" id="<?php echo esc_attr( $section_id ); ?>">
 	<div class="container finish-panel">
@@ -30,7 +31,7 @@ $specs         = is_array( $specs ) ? $specs : array();
 			<p class="eyebrow"><span></span><?php echo esc_html( $eyebrow ); ?></p>
 			<h2><?php echo esc_html( $title ); ?></h2>
 			<div class="ceiling-chip"><span><?php echo esc_html( $ceiling_label ); ?></span><strong><?php echo esc_html( $ceiling_value ); ?></strong></div>
-			<ul class="spec-grid">
+			<ul class="spec-grid" style="--spec-row-count: <?php echo esc_attr( (string) $spec_row_count ); ?>">
 				<?php foreach ( $specs as $spec ) : ?>
 					<?php $spec_text = is_array( $spec ) && isset( $spec['text'] ) ? (string) $spec['text'] : ''; ?>
 					<li><?php echo esc_html( $spec_text ); ?></li>
