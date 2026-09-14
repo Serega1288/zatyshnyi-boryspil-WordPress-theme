@@ -326,6 +326,98 @@ function project_theme_upgrade_client_content_v3( int $home_id ): bool {
 	return true;
 }
 
+/**
+ * Apply the revised builder copy without overwriting editor changes.
+ */
+function project_theme_upgrade_client_copy_v4( int $home_id ): bool {
+	if ( ! function_exists( 'update_sub_field' ) || ! function_exists( 'acf_flush_value_cache' ) ) {
+		WP_CLI::warning( 'ACF nested-field updates are unavailable; client copy v4 was not applied.' );
+		return false;
+	}
+
+	$sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable; client copy v4 was not applied.' );
+		return false;
+	}
+
+	$copy_updates = array(
+		'description'           => array(
+			'old' => 'ЖК «Затишний Бориспіль» у Борисполі реалізує багатопрофільна будівельна компанія «Агробудмеханізація».',
+			'new' => 'ЖК «Затишний Бориспіль» зводить багатопрофільна будівельна компанія «Агробудмеханізація».',
+		),
+		'assurance_description' => array(
+			'old' => 'За інформацією забудовника, завершені ним об’єкти вводилися в експлуатацію у заявлені строки.',
+			'new' => 'Завершені проєкти компанії введено в експлуатацію у заявлені строки.',
+		),
+	);
+	$expected_values = array();
+	$builder_count   = 0;
+	$updated_count   = 0;
+	$preserved_count = 0;
+
+	foreach ( $sections as $section_index => $section ) {
+		if ( ! is_array( $section ) || 'template-builder' !== ( $section['acf_fc_layout'] ?? '' ) ) {
+			continue;
+		}
+
+		++$builder_count;
+		foreach ( $copy_updates as $field_name => $copy ) {
+			$current_value = isset( $section[ $field_name ] ) && is_string( $section[ $field_name ] )
+				? $section[ $field_name ]
+				: '';
+			$expected_values[ $section_index ][ $field_name ] = $current_value;
+
+			if ( $copy['old'] === $current_value ) {
+				update_sub_field(
+					array( 'constructor', (int) $section_index + 1, $field_name ),
+					$copy['new'],
+					$home_id
+				);
+				$expected_values[ $section_index ][ $field_name ] = $copy['new'];
+				++$updated_count;
+			} elseif ( $copy['new'] !== $current_value ) {
+				++$preserved_count;
+			}
+		}
+	}
+
+	if ( 0 === $builder_count ) {
+		WP_CLI::log( 'Client content v4: builder layout is absent; nothing changed.' );
+		return true;
+	}
+
+	clean_post_cache( $home_id );
+	acf_flush_value_cache( $home_id, 'constructor' );
+	$verified_sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $verified_sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable after the client copy v4 update.' );
+		return false;
+	}
+
+	foreach ( $expected_values as $section_index => $fields ) {
+		foreach ( $fields as $field_name => $expected_value ) {
+			$verified_value = isset( $verified_sections[ $section_index ][ $field_name ] ) && is_string( $verified_sections[ $section_index ][ $field_name ] )
+				? $verified_sections[ $section_index ][ $field_name ]
+				: '';
+			if ( $expected_value !== $verified_value ) {
+				WP_CLI::warning( 'Homepage builder copy could not be verified: ' . $field_name );
+				return false;
+			}
+		}
+	}
+
+	WP_CLI::log(
+		sprintf(
+			'Client content v4: %d correction(s), %d editor-modified value(s) preserved.',
+			$updated_count,
+			$preserved_count
+		)
+	);
+
+	return true;
+}
+
 $home_id = project_theme_home_page();
 update_post_meta( $home_id, '_wp_page_template', 'page-constructor.php' );
 update_option( 'show_on_front', 'page' );
@@ -378,6 +470,15 @@ if ( $seed_version >= 1 ) {
 			WP_CLI::error( 'Client content v3 upgrade was not completed.' );
 		}
 		update_option( 'zb_seed_version', 3, false );
+	}
+	if ( $seed_version < 4 ) {
+		if ( ! project_theme_upgrade_client_copy_v4( $home_id ) ) {
+			WP_CLI::error( 'Client content v4 upgrade was not completed.' );
+		}
+		update_option( 'zb_seed_version', 4, false );
+		if ( 4 !== (int) get_option( 'zb_seed_version', 0 ) ) {
+			WP_CLI::error( 'Client content v4 was applied, but its seed version could not be recorded.' );
+		}
 	}
 
 	flush_rewrite_rules();
@@ -569,12 +670,12 @@ $sections = array(
 		'eyebrow' => 'Забудовник',
 		'builder_label' => 'ПрАТ «Агробудмеханізація»',
 		'title' => 'Відповідальність за результат',
-		'description' => 'ЖК «Затишний Бориспіль» у Борисполі реалізує багатопрофільна будівельна компанія «Агробудмеханізація».',
+		'description' => 'ЖК «Затишний Бориспіль» зводить багатопрофільна будівельна компанія «Агробудмеханізація».',
 		'primary_link' => array( 'url' => 'https://agrobudmeh.com.ua/', 'title' => 'Сайт забудовника', 'target' => '_blank' ),
 		'assurance_aria' => 'Надійність забудовника',
 		'assurance_label' => 'Надійність у строках',
 		'assurance_title' => 'Вчасне введення об’єктів',
-		'assurance_description' => 'За інформацією забудовника, завершені ним об’єкти вводилися в експлуатацію у заявлені строки.',
+		'assurance_description' => 'Завершені проєкти компанії введено в експлуатацію у заявлені строки.',
 		'secondary_link' => array( 'url' => 'https://agrobudmeh.com.ua/o-kompanii.html', 'title' => 'Докладніше про компанію', 'target' => '_blank' ),
 	),
 	array(
@@ -612,7 +713,7 @@ $sections = array(
 
 update_field( 'field_zb_constructor', $sections, $home_id );
 update_post_meta( $home_id, '_zb_content_import_version', 1 );
-update_option( 'zb_seed_version', 3, false );
+update_option( 'zb_seed_version', 4, false );
 flush_rewrite_rules();
 
 WP_CLI::success( 'Homepage, media, editable ACF content, menus and reading settings imported.' );
