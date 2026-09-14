@@ -184,6 +184,148 @@ function project_theme_seed_notification_options(): void {
 	add_option( 'zb_notify_topic', 0, '', false );
 }
 
+/**
+ * Apply the September 2026 client copy and finish-list corrections.
+ *
+ * Existing editor content is only changed when it still contains the exact old
+ * complex name or the exact original finish-list order.
+ */
+function project_theme_upgrade_client_content_v3( int $home_id ): bool {
+	$sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable; client content upgrade was not applied.' );
+		return false;
+	}
+
+	$old_name          = 'ЖК «Затишний»';
+	$correct_name      = 'ЖК «Затишний Бориспіль»';
+	$name_replacements = 0;
+	$replace_name      = static function ( $value ) use ( &$replace_name, &$name_replacements, $old_name, $correct_name ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				$value[ $key ] = $replace_name( $item );
+			}
+			return $value;
+		}
+
+		if ( is_string( $value ) ) {
+			$replacement_count = 0;
+			$value             = str_replace( $old_name, $correct_name, $value, $replacement_count );
+			$name_replacements += $replacement_count;
+		}
+
+		return $value;
+	};
+
+	$sections = $replace_name( $sections );
+	$old_specs = array(
+		'Індивідуальне газове опалення',
+		'Газовий котел у вартості',
+		'Лазерна стяжка підлоги',
+		'Штукатурка стін',
+		'Розведена електрика по квартирі',
+		'Встановлені лічильники',
+		'Радіатори під кожним вікном',
+		'Двокамерні склопакети',
+		'Шестикамерний профіль',
+		'Утеплення мінеральною ватою',
+	);
+	$correct_specs = array(
+		'Індивідуальне газове опалення',
+		'Газовий котел у вартості',
+		'Лазерна стяжка підлоги',
+		'Штукатурка стін',
+		'Розведена електрика по квартирі',
+		'Радіатори під кожним вікном',
+		'Встановлені лічильники',
+		'Двокамерні склопакети',
+		'Шестикамерний профіль',
+		'Утеплення мінеральною ватою',
+	);
+	$specs_reordered = false;
+	$reordered_indexes = array();
+
+	foreach ( $sections as $section_index => $section ) {
+		if ( ! is_array( $section ) || 'template-finish' !== ( $section['acf_fc_layout'] ?? '' ) || ! isset( $section['specs'] ) || ! is_array( $section['specs'] ) ) {
+			continue;
+		}
+
+		$current_specs = array_map(
+			static fn( $spec ): string => is_array( $spec ) && isset( $spec['text'] ) ? (string) $spec['text'] : '',
+			$section['specs']
+		);
+		if ( $old_specs !== $current_specs ) {
+			continue;
+		}
+
+		$spec_rows = array();
+		foreach ( $section['specs'] as $spec ) {
+			$spec_rows[ (string) $spec['text'] ] = $spec;
+		}
+		$sections[ $section_index ]['specs'] = array_map(
+			static fn( string $text ): array => $spec_rows[ $text ],
+			$correct_specs
+		);
+		$specs_reordered = true;
+		$reordered_indexes[] = $section_index;
+	}
+
+	if ( $name_replacements > 0 || $specs_reordered ) {
+		update_field( 'field_zb_constructor', $sections, $home_id );
+		$verified_sections = get_field( 'constructor', $home_id );
+		$verified_json     = is_array( $verified_sections ) ? wp_json_encode( $verified_sections, JSON_UNESCAPED_UNICODE ) : '';
+		if ( ! is_string( $verified_json ) || str_contains( $verified_json, $old_name ) ) {
+			WP_CLI::warning( 'Homepage client content could not be updated.' );
+			return false;
+		}
+		foreach ( $reordered_indexes as $section_index ) {
+			$verified_specs = isset( $verified_sections[ $section_index ]['specs'] ) && is_array( $verified_sections[ $section_index ]['specs'] )
+				? array_map( static fn( $spec ): string => is_array( $spec ) && isset( $spec['text'] ) ? (string) $spec['text'] : '', $verified_sections[ $section_index ]['specs'] )
+				: array();
+			if ( $correct_specs !== $verified_specs ) {
+				WP_CLI::warning( 'Homepage finish list could not be reordered.' );
+				return false;
+			}
+		}
+	}
+
+	$attachment_ids = get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'inherit',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				array(
+					'key'     => '_wp_attachment_image_alt',
+					'value'   => $old_name,
+					'compare' => 'LIKE',
+				),
+			),
+		)
+	);
+	$attachment_replacements = 0;
+	foreach ( $attachment_ids as $attachment_id ) {
+		$current_alt = (string) get_post_meta( (int) $attachment_id, '_wp_attachment_image_alt', true );
+		$updated_alt = str_replace( $old_name, $correct_name, $current_alt );
+		if ( $updated_alt !== $current_alt ) {
+			update_post_meta( (int) $attachment_id, '_wp_attachment_image_alt', $updated_alt );
+			++$attachment_replacements;
+		}
+	}
+
+	WP_CLI::log(
+		sprintf(
+			'Client content v3: %d name corrections, %d attachment alt corrections, finish list %s.',
+			$name_replacements,
+			$attachment_replacements,
+			$specs_reordered ? 'reordered' : 'already current or editor-modified'
+		)
+	);
+
+	return true;
+}
+
 $home_id = project_theme_home_page();
 update_post_meta( $home_id, '_wp_page_template', 'page-constructor.php' );
 update_option( 'show_on_front', 'page' );
@@ -231,19 +373,25 @@ if ( $seed_version >= 1 ) {
 		}
 		update_option( 'zb_seed_version', 2, false );
 	}
+	if ( $seed_version < 3 ) {
+		if ( ! project_theme_upgrade_client_content_v3( $home_id ) ) {
+			WP_CLI::error( 'Client content v3 upgrade was not completed.' );
+		}
+		update_option( 'zb_seed_version', 3, false );
+	}
 
 	flush_rewrite_rules();
-	WP_CLI::success( 'Existing editable content preserved; lead notifications, page settings and menus verified.' );
+	WP_CLI::success( 'Existing editable content preserved; client corrections, lead notifications, page settings and menus verified.' );
 	return;
 }
 
 $images = array(
 	'logo'       => project_theme_import_asset( 'zatyshnyi-logo.svg', 'Логотип ЖК «Затишний Бориспіль»' ),
-	'hero'       => project_theme_import_asset( 'concept-front-entrance.jpg', 'Передпроєктна візуалізація п’ятиповерхових цегляних будинків ЖК «Затишний»' ),
-	'courtyard'  => project_theme_import_asset( 'concept-central-courtyard.jpg', 'Передпроєктна візуалізація центрального озелененого двору ЖК «Затишний»' ),
+	'hero'       => project_theme_import_asset( 'concept-front-entrance.jpg', 'Передпроєктна візуалізація п’ятиповерхових цегляних будинків ЖК «Затишний Бориспіль»' ),
+	'courtyard'  => project_theme_import_asset( 'concept-central-courtyard.jpg', 'Передпроєктна візуалізація центрального озелененого двору ЖК «Затишний Бориспіль»' ),
 	'aerial'     => project_theme_import_asset( 'concept-aerial.jpg', 'Передпроєктна візуалізація житлового комплексу з висоти' ),
 	'facades'    => project_theme_import_asset( 'concept-facades.jpg', 'Передпроєктна візуалізація фасадів із червоної цегли та в’їзду до паркінгу' ),
-	'playground' => project_theme_import_asset( 'concept-playground.jpg', 'Передпроєктна візуалізація дитячого майданчика на території ЖК «Затишний»' ),
+	'playground' => project_theme_import_asset( 'concept-playground.jpg', 'Передпроєктна візуалізація дитячого майданчика на території ЖК «Затишний Бориспіль»' ),
 	'finish'     => project_theme_import_asset( 'apartment-finish.png', 'Візуалізація квартири у стані під чистове оздоблення' ),
 );
 
@@ -307,7 +455,7 @@ $sections = array(
 		'developer_prefix' => 'Забудовник',
 		'developer_name' => '«Агробудмеханізація»',
 		'image' => $images['hero'],
-		'image_alt' => 'Передпроєктна візуалізація п’ятиповерхових цегляних будинків ЖК «Затишний»',
+		'image_alt' => 'Передпроєктна візуалізація п’ятиповерхових цегляних будинків ЖК «Затишний Бориспіль»',
 		'image_caption' => 'Візуалізація концепції',
 		'badge_value' => '5',
 		'badge_label' => 'поверхів',
@@ -324,9 +472,9 @@ $sections = array(
 		'section_id' => 'about',
 		'eyebrow' => 'Про комплекс',
 		'title' => 'Малоповерховий дім для спокійного життя',
-		'intro' => 'ЖК «Затишний» — це три п’ятиповерхові будинки на вісім секцій. Будинки зводяться з червоної цегли, утеплюються мінеральною ватою та обладнуються вантажопасажирськими ліфтами.',
+		'intro' => 'ЖК «Затишний Бориспіль» — це три п’ятиповерхові будинки на вісім секцій. Будинки зводяться з червоної цегли, утеплюються мінеральною ватою та обладнуються вантажопасажирськими ліфтами.',
 		'gallery' => array(
-			array( 'image' => $images['courtyard'], 'image_alt' => 'Передпроєктна візуалізація центрального озелененого двору ЖК «Затишний»', 'caption' => 'Озеленений двір', 'is_wide' => 1 ),
+			array( 'image' => $images['courtyard'], 'image_alt' => 'Передпроєктна візуалізація центрального озелененого двору ЖК «Затишний Бориспіль»', 'caption' => 'Озеленений двір', 'is_wide' => 1 ),
 			array( 'image' => $images['aerial'], 'image_alt' => 'Передпроєктна візуалізація житлового комплексу з висоти', 'caption' => 'Планування території', 'is_wide' => 0 ),
 			array( 'image' => $images['facades'], 'image_alt' => 'Передпроєктна візуалізація фасадів із червоної цегли та в’їзду до паркінгу', 'caption' => 'Цегляна архітектура', 'is_wide' => 0 ),
 		),
@@ -336,7 +484,7 @@ $sections = array(
 		'territory_title' => 'Усе потрібне — на території комплексу',
 		'territory_description' => 'Велика закрита територія об’єднує простір для прогулянок і дитячих ігор із повсякденною інфраструктурою.',
 		'territory_image' => $images['playground'],
-		'territory_image_alt' => 'Передпроєктна візуалізація дитячого майданчика на території ЖК «Затишний»',
+		'territory_image_alt' => 'Передпроєктна візуалізація дитячого майданчика на території ЖК «Затишний Бориспіль»',
 		'territory_caption_kicker' => 'Візуалізація концепції',
 		'territory_caption_title' => 'Велика закрита територія',
 		'territory_caption_text' => 'Простір для прогулянок та дитячих ігор.',
@@ -349,11 +497,11 @@ $sections = array(
 		'address_label' => 'Точна адреса',
 		'address_text' => 'м. Бориспіль, вул. Коломичівська, 73',
 		'route_link' => array( 'url' => $map_route_url, 'title' => 'Прокласти маршрут до ЖК', 'target' => '_blank' ),
-		'map_from_label' => 'ЖК «Затишний»',
+		'map_from_label' => 'ЖК «Затишний Бориспіль»',
 		'map_distance' => '≈ 1,1 км',
 		'map_to_label' => 'Центр Борисполя',
 		'map_embed_url' => $map_embed_url,
-		'map_title' => 'Маршрут від ЖК «Затишний» до центру Борисполя',
+		'map_title' => 'Маршрут від ЖК «Затишний Бориспіль» до центру Борисполя',
 	),
 	array(
 		'acf_fc_layout' => 'template-benefits',
@@ -395,7 +543,7 @@ $sections = array(
 		'title' => 'Базові роботи виконані',
 		'ceiling_label' => 'Висота стелі',
 		'ceiling_value' => '2,80 м',
-		'specs' => array_map( static fn( string $text ): array => array( 'text' => $text ), array( 'Індивідуальне газове опалення', 'Газовий котел у вартості', 'Лазерна стяжка підлоги', 'Штукатурка стін', 'Розведена електрика по квартирі', 'Встановлені лічильники', 'Радіатори під кожним вікном', 'Двокамерні склопакети', 'Шестикамерний профіль', 'Утеплення мінеральною ватою' ) ),
+		'specs' => array_map( static fn( string $text ): array => array( 'text' => $text ), array( 'Індивідуальне газове опалення', 'Газовий котел у вартості', 'Лазерна стяжка підлоги', 'Штукатурка стін', 'Розведена електрика по квартирі', 'Радіатори під кожним вікном', 'Встановлені лічильники', 'Двокамерні склопакети', 'Шестикамерний профіль', 'Утеплення мінеральною ватою' ) ),
 	),
 	array(
 		'acf_fc_layout' => 'template-documents',
@@ -403,7 +551,7 @@ $sections = array(
 		'section_id' => 'documents',
 		'eyebrow' => 'Документи',
 		'title' => 'Відкрито про будівництво',
-		'intro' => 'Тут буде зібрана дозвільна та проєктна документація щодо будівництва ЖК «Затишний».',
+		'intro' => 'Тут буде зібрана дозвільна та проєктна документація щодо будівництва ЖК «Затишний Бориспіль».',
 		'documents' => array(
 			array( 'type' => 'Дозвільні матеріали', 'title' => 'Документи на будівництво', 'description' => 'Дозвільні матеріали щодо виконання будівельних робіт.', 'note' => 'Файл буде додано після отримання від замовника', 'file' => 0, 'button_text' => '' ),
 			array( 'type' => 'Земельна ділянка', 'title' => 'Правовстановлювальні документи', 'description' => 'Правовстановлювальні та супровідні матеріали.', 'note' => 'Файл буде додано після отримання від замовника', 'file' => 0, 'button_text' => '' ),
@@ -421,7 +569,7 @@ $sections = array(
 		'eyebrow' => 'Забудовник',
 		'builder_label' => 'ПрАТ «Агробудмеханізація»',
 		'title' => 'Відповідальність за результат',
-		'description' => 'ЖК «Затишний» у Борисполі реалізує багатопрофільна будівельна компанія «Агробудмеханізація».',
+		'description' => 'ЖК «Затишний Бориспіль» у Борисполі реалізує багатопрофільна будівельна компанія «Агробудмеханізація».',
 		'primary_link' => array( 'url' => 'https://agrobudmeh.com.ua/', 'title' => 'Сайт забудовника', 'target' => '_blank' ),
 		'assurance_aria' => 'Надійність забудовника',
 		'assurance_label' => 'Надійність у строках',
@@ -464,7 +612,7 @@ $sections = array(
 
 update_field( 'field_zb_constructor', $sections, $home_id );
 update_post_meta( $home_id, '_zb_content_import_version', 1 );
-update_option( 'zb_seed_version', 2, false );
+update_option( 'zb_seed_version', 3, false );
 flush_rewrite_rules();
 
 WP_CLI::success( 'Homepage, media, editable ACF content, menus and reading settings imported.' );
