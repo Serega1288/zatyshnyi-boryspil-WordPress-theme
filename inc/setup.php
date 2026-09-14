@@ -147,6 +147,7 @@ function lux_dev_mode_head_assets() {
         body:not(.mod-dev-on) #menu-comments,
         body:not(.mod-dev-on) #toplevel_page_debug-log-viewer,
         body:not(.mod-dev-on) #toplevel_page_mlang,
+        body:not(.mod-dev-on) #toplevel_page_deployer-for-git,
         body:not(.mod-dev-on) #menu-dashboard .wp-submenu.wp-submenu-wrap
 
         {
