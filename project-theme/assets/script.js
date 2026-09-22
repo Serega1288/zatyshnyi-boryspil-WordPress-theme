@@ -249,11 +249,19 @@ const openLeadDialog = (trigger) => {
 
   setContactState(false);
   setMenuState(false);
-  setModalScrollState(true);
+  const scrollPosition = { left: window.scrollX, top: window.scrollY };
+  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
   leadDialog.showModal();
+
+  // Native dialog autofocus can scroll to the dialog's DOM position near the footer.
+  window.scrollTo(scrollPosition.left, scrollPosition.top);
+  setModalScrollState(true);
+
   requestAnimationFrame(() => {
     leadDialog.classList.add("is-visible");
     leadClose?.focus({ preventScroll: true });
+    document.documentElement.style.scrollBehavior = previousScrollBehavior;
   });
 };
 

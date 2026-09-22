@@ -157,7 +157,21 @@ try {
 	$state = get_post_meta( $lead_id, '_zb_lead_notifications', true );
 	$assert( 'accepted' === ( $state['email']['status'] ?? '' ) && 'sent' === ( $state['telegram']['status'] ?? '' ), 'Mocked delivery did not complete.' );
 	$assert( 1 === $mail_count && 1 === $http_count, 'Initial mocked delivery count is incorrect.' );
-	$assert( ! isset( $last_body['reply_markup'] ), 'A localhost-only admin link was exposed to Telegram.' );
+	$button       = $last_body['reply_markup']['inline_keyboard'][0][0] ?? array();
+	$button_url   = (string) ( $button['url'] ?? '' );
+	$expected_url = project_theme_lead_notification_link( $lead_id );
+	if ( 'localhost' === wp_parse_url( $expected_url, PHP_URL_HOST ) ) {
+		$expected_url = str_replace( '://localhost', '://127.0.0.1', $expected_url );
+	}
+	$button_query = array();
+	parse_str( (string) wp_parse_url( $button_url, PHP_URL_QUERY ), $button_query );
+	$assert(
+		'Перейти до замовлення' === ( $button['text'] ?? '' )
+		&& $expected_url === $button_url
+		&& 'zb_open_lead' === ( $button_query['action'] ?? '' )
+		&& $lead_id === absint( $button_query['lead_id'] ?? 0 ),
+		'Telegram order button does not point to the protected lead route.'
+	);
 	$assert( str_ends_with( (string) ( $last_body['text'] ?? '' ), '…' ), 'Telegram message truncation was not applied.' );
 	$assert( ! str_contains( wp_json_encode( $state ), $option_values['zb_notify_token'] ), 'Telegram token leaked into lead status.' );
 	project_theme_process_lead_notifications( $lead_id );
@@ -202,6 +216,13 @@ try {
 	$field = function_exists( 'acf_get_field' ) ? acf_get_field( 'field_zb_notify_token' ) : false;
 	$assert( is_array( $field ), 'Telegram token field is not imported.' );
 	wp_set_current_user( (int) $administrators[0] );
+	$topic_field = acf_get_field( 'field_zb_notify_topic' );
+	$assert(
+		is_array( $topic_field )
+		&& 0 === (int) ( $topic_field['min'] ?? -1 )
+		&& acf_validate_value( 0, $topic_field, 'acf[field_zb_notify_topic]' ),
+		'Optional Telegram topic ID does not accept the zero sentinel.'
+	);
 	$prepared = apply_filters( 'acf/prepare_field', $field );
 	$assert( is_array( $prepared ) && '' === ( $prepared['value'] ?? null ), 'Stored token is visible in the admin field.' );
 	apply_filters( 'acf/update_value', '', 'option', $field );

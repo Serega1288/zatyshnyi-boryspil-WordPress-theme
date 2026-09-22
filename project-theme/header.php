@@ -61,12 +61,12 @@ if ( is_array( $sales_phones ) ) {
 if ( ! is_array( $sales_phones ) || empty( $sales_phones ) ) {
 	$sales_phones = array(
 		array(
-			'phone_label' => '067-445-58-59',
-			'phone_url'   => 'tel:+380674455859',
-		),
-		array(
 			'phone_label' => '067-329-27-23',
 			'phone_url'   => 'tel:+380673292723',
+		),
+		array(
+			'phone_label' => '067-445-58-59',
+			'phone_url'   => 'tel:+380674455859',
 		),
 	);
 }
@@ -85,8 +85,8 @@ if ( ! is_array( $sales_phones ) || empty( $sales_phones ) ) {
 
 	<header class="soft-header" data-header>
 		<div class="container header-row">
-			<a class="brand" href="#top" aria-label="<?php echo esc_attr__( 'ЖК «Затишний Бориспіль», на початок сторінки', 'project-theme' ); ?>">
-				<img src="<?php echo esc_url( $header_logo_url ); ?>" alt="<?php echo esc_attr( $header_logo_alt ); ?>" width="914" height="647" />
+			<a class="brand" href="<?php echo esc_url( is_front_page() ? '#top' : home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( is_front_page() ? __( 'ЖК «Затишний Бориспіль», на початок сторінки', 'project-theme' ) : __( 'ЖК «Затишний Бориспіль», на головну сторінку', 'project-theme' ) ); ?>">
+				<img src="<?php echo esc_url( $header_logo_url ); ?>" alt="<?php echo esc_attr( $header_logo_alt ); ?>" width="1240" height="840" />
 			</a>
 			<button class="menu-button" type="button" aria-expanded="false" aria-controls="soft-nav" aria-label="<?php echo esc_attr__( 'Відкрити меню', 'project-theme' ); ?>" data-menu-button>
 				<span></span><span></span><span></span>

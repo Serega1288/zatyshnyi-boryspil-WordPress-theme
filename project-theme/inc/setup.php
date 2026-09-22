@@ -29,14 +29,18 @@ function project_theme_setup(): void {
 add_action( 'after_setup_theme', 'project_theme_setup' );
 
 /**
- * Keep the bundled brand mark as a favicon until an administrator sets a Site Icon.
+ * Keep the bundled house mark as a favicon until an administrator sets a Site Icon.
  */
 function project_theme_favicon(): void {
 	if ( has_site_icon() ) {
 		return;
 	}
+
+	$favicon_file    = get_template_directory() . '/assets/zatyshnyi-favicon.svg';
+	$favicon_url     = get_template_directory_uri() . '/assets/zatyshnyi-favicon.svg';
+	$favicon_version = is_file( $favicon_file ) ? (string) filemtime( $favicon_file ) : (string) wp_get_theme()->get( 'Version' );
 	?>
-	<link rel="icon" href="<?php echo esc_url( get_template_directory_uri() . '/assets/zatyshnyi-logo.svg' ); ?>" type="image/svg+xml">
+	<link rel="icon" href="<?php echo esc_url( add_query_arg( 'ver', $favicon_version, $favicon_url ) ); ?>" type="image/svg+xml" sizes="any">
 	<?php
 }
 add_action( 'wp_head', 'project_theme_favicon', 2 );
@@ -147,6 +151,7 @@ function lux_dev_mode_head_assets() {
         body:not(.mod-dev-on) #menu-comments,
         body:not(.mod-dev-on) #toplevel_page_debug-log-viewer,
         body:not(.mod-dev-on) #toplevel_page_mlang,
+        body:not(.mod-dev-on) #toplevel_page_easy-wp-smtp,
         body:not(.mod-dev-on) #toplevel_page_deployer-for-git,
         body:not(.mod-dev-on) #menu-dashboard .wp-submenu.wp-submenu-wrap
 

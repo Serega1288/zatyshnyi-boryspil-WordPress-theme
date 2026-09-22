@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="favicon-title">
+  <title id="favicon-title">ЖК «Затишний Бориспіль»</title>
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="#FFFFFF"/>
+  <rect x="12" y="12" width="488" height="488" rx="108" fill="none" stroke="#E3E9E4" stroke-width="8"/>
+  <g transform="matrix(0.675 0 0 0.675 -419 -284)">
+    <path fill="#1D4525" d="M1203.3,946.8v-130h56.4l-98.8-88.5v-74.2h-34.7v43.1l-122.6-109.8l-256,229.3h89.8v-33.3L1003.8,635L1170,783.5v155.8c-284.3-57.9-502,50.2-502,50.2s272.7-90,664,0C1288.1,971,1245.1,957,1203.3,946.8z"/>
+    <g fill="#7A451F">
+      <rect x="963.1" y="763.6" width="34.4" height="34.4"/>
+      <rect x="1010.1" y="763.6" width="34.4" height="34.4"/>
+      <rect x="963.1" y="811.2" width="34.4" height="34.4"/>
+      <rect x="1010.1" y="811.2" width="34.4" height="34.4"/>
+    </g>
+  </g>
+</svg>

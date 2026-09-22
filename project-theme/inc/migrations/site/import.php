@@ -418,6 +418,216 @@ function project_theme_upgrade_client_copy_v4( int $home_id ): bool {
 	return true;
 }
 
+/**
+ * Apply the September 2026 client text, contact-order and naming corrections.
+ *
+ * Known seed copy is upgraded in place. Values already changed by an editor are
+ * preserved, except for the requested sales-phone priority and the old shortened
+ * complex name, which are explicit site-wide client corrections.
+ */
+function project_theme_upgrade_client_content_v5( int $home_id ): bool {
+	$sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable; client content v5 was not applied.' );
+		return false;
+	}
+
+	$builder_description = 'ПрАТ «Агробудмеханізація» — один із найвідоміших та перевірених місцевих забудовників у Борисполі. Компанію знають як надійного забудовника, який вводить всі свої об’єкти в експлуатацію в заявлені строки.';
+	$benefit_updates      = array(
+		'Червона цегла'         => array(
+			'old' => 'Будинки з утепленням мінеральною ватою.',
+			'new' => 'Будинок будується з червоної цегли - міцної та довговічної. Фасад повністю утеплюється мінеральною ватою, зберігає тепло взимку й комфортну температуру влітку.',
+		),
+		'Лише п’ять поверхів'   => array(
+			'old' => 'Зручний малоповерховий формат.',
+			'new' => 'У будинку з невеликою кількістю поверхів, створюється затишна, спокійна атмосфера. Наявність ліфта робить користування будинком комфортнішим для сімей із маленькими дітками, та для людей старшого віку.',
+		),
+		'Закрита територія'     => array(
+			'old' => 'Великий простір для комфорту мешканців.',
+			'new' => 'Мешканці отримують не просто квартиру, а затишне місце, де можна відпочити, прогулятись або провести час із сім’єю.',
+		),
+		'Підземний паркінг'     => array(
+			'old' => 'Зручне місце для автомобіля на території ЖК.',
+			'new' => 'Зручне та захищене місце для вашого автомобіля на території ЖК. Підземний паркінг дозволяє залишити авто поруч із будинком і швидко потрапити до своєї квартири.',
+		),
+		'Окремі комори'         => array(
+			'old' => 'Додатковий простір можна придбати окремо.',
+			'new' => 'У коморі можна зберігати дитячі візочки, велосипеди, валізи, сезонний одяг та інші великогабаритні речі.',
+		),
+	);
+	$conditions_description = 'Розтермінування безпосередньо від забудовника, без % та без прив’язки до курсу долара.';
+	$known_builder_copy      = array(
+		'За інформацією забудовника, завершені ним об’єкти вводилися в експлуатацію у заявлені строки.',
+		'Завершені проєкти компанії введено в експлуатацію у заявлені строки.',
+	);
+	$old_conditions_copy     = 'Розтермінування безпосередньо від забудовника.';
+	$old_names               = array( 'ЖК «Затишний»', 'ЖК "Затишний"' );
+	$correct_name            = 'ЖК «Затишний Бориспіль»';
+	$updated_count           = 0;
+	$preserved_count         = 0;
+	$name_replacements       = 0;
+	$expected_values         = array();
+
+	$replace_name = static function ( $value ) use ( &$replace_name, &$name_replacements, $old_names, $correct_name ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				$value[ $key ] = $replace_name( $item );
+			}
+			return $value;
+		}
+
+		if ( is_string( $value ) ) {
+			foreach ( $old_names as $old_name ) {
+				$replacement_count = 0;
+				$value             = str_replace( $old_name, $correct_name, $value, $replacement_count );
+				$name_replacements += $replacement_count;
+			}
+		}
+
+		return $value;
+	};
+
+	$sections = $replace_name( $sections );
+
+	foreach ( $sections as $section_index => &$section ) {
+		if ( ! is_array( $section ) ) {
+			continue;
+		}
+
+		$layout = isset( $section['acf_fc_layout'] ) ? (string) $section['acf_fc_layout'] : '';
+		if ( 'template-builder' === $layout ) {
+			$current_value = isset( $section['assurance_description'] ) ? (string) $section['assurance_description'] : '';
+			if ( in_array( $current_value, $known_builder_copy, true ) ) {
+				$section['assurance_description'] = $builder_description;
+				$expected_values[] = array( $section_index, null, 'assurance_description', $builder_description );
+				++$updated_count;
+			} elseif ( $builder_description !== $current_value ) {
+				++$preserved_count;
+			}
+		}
+
+		if ( 'template-benefits' === $layout && isset( $section['items'] ) && is_array( $section['items'] ) ) {
+			foreach ( $section['items'] as $item_index => &$item ) {
+				if ( ! is_array( $item ) ) {
+					continue;
+				}
+
+				$title = isset( $item['title'] ) ? (string) $item['title'] : '';
+				if ( ! isset( $benefit_updates[ $title ] ) ) {
+					continue;
+				}
+
+				$current_value = isset( $item['description'] ) ? (string) $item['description'] : '';
+				$copy          = $benefit_updates[ $title ];
+				if ( $copy['old'] === $current_value ) {
+					$item['description'] = $copy['new'];
+					$expected_values[] = array( $section_index, $item_index, 'description', $copy['new'] );
+					++$updated_count;
+				} elseif ( $copy['new'] !== $current_value ) {
+					++$preserved_count;
+				}
+			}
+			unset( $item );
+		}
+
+		if ( 'template-conditions' === $layout ) {
+			$current_value = isset( $section['description'] ) ? (string) $section['description'] : '';
+			if ( $old_conditions_copy === $current_value ) {
+				$section['description'] = $conditions_description;
+				$expected_values[] = array( $section_index, null, 'description', $conditions_description );
+				++$updated_count;
+			} elseif ( $conditions_description !== $current_value ) {
+				++$preserved_count;
+			}
+		}
+	}
+	unset( $section );
+
+	if ( $updated_count > 0 || $name_replacements > 0 ) {
+		update_field( 'field_zb_constructor', $sections, $home_id );
+		clean_post_cache( $home_id );
+		if ( function_exists( 'acf_flush_value_cache' ) ) {
+			acf_flush_value_cache( $home_id, 'constructor' );
+		}
+	}
+
+	$verified_sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $verified_sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable after the client content v5 update.' );
+		return false;
+	}
+
+	foreach ( $expected_values as $expected ) {
+		list( $section_index, $item_index, $field_name, $expected_value ) = $expected;
+		if ( null === $item_index ) {
+			$verified_value = isset( $verified_sections[ $section_index ][ $field_name ] ) ? (string) $verified_sections[ $section_index ][ $field_name ] : '';
+		} else {
+			$verified_value = isset( $verified_sections[ $section_index ]['items'][ $item_index ][ $field_name ] ) ? (string) $verified_sections[ $section_index ]['items'][ $item_index ][ $field_name ] : '';
+		}
+
+		if ( $expected_value !== $verified_value ) {
+			WP_CLI::warning( 'Homepage client content v5 could not be verified: ' . $field_name );
+			return false;
+		}
+	}
+
+	$verified_json = wp_json_encode( $verified_sections, JSON_UNESCAPED_UNICODE );
+	if ( ! is_string( $verified_json ) || str_contains( $verified_json, 'ЖК «Затишний»' ) || str_contains( $verified_json, 'ЖК "Затишний"' ) ) {
+		WP_CLI::warning( 'Homepage still contains the shortened complex name after the client content v5 update.' );
+		return false;
+	}
+
+	$sales_phones       = get_field( 'sales_phones', 'option' );
+	$phones_reordered   = false;
+	$natalia_phone_row  = null;
+	$remaining_phones   = array();
+	if ( is_array( $sales_phones ) ) {
+		foreach ( $sales_phones as $phone ) {
+			if ( ! is_array( $phone ) ) {
+				$remaining_phones[] = $phone;
+				continue;
+			}
+
+			$phone_label  = isset( $phone['phone_label'] ) ? (string) $phone['phone_label'] : '';
+			$phone_url    = isset( $phone['phone_url'] ) ? (string) $phone['phone_url'] : '';
+			$phone_digits = preg_replace( '/\D+/', '', $phone_label . $phone_url );
+			if ( null === $natalia_phone_row && is_string( $phone_digits ) && str_contains( $phone_digits, '0673292723' ) ) {
+				$natalia_phone_row = $phone;
+				continue;
+			}
+
+			$remaining_phones[] = $phone;
+		}
+	}
+
+	if ( null !== $natalia_phone_row ) {
+		$ordered_phones   = array_merge( array( $natalia_phone_row ), $remaining_phones );
+		$phones_reordered = $ordered_phones !== array_values( $sales_phones );
+		if ( $phones_reordered ) {
+			update_field( 'sales_phones', $ordered_phones, 'option' );
+		}
+
+		$verified_phones = get_field( 'sales_phones', 'option' );
+		$first_label     = is_array( $verified_phones ) && isset( $verified_phones[0]['phone_label'] ) ? (string) $verified_phones[0]['phone_label'] : '';
+		if ( '0673292723' !== preg_replace( '/\D+/', '', $first_label ) ) {
+			WP_CLI::warning( 'The primary sales phone order could not be verified.' );
+			return false;
+		}
+	}
+
+	WP_CLI::log(
+		sprintf(
+			'Client content v5: %d correction(s), %d name correction(s), %d editor-modified value(s) preserved, phone order %s.',
+			$updated_count,
+			$name_replacements,
+			$preserved_count,
+			$phones_reordered ? 'updated' : 'already current'
+		)
+	);
+
+	return true;
+}
+
 $home_id = project_theme_home_page();
 update_post_meta( $home_id, '_wp_page_template', 'page-constructor.php' );
 update_option( 'show_on_front', 'page' );
@@ -480,6 +690,15 @@ if ( $seed_version >= 1 ) {
 			WP_CLI::error( 'Client content v4 was applied, but its seed version could not be recorded.' );
 		}
 	}
+	if ( $seed_version < 5 ) {
+		if ( ! project_theme_upgrade_client_content_v5( $home_id ) ) {
+			WP_CLI::error( 'Client content v5 upgrade was not completed.' );
+		}
+		update_option( 'zb_seed_version', 5, false );
+		if ( 5 !== (int) get_option( 'zb_seed_version', 0 ) ) {
+			WP_CLI::error( 'Client content v5 was applied, but its seed version could not be recorded.' );
+		}
+	}
 
 	flush_rewrite_rules();
 	WP_CLI::success( 'Existing editable content preserved; client corrections, lead notifications, page settings and menus verified.' );
@@ -507,8 +726,8 @@ $options = array(
 	'sales_kicker'         => 'Відділ продажу',
 	'sales_title'          => 'Контакти',
 	'sales_phones'         => array(
-		array( 'phone_label' => '067-445-58-59', 'phone_url' => 'tel:+380674455859' ),
 		array( 'phone_label' => '067-329-27-23', 'phone_url' => 'tel:+380673292723' ),
+		array( 'phone_label' => '067-445-58-59', 'phone_url' => 'tel:+380674455859' ),
 	),
 	'sales_address_label'  => 'Адреса',
 	'sales_address'        => 'м. Бориспіль, вул. Коломичівська, 73',
@@ -612,11 +831,11 @@ $sections = array(
 		'title' => 'Усе важливе — вже в концепції комплексу',
 		'items' => array(
 			array( 'icon' => 'heating', 'overline' => 'Ваш власний комфорт', 'title' => 'Індивідуальне газове опалення', 'description' => 'Газовий котел входить у вартість кожної квартири, тож ви самі керуєте температурою вдома.', 'badge' => 'У кожній квартирі' ),
-			array( 'icon' => 'brick', 'overline' => '', 'title' => 'Червона цегла', 'description' => 'Будинки з утепленням мінеральною ватою.', 'badge' => '' ),
-			array( 'icon' => 'building', 'overline' => '', 'title' => 'Лише п’ять поверхів', 'description' => 'Зручний малоповерховий формат.', 'badge' => '' ),
-			array( 'icon' => 'shield', 'overline' => '', 'title' => 'Закрита територія', 'description' => 'Великий простір для комфорту мешканців.', 'badge' => '' ),
-			array( 'icon' => 'parking', 'overline' => '', 'title' => 'Підземний паркінг', 'description' => 'Зручне місце для автомобіля на території ЖК.', 'badge' => '' ),
-			array( 'icon' => 'storage', 'overline' => '', 'title' => 'Окремі комори', 'description' => 'Додатковий простір можна придбати окремо.', 'badge' => '' ),
+			array( 'icon' => 'brick', 'overline' => '', 'title' => 'Червона цегла', 'description' => 'Будинок будується з червоної цегли - міцної та довговічної. Фасад повністю утеплюється мінеральною ватою, зберігає тепло взимку й комфортну температуру влітку.', 'badge' => '' ),
+			array( 'icon' => 'building', 'overline' => '', 'title' => 'Лише п’ять поверхів', 'description' => 'У будинку з невеликою кількістю поверхів, створюється затишна, спокійна атмосфера. Наявність ліфта робить користування будинком комфортнішим для сімей із маленькими дітками, та для людей старшого віку.', 'badge' => '' ),
+			array( 'icon' => 'shield', 'overline' => '', 'title' => 'Закрита територія', 'description' => 'Мешканці отримують не просто квартиру, а затишне місце, де можна відпочити, прогулятись або провести час із сім’єю.', 'badge' => '' ),
+			array( 'icon' => 'parking', 'overline' => '', 'title' => 'Підземний паркінг', 'description' => 'Зручне та захищене місце для вашого автомобіля на території ЖК. Підземний паркінг дозволяє залишити авто поруч із будинком і швидко потрапити до своєї квартири.', 'badge' => '' ),
+			array( 'icon' => 'storage', 'overline' => '', 'title' => 'Окремі комори', 'description' => 'У коморі можна зберігати дитячі візочки, велосипеди, валізи, сезонний одяг та інші великогабаритні речі.', 'badge' => '' ),
 		),
 		'hint' => 'Гортайте переваги',
 	),
@@ -675,7 +894,7 @@ $sections = array(
 		'assurance_aria' => 'Надійність забудовника',
 		'assurance_label' => 'Надійність у строках',
 		'assurance_title' => 'Вчасне введення об’єктів',
-		'assurance_description' => 'Завершені проєкти компанії введено в експлуатацію у заявлені строки.',
+		'assurance_description' => 'ПрАТ «Агробудмеханізація» — один із найвідоміших та перевірених місцевих забудовників у Борисполі. Компанію знають як надійного забудовника, який вводить всі свої об’єкти в експлуатацію в заявлені строки.',
 		'secondary_link' => array( 'url' => 'https://agrobudmeh.com.ua/o-kompanii.html', 'title' => 'Докладніше про компанію', 'target' => '_blank' ),
 	),
 	array(
@@ -684,7 +903,7 @@ $sections = array(
 		'section_id' => 'conditions',
 		'eyebrow' => 'Гнучкі умови',
 		'title' => 'Власна квартира — крок за кроком',
-		'description' => 'Розтермінування безпосередньо від забудовника.',
+		'description' => 'Розтермінування безпосередньо від забудовника, без % та без прив’язки до курсу долара.',
 		'button_text' => 'Дізнатися умови',
 		'interest' => 'Умови придбання',
 		'context' => 'Умови придбання та розтермінування',
@@ -713,7 +932,7 @@ $sections = array(
 
 update_field( 'field_zb_constructor', $sections, $home_id );
 update_post_meta( $home_id, '_zb_content_import_version', 1 );
-update_option( 'zb_seed_version', 4, false );
+update_option( 'zb_seed_version', 5, false );
 flush_rewrite_rules();
 
 WP_CLI::success( 'Homepage, media, editable ACF content, menus and reading settings imported.' );

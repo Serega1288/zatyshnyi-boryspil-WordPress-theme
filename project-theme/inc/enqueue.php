@@ -10,11 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function project_theme_enqueue_assets(): void {
-	$theme      = wp_get_theme();
-	$version    = $theme->get( 'Version' ) ?: '1.0.0';
-	$theme_uri  = get_template_directory_uri();
-	$style_path = get_template_directory() . '/assets/styles.css';
-	$script_path = get_template_directory() . '/assets/script.js';
+	$theme                = wp_get_theme();
+	$version              = $theme->get( 'Version' ) ?: '1.0.0';
+	$theme_uri            = get_template_directory_uri();
+	$style_path           = get_template_directory() . '/assets/styles.css';
+	$not_found_style_path = get_template_directory() . '/assets/404.css';
+	$script_path          = get_template_directory() . '/assets/script.js';
 
 	wp_enqueue_style(
 		'project-theme-fonts',
@@ -29,6 +30,15 @@ function project_theme_enqueue_assets(): void {
 		array( 'project-theme-fonts' ),
 		is_file( $style_path ) ? (string) filemtime( $style_path ) : $version
 	);
+
+	if ( is_404() ) {
+		wp_enqueue_style(
+			'project-theme-404',
+			$theme_uri . '/assets/404.css',
+			array( 'project-theme-styles' ),
+			is_file( $not_found_style_path ) ? (string) filemtime( $not_found_style_path ) : $version
+		);
+	}
 
 	wp_enqueue_script(
 		'project-theme-script',
