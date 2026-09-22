@@ -41,6 +41,22 @@ function project_theme_is_notification_field( array $field ): bool {
 }
 
 /**
+ * Keep zero as the valid "no topic" sentinel for the already-imported ACF field.
+ *
+ * @param mixed $field ACF field definition.
+ * @return mixed
+ */
+function project_theme_load_notification_topic_field( $field ) {
+	if ( is_array( $field ) ) {
+		$field['min']  = 0;
+		$field['step'] = 1;
+	}
+
+	return $field;
+}
+add_filter( 'acf/load_field/key=field_zb_notify_topic', 'project_theme_load_notification_topic_field' );
+
+/**
  * Hide technical fields from non-administrators and never refill the token.
  *
  * @param mixed $field ACF field definition.
@@ -84,6 +100,11 @@ function project_theme_load_notification_value( $value, $post_id, array $field )
 	}
 	if ( in_array( $field['name'], array( 'zb_notify_token', 'zb_notify_clear_token' ), true ) ) {
 		return '';
+	}
+	if ( 'zb_notify_topic' === $field['name'] ) {
+		$topic = absint( get_option( 'zb_notify_topic', 0 ) );
+
+		return $topic > 0 ? $topic : '';
 	}
 
 	return get_option( $field['name'], $value );
@@ -222,21 +243,6 @@ function project_theme_lead_notification_text( int $lead_id, array $data ): stri
 }
 
 /**
- * Whether Telegram can offer a meaningful admin URL button for this install.
- */
-function project_theme_has_public_notification_url( string $url ): bool {
-	$host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
-	if ( '' === $host || in_array( $host, array( 'localhost', '127.0.0.1', '::1' ), true ) ) {
-		return false;
-	}
-	if ( ! str_contains( $host, '.' ) || str_ends_with( $host, '.local' ) || str_ends_with( $host, '.test' ) ) {
-		return false;
-	}
-
-	return true;
-}
-
-/**
  * Deliver one channel and return a redacted status suitable for post meta.
  *
  * @return array{status:string,detail:string}
@@ -285,23 +291,27 @@ function project_theme_send_lead_channel( string $channel, int $lead_id, array $
 	if ( mb_strlen( $text ) > 1700 ) {
 		$telegram_text .= "\n…";
 	}
+
+	// Telegram URL buttons reject the single-label localhost hostname.
+	if ( 'localhost' === wp_parse_url( $link, PHP_URL_HOST ) ) {
+		$link = str_replace( '://localhost', '://127.0.0.1', $link );
+	}
+
 	$body = array(
 		'chat_id'              => $chat,
 		'text'                 => $telegram_text,
 		'link_preview_options' => array( 'is_disabled' => true ),
-	);
-	if ( project_theme_has_public_notification_url( $link ) ) {
-		$body['reply_markup'] = array(
+		'reply_markup'         => array(
 			'inline_keyboard' => array(
 				array(
 					array(
-						'text' => __( 'Перейти до заявки', 'project-theme' ),
+						'text' => __( 'Перейти до замовлення', 'project-theme' ),
 						'url'  => $link,
 					),
 				),
 			),
-		);
-	}
+		),
+	);
 
 	$topic = absint( get_option( 'zb_notify_topic', 0 ) );
 	if ( $topic > 0 ) {

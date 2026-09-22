@@ -68,12 +68,12 @@ if ( is_array( $sales_phones ) ) {
 if ( ! is_array( $sales_phones ) || empty( $sales_phones ) ) {
 	$sales_phones = array(
 		array(
-			'phone_label' => '067-445-58-59',
-			'phone_url'   => 'tel:+380674455859',
-		),
-		array(
 			'phone_label' => '067-329-27-23',
 			'phone_url'   => 'tel:+380673292723',
+		),
+		array(
+			'phone_label' => '067-445-58-59',
+			'phone_url'   => 'tel:+380674455859',
 		),
 	);
 }
@@ -114,7 +114,7 @@ $footer_developer_target = isset( $footer_developer_link['target'] ) && '_blank'
 		<div class="container footer-shell">
 			<div class="footer-grid">
 				<div class="footer-brand">
-					<img src="<?php echo esc_url( $footer_logo_url ); ?>" alt="<?php echo esc_attr( $footer_logo_alt ); ?>" width="914" height="647" />
+					<img src="<?php echo esc_url( $footer_logo_url ); ?>" alt="<?php echo esc_attr( $footer_logo_alt ); ?>" width="1240" height="840" />
 					<p><?php echo esc_html( $footer_description ); ?></p>
 					<button class="button button--clay footer-cta" type="button" data-open-lead data-interest="<?php echo esc_attr( $footer_cta_interest ); ?>" data-context="<?php echo esc_attr( $footer_cta_context ); ?>"><?php echo esc_html( $footer_cta_text ); ?></button>
 				</div>

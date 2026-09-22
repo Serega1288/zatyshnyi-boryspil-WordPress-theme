@@ -517,7 +517,7 @@ function project_theme_notifications_group(): array {
 				'name'    => 'zb_notify_topic',
 				'label'   => __( 'ID теми (необов’язково)', 'project-theme' ),
 				'type'    => 'number',
-				'min'     => 1,
+				'min'     => 0,
 				'step'    => 1,
 				'wrapper' => array( 'width' => '25' ),
 			),
