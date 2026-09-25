@@ -54,6 +54,7 @@ function project_theme_import_asset( string $filename, string $alt = '' ): int {
 		'png'  => 'image/png',
 		'svg'  => 'image/svg+xml',
 		'webp' => 'image/webp',
+		'pdf'  => 'application/pdf',
 	);
 	$mime      = $mimes[ $extension ] ?? 'application/octet-stream';
 
@@ -628,6 +629,296 @@ function project_theme_upgrade_client_content_v5( int $home_id ): bool {
 	return true;
 }
 
+/**
+ * Apply the document, logo and layout corrections supplied in September 2026.
+ *
+ * The migration starts from the current ACF value and only replaces the known
+ * seeded cards, so unrelated editor changes remain intact.
+ */
+function project_theme_upgrade_client_content_v6( int $home_id ): bool {
+	$permit_id = project_theme_import_asset(
+		'documents/dozvil-na-vykonannia-budivelnykh-robit.pdf',
+		'Дозвіл на виконання будівельних робіт ЖК «Затишний Бориспіль»'
+	);
+	$lease_id  = project_theme_import_asset(
+		'documents/vytiah-pro-reiestratsiiu-prava-orendy-kolomychivska-73.pdf',
+		'Витяг про реєстрацію права оренди земельної ділянки на вул. Коломичівській, 73'
+	);
+
+	// The logo is already present in Media Library on existing sites. Refresh
+	// that imported attachment in place so saved ACF references keep working.
+	$logo_id          = project_theme_import_asset( 'zatyshnyi-logo.svg', 'Логотип ЖК «Затишний Бориспіль»' );
+	$logo_source      = realpath( get_template_directory() . '/assets/zatyshnyi-logo.svg' );
+	$logo_assets_root = realpath( get_template_directory() . '/assets' );
+	$logo_destination = get_attached_file( $logo_id );
+	if (
+		! $logo_source ||
+		! $logo_assets_root ||
+		! str_starts_with( $logo_source, $logo_assets_root . DIRECTORY_SEPARATOR ) ||
+		! is_string( $logo_destination ) ||
+		'' === $logo_destination
+	) {
+		WP_CLI::warning( 'The imported logo attachment could not be resolved.' );
+		return false;
+	}
+
+	$source_hash      = hash_file( 'sha256', $logo_source );
+	$destination_hash = is_file( $logo_destination ) ? hash_file( 'sha256', $logo_destination ) : false;
+	if ( ! is_string( $source_hash ) || ( $source_hash !== $destination_hash && ! copy( $logo_source, $logo_destination ) ) ) {
+		WP_CLI::warning( 'The imported logo attachment could not be refreshed.' );
+		return false;
+	}
+	update_post_meta( $logo_id, '_wp_attachment_image_alt', 'Логотип ЖК «Затишний Бориспіль»' );
+
+	$sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable; client content v6 was not applied.' );
+		return false;
+	}
+
+	$metric_value       = '36,73–85,99 м²';
+	$metric_label       = 'площа квартир';
+	$license_text       = 'Ліцензія ДАБІУ Nº2013056536, видана 27.11.2018 р';
+	$changed            = false;
+	$updated_count      = 0;
+	$preserved_count    = 0;
+	$expected_metrics   = array();
+	$expected_benefits  = array();
+	$expected_documents = array();
+
+	$document_updates = array(
+		'Дозвільні матеріали' => array(
+			'type'        => 'Дозвільні матеріали',
+			'title'       => 'Дозвіл на виконання будівельних робіт',
+			'description' => 'Витяг з Реєстру будівельної діяльності. Реєстраційний номер КС012250306646, документ чинний від 07.03.2025.',
+			'note'        => '',
+			'file'        => $permit_id,
+			'button_text' => 'Переглянути документ ↗',
+		),
+		'Земельна ділянка' => array(
+			'type'        => 'Земельна ділянка',
+			'title'       => 'Витяг про реєстрацію права оренди',
+			'description' => 'Право оренди земельної ділянки площею 1,4216 га, кадастровий номер 3210500000:09:003:0004, строком до 09.09.2032.',
+			'note'        => '',
+			'file'        => $lease_id,
+			'button_text' => 'Переглянути документ ↗',
+		),
+		'Проєктні матеріали' => array(
+			'type'        => 'Ліцензійні дані',
+			'title'       => 'Ліцензія на будівельну діяльність',
+			'description' => $license_text,
+			'note'        => 'Відомості про ліцензію забудовника',
+			'file'        => 0,
+			'button_text' => '',
+		),
+		'Ліцензійні дані' => array(
+			'type'        => 'Ліцензійні дані',
+			'title'       => 'Ліцензія на будівельну діяльність',
+			'description' => $license_text,
+			'note'        => 'Відомості про ліцензію забудовника',
+			'file'        => 0,
+			'button_text' => '',
+		),
+	);
+	$document_seed_rows = array(
+		'Дозвільні матеріали' => array(
+			'type'        => 'Дозвільні матеріали',
+			'title'       => 'Документи на будівництво',
+			'description' => 'Дозвільні матеріали щодо виконання будівельних робіт.',
+			'note'        => 'Файл буде додано після отримання від замовника',
+			'file'        => 0,
+			'button_text' => '',
+		),
+		'Земельна ділянка' => array(
+			'type'        => 'Земельна ділянка',
+			'title'       => 'Правовстановлювальні документи',
+			'description' => 'Правовстановлювальні та супровідні матеріали.',
+			'note'        => 'Файл буде додано після отримання від замовника',
+			'file'        => 0,
+			'button_text' => '',
+		),
+		'Проєктні матеріали' => array(
+			'type'        => 'Проєктні матеріали',
+			'title'       => 'Містобудівна документація',
+			'description' => 'Матеріали, що визначають параметри та реалізацію проєкту.',
+			'note'        => 'Файл буде додано після отримання від замовника',
+			'file'        => 0,
+			'button_text' => '',
+		),
+	);
+
+	$normalize_document = static function ( array $document ): array {
+		$file_id = isset( $document['file']['ID'] )
+			? (int) $document['file']['ID']
+			: (int) ( $document['file'] ?? 0 );
+
+		return array(
+			'type'        => (string) ( $document['type'] ?? '' ),
+			'title'       => (string) ( $document['title'] ?? '' ),
+			'description' => (string) ( $document['description'] ?? '' ),
+			'note'        => (string) ( $document['note'] ?? '' ),
+			'file'        => $file_id,
+			'button_text' => (string) ( $document['button_text'] ?? '' ),
+		);
+	};
+
+	foreach ( $sections as $section_index => &$section ) {
+		if ( ! is_array( $section ) ) {
+			continue;
+		}
+
+		$layout = isset( $section['acf_fc_layout'] ) ? (string) $section['acf_fc_layout'] : '';
+		if ( 'template-hero' === $layout && isset( $section['metrics'] ) && is_array( $section['metrics'] ) ) {
+			foreach ( $section['metrics'] as $metric_index => &$metric ) {
+				if ( ! is_array( $metric ) ) {
+					continue;
+				}
+
+				$current_value = isset( $metric['value'] ) ? (string) $metric['value'] : '';
+				$current_label = isset( $metric['label'] ) ? (string) $metric['label'] : '';
+				$value_is_known = in_array( $current_value, array( '36,73 м²', $metric_value ), true );
+				$label_is_known = in_array( $current_label, array( 'мінімальна площа', $metric_label ), true );
+				if ( $value_is_known && $label_is_known ) {
+					if ( $metric_value !== $current_value || $metric_label !== (string) ( $metric['label'] ?? '' ) ) {
+						$metric['value'] = $metric_value;
+						$metric['label'] = $metric_label;
+						$changed         = true;
+						++$updated_count;
+					}
+				} elseif ( $value_is_known || $label_is_known ) {
+					++$preserved_count;
+				}
+
+				$expected_metrics[ $section_index ][ $metric_index ] = array(
+					'value' => (string) ( $metric['value'] ?? '' ),
+					'label' => (string) ( $metric['label'] ?? '' ),
+				);
+			}
+			unset( $metric );
+		}
+
+		if ( 'template-benefits' === $layout && isset( $section['items'] ) && is_array( $section['items'] ) ) {
+			$brick_index     = null;
+			$territory_index = null;
+			foreach ( $section['items'] as $item_index => $item ) {
+				$title = is_array( $item ) && isset( $item['title'] ) ? (string) $item['title'] : '';
+				if ( 'Червона цегла' === $title ) {
+					$brick_index = $item_index;
+				} elseif ( 'Закрита територія' === $title ) {
+					$territory_index = $item_index;
+				}
+			}
+
+			if ( 1 === $brick_index && 3 === $territory_index ) {
+				$brick_item                              = $section['items'][ $brick_index ];
+				$section['items'][ $brick_index ]         = $section['items'][ $territory_index ];
+				$section['items'][ $territory_index ]     = $brick_item;
+				$changed                                   = true;
+				++$updated_count;
+			} elseif ( null !== $brick_index && null !== $territory_index && ( 3 !== $brick_index || 1 !== $territory_index ) ) {
+				++$preserved_count;
+			}
+
+			$expected_benefits[ $section_index ] = array_map(
+				static fn( $item ): string => is_array( $item ) ? (string) ( $item['title'] ?? '' ) : '',
+				$section['items']
+			);
+		}
+
+		if ( 'template-documents' === $layout && isset( $section['documents'] ) && is_array( $section['documents'] ) ) {
+			foreach ( $section['documents'] as $document_index => &$document ) {
+				if ( ! is_array( $document ) ) {
+					continue;
+				}
+
+				$type              = isset( $document['type'] ) ? (string) $document['type'] : '';
+				$current_document  = $normalize_document( $document );
+				$expected_document = $current_document;
+				if ( isset( $document_updates[ $type ], $document_seed_rows[ $type ] ) ) {
+					$updated_document = $normalize_document( $document_updates[ $type ] );
+					$seed_document    = $normalize_document( $document_seed_rows[ $type ] );
+					if ( $seed_document === $current_document ) {
+						$document          = $document_updates[ $type ];
+						$expected_document = $updated_document;
+						$changed           = true;
+						++$updated_count;
+					} elseif ( $updated_document !== $current_document ) {
+						++$preserved_count;
+					}
+				}
+
+				$expected_documents[ $section_index ][ $document_index ] = $expected_document;
+			}
+			unset( $document );
+		}
+	}
+	unset( $section );
+
+	if ( $changed ) {
+		update_field( 'field_zb_constructor', $sections, $home_id );
+		clean_post_cache( $home_id );
+		if ( function_exists( 'acf_flush_value_cache' ) ) {
+			acf_flush_value_cache( $home_id, 'constructor' );
+		}
+	}
+
+	$verified_sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $verified_sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable after the client content v6 update.' );
+		return false;
+	}
+
+	foreach ( $expected_metrics as $section_index => $metrics ) {
+		foreach ( $metrics as $metric_index => $expected_metric ) {
+			$verified_metric = isset( $verified_sections[ $section_index ]['metrics'][ $metric_index ] ) && is_array( $verified_sections[ $section_index ]['metrics'][ $metric_index ] )
+				? $verified_sections[ $section_index ]['metrics'][ $metric_index ]
+				: array();
+			if (
+				$expected_metric['value'] !== (string) ( $verified_metric['value'] ?? '' ) ||
+				$expected_metric['label'] !== (string) ( $verified_metric['label'] ?? '' )
+			) {
+				WP_CLI::warning( 'Homepage metric could not be verified after the client content v6 update.' );
+				return false;
+			}
+		}
+	}
+
+	foreach ( $expected_benefits as $section_index => $expected_titles ) {
+		$verified_items = isset( $verified_sections[ $section_index ]['items'] ) && is_array( $verified_sections[ $section_index ]['items'] )
+			? $verified_sections[ $section_index ]['items']
+			: array();
+		$verified_titles = array_map(
+			static fn( $item ): string => is_array( $item ) ? (string) ( $item['title'] ?? '' ) : '',
+			$verified_items
+		);
+		if ( $expected_titles !== $verified_titles ) {
+			WP_CLI::warning( 'Homepage benefits could not be verified after the client content v6 update.' );
+			return false;
+		}
+	}
+
+	foreach ( $expected_documents as $section_index => $documents ) {
+		foreach ( $documents as $document_index => $expected_document ) {
+			$verified_document = isset( $verified_sections[ $section_index ]['documents'][ $document_index ] ) && is_array( $verified_sections[ $section_index ]['documents'][ $document_index ] )
+				? $normalize_document( $verified_sections[ $section_index ]['documents'][ $document_index ] )
+				: array();
+			if ( $expected_document !== $verified_document ) {
+				WP_CLI::warning( 'Homepage document could not be verified after the client content v6 update.' );
+				return false;
+			}
+		}
+	}
+
+	WP_CLI::log(
+		sprintf(
+			'Client content v6: logo and assets verified, %d correction(s), %d editor-modified value(s) preserved.',
+			$updated_count,
+			$preserved_count
+		)
+	);
+	return true;
+}
+
 $home_id = project_theme_home_page();
 update_post_meta( $home_id, '_wp_page_template', 'page-constructor.php' );
 update_option( 'show_on_front', 'page' );
@@ -699,6 +990,15 @@ if ( $seed_version >= 1 ) {
 			WP_CLI::error( 'Client content v5 was applied, but its seed version could not be recorded.' );
 		}
 	}
+	if ( $seed_version < 6 ) {
+		if ( ! project_theme_upgrade_client_content_v6( $home_id ) ) {
+			WP_CLI::error( 'Client content v6 upgrade was not completed.' );
+		}
+		update_option( 'zb_seed_version', 6, false );
+		if ( 6 !== (int) get_option( 'zb_seed_version', 0 ) ) {
+			WP_CLI::error( 'Client content v6 was applied, but its seed version could not be recorded.' );
+		}
+	}
 
 	flush_rewrite_rules();
 	WP_CLI::success( 'Existing editable content preserved; client corrections, lead notifications, page settings and menus verified.' );
@@ -713,6 +1013,11 @@ $images = array(
 	'facades'    => project_theme_import_asset( 'concept-facades.jpg', 'Передпроєктна візуалізація фасадів із червоної цегли та в’їзду до паркінгу' ),
 	'playground' => project_theme_import_asset( 'concept-playground.jpg', 'Передпроєктна візуалізація дитячого майданчика на території ЖК «Затишний Бориспіль»' ),
 	'finish'     => project_theme_import_asset( 'apartment-finish.png', 'Візуалізація квартири у стані під чистове оздоблення' ),
+);
+
+$documents = array(
+	'permit' => project_theme_import_asset( 'documents/dozvil-na-vykonannia-budivelnykh-robit.pdf', 'Дозвіл на виконання будівельних робіт ЖК «Затишний Бориспіль»' ),
+	'lease'  => project_theme_import_asset( 'documents/vytiah-pro-reiestratsiiu-prava-orendy-kolomychivska-73.pdf', 'Витяг про реєстрацію права оренди земельної ділянки на вул. Коломичівській, 73' ),
 );
 
 $map_search_url = 'https://www.google.com/maps/search/?api=1&query=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073';
@@ -783,7 +1088,7 @@ $sections = array(
 			array( 'value' => '3', 'label' => 'будинки' ),
 			array( 'value' => '8', 'label' => 'секцій' ),
 			array( 'value' => '5', 'label' => 'поверхів' ),
-			array( 'value' => '36,73 м²', 'label' => 'мінімальна площа' ),
+			array( 'value' => '36,73–85,99 м²', 'label' => 'площа квартир' ),
 		),
 	),
 	array(
@@ -831,9 +1136,9 @@ $sections = array(
 		'title' => 'Усе важливе — вже в концепції комплексу',
 		'items' => array(
 			array( 'icon' => 'heating', 'overline' => 'Ваш власний комфорт', 'title' => 'Індивідуальне газове опалення', 'description' => 'Газовий котел входить у вартість кожної квартири, тож ви самі керуєте температурою вдома.', 'badge' => 'У кожній квартирі' ),
-			array( 'icon' => 'brick', 'overline' => '', 'title' => 'Червона цегла', 'description' => 'Будинок будується з червоної цегли - міцної та довговічної. Фасад повністю утеплюється мінеральною ватою, зберігає тепло взимку й комфортну температуру влітку.', 'badge' => '' ),
-			array( 'icon' => 'building', 'overline' => '', 'title' => 'Лише п’ять поверхів', 'description' => 'У будинку з невеликою кількістю поверхів, створюється затишна, спокійна атмосфера. Наявність ліфта робить користування будинком комфортнішим для сімей із маленькими дітками, та для людей старшого віку.', 'badge' => '' ),
 			array( 'icon' => 'shield', 'overline' => '', 'title' => 'Закрита територія', 'description' => 'Мешканці отримують не просто квартиру, а затишне місце, де можна відпочити, прогулятись або провести час із сім’єю.', 'badge' => '' ),
+			array( 'icon' => 'building', 'overline' => '', 'title' => 'Лише п’ять поверхів', 'description' => 'У будинку з невеликою кількістю поверхів, створюється затишна, спокійна атмосфера. Наявність ліфта робить користування будинком комфортнішим для сімей із маленькими дітками, та для людей старшого віку.', 'badge' => '' ),
+			array( 'icon' => 'brick', 'overline' => '', 'title' => 'Червона цегла', 'description' => 'Будинок будується з червоної цегли - міцної та довговічної. Фасад повністю утеплюється мінеральною ватою, зберігає тепло взимку й комфортну температуру влітку.', 'badge' => '' ),
 			array( 'icon' => 'parking', 'overline' => '', 'title' => 'Підземний паркінг', 'description' => 'Зручне та захищене місце для вашого автомобіля на території ЖК. Підземний паркінг дозволяє залишити авто поруч із будинком і швидко потрапити до своєї квартири.', 'badge' => '' ),
 			array( 'icon' => 'storage', 'overline' => '', 'title' => 'Окремі комори', 'description' => 'У коморі можна зберігати дитячі візочки, велосипеди, валізи, сезонний одяг та інші великогабаритні речі.', 'badge' => '' ),
 		),
@@ -873,9 +1178,9 @@ $sections = array(
 		'title' => 'Відкрито про будівництво',
 		'intro' => 'Тут буде зібрана дозвільна та проєктна документація щодо будівництва ЖК «Затишний Бориспіль».',
 		'documents' => array(
-			array( 'type' => 'Дозвільні матеріали', 'title' => 'Документи на будівництво', 'description' => 'Дозвільні матеріали щодо виконання будівельних робіт.', 'note' => 'Файл буде додано після отримання від замовника', 'file' => 0, 'button_text' => '' ),
-			array( 'type' => 'Земельна ділянка', 'title' => 'Правовстановлювальні документи', 'description' => 'Правовстановлювальні та супровідні матеріали.', 'note' => 'Файл буде додано після отримання від замовника', 'file' => 0, 'button_text' => '' ),
-			array( 'type' => 'Проєктні матеріали', 'title' => 'Містобудівна документація', 'description' => 'Матеріали, що визначають параметри та реалізацію проєкту.', 'note' => 'Файл буде додано після отримання від замовника', 'file' => 0, 'button_text' => '' ),
+			array( 'type' => 'Дозвільні матеріали', 'title' => 'Дозвіл на виконання будівельних робіт', 'description' => 'Витяг з Реєстру будівельної діяльності. Реєстраційний номер КС012250306646, документ чинний від 07.03.2025.', 'note' => '', 'file' => $documents['permit'], 'button_text' => 'Переглянути документ ↗' ),
+			array( 'type' => 'Земельна ділянка', 'title' => 'Витяг про реєстрацію права оренди', 'description' => 'Право оренди земельної ділянки площею 1,4216 га, кадастровий номер 3210500000:09:003:0004, строком до 09.09.2032.', 'note' => '', 'file' => $documents['lease'], 'button_text' => 'Переглянути документ ↗' ),
+			array( 'type' => 'Ліцензійні дані', 'title' => 'Ліцензія на будівельну діяльність', 'description' => 'Ліцензія ДАБІУ Nº2013056536, видана 27.11.2018 р', 'note' => 'Відомості про ліцензію забудовника', 'file' => 0, 'button_text' => '' ),
 		),
 		'hint' => 'Гортайте документи',
 		'cta_text' => 'Запросити документи',
@@ -932,7 +1237,7 @@ $sections = array(
 
 update_field( 'field_zb_constructor', $sections, $home_id );
 update_post_meta( $home_id, '_zb_content_import_version', 1 );
-update_option( 'zb_seed_version', 5, false );
+update_option( 'zb_seed_version', 6, false );
 flush_rewrite_rules();
 
 WP_CLI::success( 'Homepage, media, editable ACF content, menus and reading settings imported.' );
