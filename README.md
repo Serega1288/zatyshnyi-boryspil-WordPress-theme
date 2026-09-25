@@ -56,3 +56,25 @@ npm test
 ```
 
 Стара тема та пов’язані з нею перевірочні скрипти збережені в папці `old`.
+
+## Деплой теми через Deployer for Git
+
+Гілка `theme-deploy` містить лише вміст `project-theme` у корені. Після коміту змін у `main` її потрібно зібрати й опублікувати так:
+
+```powershell
+$sourceCommit = git rev-parse main
+$deployCommit = git subtree split --prefix=project-theme $sourceCommit
+git diff --exit-code "${sourceCommit}:project-theme" "${deployCommit}^{tree}"
+git push origin "${deployCommit}:refs/heads/theme-deploy"
+```
+
+Налаштування пакета в плагіні:
+
+- тип пакета: `Theme`;
+- провайдер: `GitHub`;
+- репозиторій: `https://github.com/Serega1288/zatyshnyi-boryspil-WordPress-theme` без `.git`;
+- гілка: `theme-deploy`;
+- `Miscellaneous → Flush cache`: увімкнено;
+- для автоматичного деплою додати `Push-to-Deploy/Webhook URL` плагіна до GitHub Webhooks з типом `application/json` і подією `push`.
+
+Deployer for Git формує папку теми з назви репозиторію: `zatyshnyi-boryspil-WordPress-theme`. Після першого встановлення цю тему потрібно активувати та перевірити призначення меню. Версійні зміни ACF-контенту застосовуються окремо командою імпорту з фактичної папки активної теми.
