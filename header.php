@@ -18,8 +18,9 @@ $header_cta_text     = get_field( 'header_cta_text', 'option' );
 $header_cta_interest = get_field( 'header_cta_interest', 'option' );
 $header_cta_context  = get_field( 'header_cta_context', 'option' );
 
-$logo_fallback = get_template_directory_uri() . '/assets/zatyshnyi-logo.svg';
-$header_logo_url = $logo_fallback;
+$logo_fallback        = get_template_directory_uri() . '/assets/zatyshnyi-logo.png';
+$header_logo_mark_url = get_template_directory_uri() . '/assets/zatyshnyi-logo-mark.png';
+$header_logo_url       = $logo_fallback;
 
 if ( is_array( $header_logo ) ) {
 	$header_logo_id = isset( $header_logo['ID'] ) ? (int) $header_logo['ID'] : ( isset( $header_logo['id'] ) ? (int) $header_logo['id'] : 0 );
@@ -86,7 +87,8 @@ if ( ! is_array( $sales_phones ) || empty( $sales_phones ) ) {
 	<header class="soft-header" data-header>
 		<div class="container header-row">
 			<a class="brand" href="<?php echo esc_url( is_front_page() ? '#top' : home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( is_front_page() ? __( 'ЖК «Затишний Бориспіль», на початок сторінки', 'project-theme' ) : __( 'ЖК «Затишний Бориспіль», на головну сторінку', 'project-theme' ) ); ?>">
-				<img src="<?php echo esc_url( $header_logo_url ); ?>" alt="<?php echo esc_attr( $header_logo_alt ); ?>" width="1240" height="840" />
+				<img class="brand-logo brand-logo--full" src="<?php echo esc_url( $header_logo_url ); ?>" alt="<?php echo esc_attr( $header_logo_alt ); ?>" width="2072" height="1435" />
+				<img class="brand-logo brand-logo--mark" src="<?php echo esc_url( $header_logo_mark_url ); ?>" alt="" aria-hidden="true" width="1141" height="699" />
 			</a>
 			<button class="menu-button" type="button" aria-expanded="false" aria-controls="soft-nav" aria-label="<?php echo esc_attr__( 'Відкрити меню', 'project-theme' ); ?>" data-menu-button>
 				<span></span><span></span><span></span>
