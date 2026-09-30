@@ -35,6 +35,12 @@ if ( '' === $header_logo_url ) {
 	$header_logo_url = $logo_fallback;
 }
 
+$header_logo_path     = wp_parse_url( $header_logo_url, PHP_URL_PATH );
+$header_logo_filename = is_string( $header_logo_path ) ? basename( $header_logo_path ) : '';
+if ( in_array( $header_logo_filename, array( 'zatyshnyi-logo.svg', 'zatyshnyi-logo-official.svg' ), true ) ) {
+	$header_logo_url = $logo_fallback;
+}
+
 $header_logo_alt     = is_string( $header_logo_alt ) ? $header_logo_alt : '';
 $contact_button_text = is_string( $contact_button_text ) && '' !== trim( $contact_button_text ) ? $contact_button_text : __( 'Контакти', 'project-theme' );
 $sales_kicker        = is_string( $sales_kicker ) && '' !== trim( $sales_kicker ) ? $sales_kicker : __( 'Відділ продажу', 'project-theme' );
