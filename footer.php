@@ -47,6 +47,12 @@ if ( '' === $footer_logo_url ) {
 	$footer_logo_url = $logo_fallback;
 }
 
+$footer_logo_path     = wp_parse_url( $footer_logo_url, PHP_URL_PATH );
+$footer_logo_filename = is_string( $footer_logo_path ) ? basename( $footer_logo_path ) : '';
+if ( in_array( $footer_logo_filename, array( 'zatyshnyi-logo.svg', 'zatyshnyi-logo-official.svg' ), true ) ) {
+	$footer_logo_url = $logo_fallback;
+}
+
 $sales_kicker        = is_string( $sales_kicker ) && '' !== trim( $sales_kicker ) ? $sales_kicker : __( 'Відділ продажу', 'project-theme' );
 $sales_address_label = is_string( $sales_address_label ) && '' !== trim( $sales_address_label ) ? $sales_address_label : __( 'Адреса', 'project-theme' );
 $sales_address       = is_string( $sales_address ) && '' !== trim( $sales_address ) ? $sales_address : __( 'м. Бориспіль, вул. Коломичівська, 73', 'project-theme' );
