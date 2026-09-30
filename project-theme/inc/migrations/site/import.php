@@ -919,6 +919,46 @@ function project_theme_upgrade_client_content_v6( int $home_id ): bool {
 	return true;
 }
 
+/**
+ * Install the client-supplied original logo and connect it to the saved options.
+ */
+function project_theme_upgrade_logo_v7(): bool {
+	$logo_id          = project_theme_import_asset( 'zatyshnyi-logo.png', 'Логотип ЖК «Затишний Бориспіль»' );
+	$logo_source      = realpath( get_template_directory() . '/assets/zatyshnyi-logo.png' );
+	$logo_assets_root = realpath( get_template_directory() . '/assets' );
+	$logo_destination = get_attached_file( $logo_id );
+
+	if (
+		! $logo_source ||
+		! $logo_assets_root ||
+		! str_starts_with( $logo_source, $logo_assets_root . DIRECTORY_SEPARATOR ) ||
+		! is_string( $logo_destination ) ||
+		'' === $logo_destination
+	) {
+		WP_CLI::warning( 'The original logo attachment could not be resolved.' );
+		return false;
+	}
+
+	$source_hash      = hash_file( 'sha256', $logo_source );
+	$destination_hash = is_file( $logo_destination ) ? hash_file( 'sha256', $logo_destination ) : false;
+	if ( ! is_string( $source_hash ) || ( $source_hash !== $destination_hash && ! copy( $logo_source, $logo_destination ) ) ) {
+		WP_CLI::warning( 'The original logo attachment could not be refreshed.' );
+		return false;
+	}
+
+	clearstatcache( true, $logo_destination );
+	if ( $source_hash !== hash_file( 'sha256', $logo_destination ) ) {
+		WP_CLI::warning( 'The original logo attachment could not be verified.' );
+		return false;
+	}
+
+	update_post_meta( $logo_id, '_wp_attachment_image_alt', 'Логотип ЖК «Затишний Бориспіль»' );
+	update_field( 'header_logo', $logo_id, 'option' );
+	update_field( 'footer_logo', $logo_id, 'option' );
+	WP_CLI::log( 'Client content v7: client-supplied original logo installed.' );
+	return true;
+}
+
 $home_id = project_theme_home_page();
 update_post_meta( $home_id, '_wp_page_template', 'page-constructor.php' );
 update_option( 'show_on_front', 'page' );
@@ -999,6 +1039,15 @@ if ( $seed_version >= 1 ) {
 			WP_CLI::error( 'Client content v6 was applied, but its seed version could not be recorded.' );
 		}
 	}
+	if ( $seed_version < 7 ) {
+		if ( ! project_theme_upgrade_logo_v7() ) {
+			WP_CLI::error( 'Client content v7 logo upgrade was not completed.' );
+		}
+		update_option( 'zb_seed_version', 7, false );
+		if ( 7 !== (int) get_option( 'zb_seed_version', 0 ) ) {
+			WP_CLI::error( 'Client content v7 was applied, but its seed version could not be recorded.' );
+		}
+	}
 
 	flush_rewrite_rules();
 	WP_CLI::success( 'Existing editable content preserved; client corrections, lead notifications, page settings and menus verified.' );
@@ -1006,7 +1055,7 @@ if ( $seed_version >= 1 ) {
 }
 
 $images = array(
-	'logo'       => project_theme_import_asset( 'zatyshnyi-logo.svg', 'Логотип ЖК «Затишний Бориспіль»' ),
+	'logo'       => project_theme_import_asset( 'zatyshnyi-logo.png', 'Логотип ЖК «Затишний Бориспіль»' ),
 	'hero'       => project_theme_import_asset( 'concept-front-entrance.jpg', 'Передпроєктна візуалізація п’ятиповерхових цегляних будинків ЖК «Затишний Бориспіль»' ),
 	'courtyard'  => project_theme_import_asset( 'concept-central-courtyard.jpg', 'Передпроєктна візуалізація центрального озелененого двору ЖК «Затишний Бориспіль»' ),
 	'aerial'     => project_theme_import_asset( 'concept-aerial.jpg', 'Передпроєктна візуалізація житлового комплексу з висоти' ),
@@ -1237,7 +1286,7 @@ $sections = array(
 
 update_field( 'field_zb_constructor', $sections, $home_id );
 update_post_meta( $home_id, '_zb_content_import_version', 1 );
-update_option( 'zb_seed_version', 6, false );
+update_option( 'zb_seed_version', 7, false );
 flush_rewrite_rules();
 
 WP_CLI::success( 'Homepage, media, editable ACF content, menus and reading settings imported.' );

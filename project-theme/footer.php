@@ -31,7 +31,7 @@ $lead_context_label    = get_field( 'lead_context_label', 'option' );
 $lead_default_context  = get_field( 'lead_default_context', 'option' );
 $lead_form_note        = get_field( 'lead_form_note', 'option' );
 
-$logo_fallback = get_template_directory_uri() . '/assets/zatyshnyi-logo.svg';
+$logo_fallback = get_template_directory_uri() . '/assets/zatyshnyi-logo.png';
 $footer_logo_url = $logo_fallback;
 
 if ( is_array( $footer_logo ) ) {
@@ -114,7 +114,7 @@ $footer_developer_target = isset( $footer_developer_link['target'] ) && '_blank'
 		<div class="container footer-shell">
 			<div class="footer-grid">
 				<div class="footer-brand">
-					<img src="<?php echo esc_url( $footer_logo_url ); ?>" alt="<?php echo esc_attr( $footer_logo_alt ); ?>" width="1240" height="840" />
+					<img src="<?php echo esc_url( $footer_logo_url ); ?>" alt="<?php echo esc_attr( $footer_logo_alt ); ?>" width="2072" height="1435" />
 					<p><?php echo esc_html( $footer_description ); ?></p>
 					<button class="button button--clay footer-cta" type="button" data-open-lead data-interest="<?php echo esc_attr( $footer_cta_interest ); ?>" data-context="<?php echo esc_attr( $footer_cta_context ); ?>"><?php echo esc_html( $footer_cta_text ); ?></button>
 				</div>
