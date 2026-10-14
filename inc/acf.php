@@ -92,6 +92,39 @@ function project_theme_acf_key_fields( array $fields, string $path ): array {
 	return $fields;
 }
 
+/**
+ * Return the editable plan-gallery fields shared by the schema and migrations.
+ *
+ * @return array<int,array<string,mixed>>
+ */
+function project_theme_apartment_plan_fields(): array {
+	$f = 'project_theme_acf_field';
+	$m = 'project_theme_acf_message';
+
+	return array(
+		$m(
+			'plans_message',
+			__( 'Схеми планувань', 'project-theme' ),
+			__( 'Додайте всі доступні варіанти для цієї кількості кімнат. Перша схема буде показана одразу.', 'project-theme' )
+		),
+		$f(
+			'plans',
+			__( 'Планування', 'project-theme' ),
+			'repeater',
+			100,
+			array(
+				'button_label' => __( 'Додати планування', 'project-theme' ),
+				'sub_fields'   => array(
+					$f( 'image', __( 'Схема', 'project-theme' ), 'image', 35 ),
+					$f( 'image_alt', __( 'Alt схеми', 'project-theme' ), 'text', 65 ),
+					$f( 'code', __( 'Код планування', 'project-theme' ), 'text', 50 ),
+					$f( 'area', __( 'Загальна площа', 'project-theme' ), 'text', 50 ),
+				),
+			)
+		),
+	);
+}
+
 function project_theme_options_group(): array {
 	$f = 'project_theme_acf_field';
 	$m = 'project_theme_acf_message';
@@ -290,7 +323,7 @@ function project_theme_constructor_group(): array {
 			$f( 'eyebrow', __( 'Надзаголовок', 'project-theme' ), 'text', 35 ),
 			$f( 'title', __( 'Заголовок', 'project-theme' ), 'textarea', 65 ),
 			$m( 'items_message', __( 'Типи квартир', 'project-theme' ) ),
-			$f( 'items', __( 'Квартири', 'project-theme' ), 'repeater', 100, array( 'sub_fields' => array(
+			$f( 'items', __( 'Квартири', 'project-theme' ), 'repeater', 100, array( 'sub_fields' => array_merge( array(
 				$f( 'anchor_id', __( 'Внутрішній якір картки', 'project-theme' ), 'text', 25 ),
 				$f( 'rooms_number', __( 'Кількість кімнат', 'project-theme' ), 'select', 20, array( 'choices' => array( '1' => '1', '2' => '2', '3' => '3' ) ) ),
 				$f( 'rooms_label', __( 'Підпис кімнат', 'project-theme' ), 'text', 25 ),
@@ -301,7 +334,7 @@ function project_theme_constructor_group(): array {
 				$f( 'button_text', __( 'Текст кнопки', 'project-theme' ), 'text', 50 ),
 				$f( 'interest', __( 'Інтерес у формі', 'project-theme' ), 'text', 40 ),
 				$f( 'context', __( 'Контекст заявки', 'project-theme' ), 'text', 60 ),
-			) ) ),
+			), project_theme_apartment_plan_fields() ) ) ),
 			$f( 'hint', __( 'Підказка слайдера', 'project-theme' ) ),
 		)
 	);
@@ -343,9 +376,6 @@ function project_theme_constructor_group(): array {
 				$f( 'button_text', __( 'Текст посилання на файл', 'project-theme' ), 'text', 50 ),
 			) ) ),
 			$f( 'hint', __( 'Підказка слайдера', 'project-theme' ), 'text', 50 ),
-			$f( 'cta_text', __( 'Текст кнопки', 'project-theme' ), 'text', 50 ),
-			$f( 'cta_interest', __( 'Інтерес у формі', 'project-theme' ), 'text', 50 ),
-			$f( 'cta_context', __( 'Контекст заявки', 'project-theme' ), 'text', 50 ),
 		)
 	);
 

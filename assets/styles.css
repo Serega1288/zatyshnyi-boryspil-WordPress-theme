@@ -129,25 +129,73 @@ p { color: var(--muted); }
 .section-intro--apartments { align-items: center; }
 .apartment-tabs { display: flex; justify-content: flex-end; gap: 8px; padding: 7px; border-radius: 999px; background: var(--green-050); }
 .apartment-tabs a { min-width: 112px; padding: 12px 16px; border-radius: 999px; text-align: center; font-size: .82rem; font-weight: 900; transition: color 180ms ease, background 180ms ease; }
-.apartment-tabs a[aria-current="true"], .apartment-tabs a:hover { color: #fff; background: var(--green-900); }
-.apartment-list { display: grid; gap: 18px; }
-.apartment-row { display: grid; min-height: 270px; grid-template-columns: 128px 260px minmax(0, 1fr) max-content; align-items: center; gap: 36px; padding: 30px 32px; border: 1px solid var(--line); border-radius: 30px; background: #fff; transition: transform 180ms ease, box-shadow 180ms ease; }
+.apartment-tabs a[aria-selected="true"], .apartment-tabs a:hover { color: #fff; background: var(--green-900); }
+.apartment-list { display: block; }
+.apartments.is-tabs-ready .apartment-row[hidden] { display: none; }
+.apartment-row { display: grid; min-height: 520px; grid-template-columns: 112px minmax(360px, 1.18fr) minmax(250px, .82fr); grid-template-areas: "pill plan copy" "pill plan cta"; grid-template-rows: 1fr auto; align-items: start; gap: 28px 34px; padding: 30px 32px; border: 1px solid var(--line); border-radius: 30px; background: #fff; transition: transform 180ms ease, box-shadow 180ms ease; }
 .apartment-row:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.room-pill { display: flex; width: 112px; aspect-ratio: 1; flex-direction: column; align-items: center; justify-content: center; border-radius: 35px; color: #fff; background: var(--green-900); }
+.room-pill { display: flex; width: 112px; aspect-ratio: 1; grid-area: pill; flex-direction: column; align-items: center; justify-content: center; border-radius: 35px; color: #fff; background: var(--green-900); }
 .room-pill strong { font-size: 3.3rem; line-height: .9; }
 .room-pill span { margin-top: 8px; font-size: .72rem; font-weight: 800; }
-.apartment-row:nth-child(2) .room-pill { color: var(--green-900); background: var(--green-100); }
-.apartment-row:nth-child(3) .room-pill { background: var(--clay-800); }
+.apartment-row--tone-1 .room-pill { color: var(--green-900); background: var(--green-100); }
+.apartment-row--tone-2 .room-pill { background: var(--clay-800); }
+.apartment-plan-gallery, .apartment-plan-fallback { min-width: 0; grid-area: plan; }
+.apartment-plan-stage { position: relative; min-height: 390px; overflow: hidden; border: 1px solid rgba(22, 61, 41, .1); border-radius: 24px; background: #f7f8f4; }
+.apartment-plan-slide { margin: 0; }
+.apartment-plan-open { position: relative; display: block; width: 100%; height: 330px; padding: 18px; overflow: hidden; border: 0; color: var(--green-900); background: transparent; cursor: zoom-in; }
+.apartment-plan-open img { width: 100%; height: 100%; object-fit: contain; transition: transform 240ms ease; }
+.apartment-plan-open:hover img { transform: scale(1.018); }
+.apartment-plan-zoom { position: absolute; right: 14px; bottom: 14px; padding: 8px 11px; border-radius: 999px; color: var(--green-900); background: rgba(255, 255, 255, .92); box-shadow: 0 8px 20px rgba(14, 47, 30, .1); font-size: .68rem; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+.apartment-plan-meta { display: flex; min-height: 60px; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 18px; border-top: 1px solid rgba(22, 61, 41, .1); background: #fff; }
+.apartment-plan-meta span { color: var(--clay-800); font-size: .78rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.apartment-plan-meta strong { color: var(--green-950); font-size: 1.18rem; }
+.apartment-plan-thumbnails { display: flex; gap: 9px; margin-top: 10px; padding: 2px 2px 7px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; scroll-snap-type: x proximity; }
+.apartment-plan-thumbnail { display: grid; width: 132px; min-width: 132px; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: 8px; padding: 6px; border: 2px solid transparent; border-radius: 15px; color: var(--green-900); background: var(--green-050); cursor: pointer; scroll-snap-align: start; text-align: left; transition: border-color 160ms ease, background 160ms ease, transform 160ms ease; }
+.apartment-plan-thumbnail:hover { transform: translateY(-2px); }
+.apartment-plan-thumbnail[aria-pressed="true"] { border-color: var(--clay-800); background: #fff; }
+.apartment-plan-thumbnail-image { display: block; width: 52px; height: 52px; overflow: hidden; border-radius: 10px; background: #fff; }
+.apartment-plan-thumbnail-image img { width: 100%; height: 100%; object-fit: contain; }
+.apartment-plan-thumbnail-copy { display: flex; min-width: 0; flex-direction: column; line-height: 1.15; }
+.apartment-plan-thumbnail-copy b { overflow: hidden; font-size: .7rem; text-overflow: ellipsis; white-space: nowrap; }
+.apartment-plan-thumbnail-copy small { margin-top: 4px; color: var(--muted); font-size: .66rem; font-weight: 800; }
+.apartment-plan-fallback { display: grid; min-height: 390px; place-items: center; padding: 28px; border-radius: 24px; background: var(--green-050); }
 .plan { width: 100%; height: 190px; color: var(--green-700); }
 .plan rect, .plan path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .plan .door { stroke: var(--clay-600); stroke-width: 2; }
+.apartment-copy { grid-area: copy; align-self: center; }
 .apartment-copy > span { color: var(--clay-800); font-size: .76rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .apartment-copy h3 { margin: 8px 0 10px; font-size: clamp(2.1rem, 3vw, 3.2rem); }
 .apartment-copy p { margin-bottom: 12px; }
 .apartment-copy small { color: var(--green-700); font-weight: 800; }
 .circle-link { display: grid; width: 58px; aspect-ratio: 1; place-items: center; border-radius: 50%; color: #fff; background: var(--clay-800); font-size: 1.5rem; transition: transform 180ms ease; }
 .circle-link:hover { transform: rotate(8deg) scale(1.05); }
-.apartment-card-cta { min-width: 176px; min-height: 54px; justify-self: end; padding-inline: 20px; white-space: nowrap; }
+.apartment-card-cta { min-width: 176px; min-height: 54px; grid-area: cta; align-self: end; justify-self: start; padding-inline: 20px; white-space: nowrap; }
+.apartment-plan-dialog { width: min(1120px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 30px; color: var(--ink); background: #fff; box-shadow: 0 34px 100px rgba(6, 29, 17, .34); opacity: 0; transform: translateY(18px) scale(.985); transition: opacity 220ms ease, transform 260ms cubic-bezier(.22, 1, .36, 1); }
+.apartment-plan-dialog::backdrop { background: rgba(8, 28, 18, 0); backdrop-filter: blur(0); transition: background-color 240ms ease, backdrop-filter 240ms ease; }
+.apartment-plan-dialog[open].is-visible { opacity: 1; transform: none; }
+.apartment-plan-dialog[open].is-visible::backdrop { background: rgba(8, 28, 18, .78); backdrop-filter: blur(6px); }
+.apartment-plan-dialog[open].is-closing { opacity: 0; pointer-events: none; transform: translateY(10px) scale(.99); }
+.apartment-plan-dialog-shell { display: grid; max-height: calc(100dvh - 32px); grid-template-rows: auto minmax(0, 1fr) auto; padding: 22px; }
+.apartment-plan-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 0 16px; }
+.apartment-plan-dialog-header span { color: var(--clay-800); font-size: .7rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+.apartment-plan-dialog-header h2 { margin-top: 3px; font-size: 1.65rem; }
+.apartment-plan-dialog-actions { display: flex; align-items: center; gap: 8px; }
+.apartment-plan-dialog-zoom { min-height: 46px; padding: 10px 15px; border: 1px solid rgba(22, 61, 41, .15); border-radius: 14px; color: var(--green-900); background: #fff; cursor: pointer; font-size: .75rem; font-weight: 900; transition: color 160ms ease, background 160ms ease, border-color 160ms ease; }
+.apartment-plan-dialog-zoom:hover, .apartment-plan-dialog-zoom[aria-pressed="true"] { border-color: var(--green-900); color: #fff; background: var(--green-900); }
+.apartment-plan-dialog-zoom span { color: inherit; font-size: inherit; letter-spacing: 0; text-transform: none; }
+.apartment-plan-dialog-close, .apartment-plan-dialog-nav { display: grid; width: 46px; height: 46px; flex: 0 0 auto; padding: 0; place-items: center; border: 1px solid rgba(22, 61, 41, .15); border-radius: 14px; color: var(--green-900); background: var(--green-050); cursor: pointer; font-weight: 900; transition: color 160ms ease, background 160ms ease, opacity 160ms ease; }
+.apartment-plan-dialog-close:hover, .apartment-plan-dialog-nav:not(:disabled):hover { color: #fff; background: var(--green-900); }
+.apartment-plan-dialog-close svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.apartment-plan-dialog-frame { display: grid; min-height: 0; place-items: center; overflow: auto; border-radius: 20px; background: #f7f8f4; }
+.apartment-plan-dialog-frame img { width: 100%; height: 100%; max-height: calc(100dvh - 190px); object-fit: contain; }
+.apartment-plan-dialog.is-actual-size .apartment-plan-dialog-frame { display: block; overscroll-behavior: contain; }
+.apartment-plan-dialog.is-actual-size .apartment-plan-dialog-frame img { width: auto; max-width: none; height: auto; max-height: none; margin-inline: auto; object-fit: initial; }
+.apartment-plan-dialog-footer { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding-top: 16px; }
+.apartment-plan-dialog-footer p { display: flex; margin: 0; align-items: baseline; justify-content: center; gap: 10px; text-align: center; }
+.apartment-plan-dialog-footer p span { color: var(--clay-800); font-size: .78rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.apartment-plan-dialog-footer p strong { color: var(--green-950); font-size: 1.16rem; }
+.apartment-plan-dialog-footer p small { color: var(--muted); font-size: .72rem; font-weight: 800; }
+.apartment-plan-dialog-nav:disabled { opacity: .34; cursor: default; }
 
 .finish { padding-top: 44px; }
 .finish-panel { display: grid; grid-template-columns: .92fr 1.08fr; gap: 24px; padding: 24px; border-radius: 44px; background: var(--green-050); }
@@ -304,7 +352,9 @@ p { color: var(--muted); }
   .benefit-bento { grid-template-columns: repeat(3, 1fr); }
   .benefit--main { grid-column: span 2; }
   .benefit--sand { grid-column: span 1; }
-  .apartment-row { grid-template-columns: 112px 210px minmax(0, 1fr) max-content; gap: 24px; }
+  .apartment-row { grid-template-columns: 96px minmax(330px, 1.1fr) minmax(220px, .9fr); gap: 24px; padding: 26px; }
+  .room-pill { width: 96px; border-radius: 30px; }
+  .room-pill strong { font-size: 3rem; }
   .conditions-panel { grid-template-columns: 1fr; grid-template-areas: "copy" "stats" "note"; padding: 48px; gap: 32px; }
   .contact-panel { padding: 48px; gap: 40px; }
 }
@@ -346,9 +396,10 @@ p { color: var(--muted); }
   .benefit--sand { grid-column: span 1; }
   .section-intro--apartments { align-items: start; }
   .apartment-tabs { justify-content: flex-start; }
-  .apartment-row { grid-template-columns: 105px minmax(0, 1fr) max-content; }
-  .apartment-row .plan { grid-column: 1 / -1; grid-row: 2; height: 220px; }
-  .apartment-copy { grid-column: 2; grid-row: 1; }
+  .apartment-row { min-height: 0; grid-template-columns: 96px minmax(0, 1fr); grid-template-areas: "pill copy" "plan plan" "cta cta"; grid-template-rows: auto; }
+  .apartment-plan-stage, .apartment-plan-fallback { min-height: 440px; }
+  .apartment-plan-open { height: 380px; }
+  .apartment-card-cta { justify-self: end; }
   .finish-panel { grid-template-columns: 1fr; }
   .finish-image { min-height: 560px; }
   .conditions-panel, .location-panel, .contact-panel { grid-template-columns: 1fr; }
@@ -387,13 +438,13 @@ body.admin-bar .soft-header { top: 32px; }
   .benefit--main { min-height: 420px; padding: 30px; }
   .apartment-tabs { width: 100%; overflow-x: auto; }
   .apartment-tabs a { min-width: 108px; }
-  .apartment-row { grid-template-columns: 82px 1fr; gap: 18px; padding: 22px; }
+  .apartment-row { grid-template-columns: 82px 1fr; grid-template-areas: "pill copy" "plan plan" "cta cta"; gap: 18px; padding: 22px; }
   .room-pill { width: 78px; border-radius: 24px; }
   .room-pill strong { font-size: 2.6rem; }
-  .apartment-copy { grid-column: 2; }
   .apartment-copy h3 { font-size: 1.85rem; }
-  .apartment-row .plan { grid-column: 1 / -1; grid-row: 2; }
-  .apartment-card-cta { grid-column: 2; grid-row: 3; }
+  .apartment-plan-stage, .apartment-plan-fallback { min-height: 390px; }
+  .apartment-plan-open { height: 330px; }
+  .apartment-card-cta { width: 100%; justify-self: stretch; }
   .finish-panel { width: calc(100% - 20px); padding: 12px; border-radius: 32px; }
   .finish-image { min-height: 440px; border-radius: 24px; }
   .finish-content { padding: 34px 12px 18px; }
@@ -443,7 +494,7 @@ body.admin-bar .soft-header { top: 32px; }
 .document-card--accent h3 { color: #fff; }
 .document-card--accent p { color: rgba(255, 255, 255, .72); }
 .document-card--accent small { border-color: rgba(255, 255, 255, .16); color: rgba(255, 255, 255, .82); }
-.document-footer { display: flex; align-items: center; justify-content: flex-end; margin-top: 28px; }
+.document-footer { display: none; }
 
 .builder { padding-top: 74px; }
 .builder-panel { display: grid; grid-template-columns: 1.05fr .95fr; align-items: stretch; gap: 22px; padding: 24px; overflow: hidden; border-radius: 46px; color: #fff; background: var(--green-900); box-shadow: 0 26px 60px rgba(22, 61, 41, .16); }
@@ -560,14 +611,31 @@ body.admin-bar .soft-header { top: 32px; }
 
   .section-intro--apartments { gap: 24px; }
   .apartment-tabs { width: 100%; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
-  .apartment-list { display: grid; grid-auto-columns: 88%; grid-auto-flow: column; grid-template-columns: none; gap: 14px; overflow-x: auto; scroll-padding-inline: 1px; scroll-snap-type: x mandatory; }
-  .apartment-row { display: flex; min-height: 540px; flex-direction: column; align-items: stretch; gap: 17px; padding: 22px; scroll-snap-align: start; }
+  .apartment-list { display: block; overflow: visible; }
+  .apartment-row { display: grid; min-height: 0; grid-template-columns: 74px minmax(0, 1fr); grid-template-areas: "pill copy" "plan plan" "cta cta"; gap: 17px; padding: 18px; }
   .room-pill { width: 74px; aspect-ratio: 1; border-radius: 23px; }
   .room-pill strong { font-size: 2.45rem; }
-  .apartment-row .plan { width: 100%; height: 168px; flex: 0 0 auto; }
   .apartment-copy { min-width: 0; }
   .apartment-copy h3 { font-size: 1.82rem; }
-  .apartment-card-cta { width: 100%; min-width: 0; align-self: stretch; justify-content: center; margin-top: auto; }
+  .apartment-plan-stage { min-height: 350px; border-radius: 20px; }
+  .apartment-plan-open { height: 292px; padding: 12px; }
+  .apartment-plan-fallback { min-height: 270px; padding: 18px; border-radius: 20px; }
+  .apartment-plan-fallback .plan { height: 190px; }
+  .apartment-plan-thumbnail { width: 122px; min-width: 122px; grid-template-columns: 46px minmax(0, 1fr); }
+  .apartment-plan-thumbnail-image { width: 46px; height: 46px; }
+  .apartment-card-cta { width: 100%; min-width: 0; align-self: stretch; justify-self: stretch; justify-content: center; }
+  .apartment-category-controls { display: flex; }
+
+  .apartment-plan-dialog { width: calc(100% - 16px); max-height: calc(100dvh - 16px); border-radius: 24px; }
+  .apartment-plan-dialog-shell { max-height: calc(100dvh - 16px); padding: 14px; }
+  .apartment-plan-dialog-header { padding-bottom: 12px; }
+  .apartment-plan-dialog-header h2 { font-size: 1.35rem; }
+  .apartment-plan-dialog-close, .apartment-plan-dialog-nav { width: 44px; height: 44px; }
+  .apartment-plan-dialog-frame { border-radius: 16px; }
+  .apartment-plan-dialog-frame img { max-height: calc(100dvh - 166px); }
+  .apartment-plan-dialog-footer { gap: 9px; padding-top: 10px; }
+  .apartment-plan-dialog-footer p { flex-wrap: wrap; gap: 3px 8px; line-height: 1.15; }
+  .apartment-plan-dialog-footer p small { width: 100%; }
 
   .finish { padding-top: 20px; }
   .finish-panel { width: calc(100% - 20px); gap: 0; padding: 10px; border-radius: 30px; }
@@ -584,7 +652,6 @@ body.admin-bar .soft-header { top: 32px; }
   .document-number { margin-bottom: 38px; }
   .document-type, .document-card small { font-size: .8rem; }
   .document-footer { display: block; margin-top: 12px; }
-  .document-footer .button { width: 100%; margin-top: 20px; }
 
   .builder { padding-top: 54px; }
   .builder-panel { width: calc(100% - 20px); gap: 10px; padding: 10px; border-radius: 31px; }
@@ -639,7 +706,6 @@ body.admin-bar .soft-header { top: 32px; }
   .header-button { min-height: 42px; padding: 9px 10px; font-size: .69rem; }
   .menu-button { width: 42px; height: 42px; }
   .moment-strip, .benefit-bento, .document-track { grid-auto-columns: 90%; }
-  .apartment-list { grid-auto-columns: 92%; }
 }
 
 /* Lead popup and sales contacts */
@@ -751,6 +817,9 @@ body.modal-open { overflow: visible; overscroll-behavior: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .apartment-row, .apartment-plan-open img, .apartment-plan-thumbnail, .apartment-plan-dialog, .apartment-plan-dialog::backdrop { transition: none !important; }
+  .apartment-plan-dialog[open], .apartment-plan-dialog[open].is-visible { opacity: 1; transform: none; }
+  .apartment-plan-dialog[open]::backdrop, .apartment-plan-dialog[open].is-visible::backdrop { background: rgba(8, 28, 18, .78); backdrop-filter: blur(6px); }
   .lead-dialog, .lead-dialog::backdrop, .dialog-close, .lead-dialog-copy, .lead-form, .lead-form-fields, .lead-success { transition: none !important; }
   .lead-dialog[open], .lead-dialog[open].is-visible { opacity: 1; transform: none; }
   .lead-dialog[open]::backdrop, .lead-dialog[open].is-visible::backdrop { background: rgba(8, 28, 18, .72); backdrop-filter: blur(7px); }

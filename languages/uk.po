@@ -1,0 +1,1478 @@
+# Copyright (C) 2026 Sergii Tomusyak
+# This file is distributed under the same license as the Затишний Бориспіль theme.
+msgid ""
+msgstr ""
+"Project-Id-Version: Затишний Бориспіль 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/project-theme\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Ukrainian\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-14T15:11:51+00:00\n"
+"PO-Revision-Date: 2026-10-14 18:15+0300\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: project-theme\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "Затишний Бориспіль"
+msgstr "Затишний Бориспіль"
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://github.com/Serega1288/zatyshnyi-boryspil-WordPress-theme"
+msgstr "https://github.com/Serega1288/zatyshnyi-boryspil-WordPress-theme"
+
+#. Description of the theme
+#: style.css
+msgid "Односторінкова WordPress-тема житлового комплексу «Затишний Бориспіль»."
+msgstr "Односторінкова WordPress-тема житлового комплексу «Затишний Бориспіль»."
+
+#. Author of the theme
+#: style.css
+msgid "Sergii Tomusyak"
+msgstr "Sergii Tomusyak"
+
+#. Author URI of the theme
+#: style.css
+msgid "https://github.com/Serega1288"
+msgstr "https://github.com/Serega1288"
+
+#: 404.php:14
+msgid "Сторінку не знайдено"
+msgstr "Сторінку не знайдено"
+
+#: 404.php:43
+msgid "Помилка 404"
+msgstr "Помилка 404"
+
+#: 404.php:44
+msgid "Такої сторінки немає"
+msgstr "Такої сторінки немає"
+
+#: 404.php:45
+msgid "Можливо, адресу введено з помилкою або сторінку було переміщено. Поверніться на головну, щоб переглянути актуальну інформацію про комплекс."
+msgstr "Можливо, адресу введено з помилкою або сторінку було переміщено. Поверніться на головну, щоб переглянути актуальну інформацію про комплекс."
+
+#: 404.php:46
+msgid "Повернутися на головну"
+msgstr "Повернутися на головну"
+
+#: footer.php:56
+#: header.php:46
+msgid "Відділ продажу"
+msgstr "Відділ продажу"
+
+#: footer.php:57
+#: header.php:48
+#: inc/acf.php:148
+#: inc/acf.php:287
+msgid "Адреса"
+msgstr "Адреса"
+
+#: footer.php:58
+#: header.php:49
+msgid "м. Бориспіль, вул. Коломичівська, 73"
+msgstr "м. Бориспіль, вул. Коломичівська, 73"
+
+#: footer.php:87
+msgid "Логотип ЖК «Затишний Бориспіль»"
+msgstr "Логотип ЖК «Затишний Бориспіль»"
+
+#: footer.php:88
+msgid "Житловий комплекс для спокійного сімейного життя у Борисполі."
+msgstr "Житловий комплекс для спокійного сімейного життя у Борисполі."
+
+#: footer.php:89
+#: header.php:51
+msgid "Обрати квартиру"
+msgstr "Обрати квартиру"
+
+#: footer.php:90
+#: footer.php:210
+#: header.php:52
+#: inc/enqueue.php:61
+#: inc/leads.php:92
+msgid "Квартира"
+msgstr "Квартира"
+
+#: footer.php:91
+#: footer.php:104
+#: header.php:53
+#: inc/enqueue.php:62
+msgid "Підбір квартири"
+msgstr "Підбір квартири"
+
+#: footer.php:96
+msgid "Відкрити на карті"
+msgstr "Відкрити на карті"
+
+#: footer.php:97
+msgid "Навігація"
+msgstr "Навігація"
+
+#: footer.php:98
+msgid "© {year} ЖК «Затишний Бориспіль»"
+msgstr "© {year} ЖК «Затишний Бориспіль»"
+
+#: footer.php:100
+msgid "Консультація"
+msgstr "Консультація"
+
+#: footer.php:101
+msgid "Поговорімо про вашу майбутню квартиру"
+msgstr "Поговорімо про вашу майбутню квартиру"
+
+#: footer.php:102
+msgid "Залиште контакти — менеджер допоможе з плануванням, наявністю та умовами придбання."
+msgstr "Залиште контакти — менеджер допоможе з плануванням, наявністю та умовами придбання."
+
+#: footer.php:103
+msgid "Ваш запит"
+msgstr "Ваш запит"
+
+#: footer.php:105
+msgid "Менеджер зв’яжеться з вами за вказаним номером телефону."
+msgstr "Менеджер зв’яжеться з вами за вказаним номером телефону."
+
+#: footer.php:110
+#: footer.php:116
+msgid "Забудовник: Агробудмеханізація"
+msgstr "Забудовник: Агробудмеханізація"
+
+#: footer.php:146
+msgid "Навігація у футері"
+msgstr "Навігація у футері"
+
+#: footer.php:167
+msgid "Повернутися на початок сторінки"
+msgstr "Повернутися на початок сторінки"
+
+#: footer.php:173
+msgid "Закрити форму"
+msgstr "Закрити форму"
+
+#: footer.php:205
+msgid "Ваше ім’я"
+msgstr "Ваше ім’я"
+
+#: footer.php:205
+msgid "Як до вас звертатися"
+msgstr "Як до вас звертатися"
+
+#: footer.php:206
+msgid "Номер телефону"
+msgstr "Номер телефону"
+
+#: footer.php:208
+msgid "Що вас цікавить?"
+msgstr "Що вас цікавить?"
+
+#: footer.php:211
+#: inc/acf.php:307
+#: inc/leads.php:93
+msgid "Паркінг"
+msgstr "Паркінг"
+
+#: footer.php:212
+#: inc/acf.php:307
+#: inc/leads.php:94
+msgid "Комора"
+msgstr "Комора"
+
+#: footer.php:213
+#: inc/leads.php:95
+msgid "Комерційне приміщення"
+msgstr "Комерційне приміщення"
+
+#: footer.php:214
+#: inc/acf.php:404
+#: inc/leads.php:96
+msgid "Умови придбання"
+msgstr "Умови придбання"
+
+#: footer.php:215
+#: inc/leads.php:97
+msgid "Питання про комплекс"
+msgstr "Питання про комплекс"
+
+#: footer.php:218
+msgid "Коментар (необов’язково)"
+msgstr "Коментар (необов’язково)"
+
+#: footer.php:218
+msgid "Напишіть ваше запитання або побажання"
+msgstr "Напишіть ваше запитання або побажання"
+
+#: footer.php:221
+msgid "Отримати консультацію"
+msgstr "Отримати консультацію"
+
+#: footer.php:227
+#: inc/enqueue.php:70
+msgid "Дякуємо за інтерес!"
+msgstr "Дякуємо за інтерес!"
+
+#: footer.php:229
+#: inc/enqueue.php:72
+msgid "Вікно автоматично закриється через 8 секунд."
+msgstr "Вікно автоматично закриється через 8 секунд."
+
+#: header.php:45
+#: header.php:47
+msgid "Контакти"
+msgstr "Контакти"
+
+#: header.php:86
+msgid "ЖК «Затишний Бориспіль» — малоповерховий житловий комплекс із цегляними будинками, індивідуальним опаленням і закритою територією."
+msgstr "ЖК «Затишний Бориспіль» — малоповерховий житловий комплекс із цегляними будинками, індивідуальним опаленням і закритою територією."
+
+#: header.php:91
+msgid "Перейти до основного вмісту"
+msgstr "Перейти до основного вмісту"
+
+#: header.php:95
+msgid "ЖК «Затишний Бориспіль», на початок сторінки"
+msgstr "ЖК «Затишний Бориспіль», на початок сторінки"
+
+#: header.php:95
+msgid "ЖК «Затишний Бориспіль», на головну сторінку"
+msgstr "ЖК «Затишний Бориспіль», на головну сторінку"
+
+#: header.php:99
+#: inc/enqueue.php:58
+msgid "Відкрити меню"
+msgstr "Відкрити меню"
+
+#: header.php:102
+msgid "Головна навігація"
+msgstr "Головна навігація"
+
+#: header.php:115
+#: inc/acf.php:142
+msgid "Контакти відділу продажу"
+msgstr "Контакти відділу продажу"
+
+#: header.php:126
+msgid "Закрити контакти"
+msgstr "Закрити контакти"
+
+#: header.php:131
+#: inc/acf.php:146
+msgid "Телефони"
+msgstr "Телефони"
+
+#: header.php:150
+msgid "Зворотний дзвінок"
+msgstr "Зворотний дзвінок"
+
+#: header.php:150
+msgid "Залишити заявку"
+msgstr "Залишити заявку"
+
+#: inc/acf.php:22
+#: inc/acf.php:186
+msgid "Глобальні налаштування"
+msgstr "Глобальні налаштування"
+
+#: inc/acf.php:23
+msgid "Налаштування теми"
+msgstr "Налаштування теми"
+
+#: inc/acf.php:52
+msgid "Додати елемент"
+msgstr "Додати елемент"
+
+#: inc/acf.php:107
+msgid "Схеми планувань"
+msgstr "Схеми планувань"
+
+#: inc/acf.php:108
+msgid "Додайте всі доступні варіанти для цієї кількості кімнат. Перша схема буде показана одразу."
+msgstr "Додайте всі доступні варіанти для цієї кількості кімнат. Перша схема буде показана одразу."
+
+#: inc/acf.php:112
+msgid "Планування"
+msgstr "Планування"
+
+#: inc/acf.php:116
+msgid "Додати планування"
+msgstr "Додати планування"
+
+#: inc/acf.php:118
+msgid "Схема"
+msgstr "Схема"
+
+#: inc/acf.php:119
+msgid "Alt схеми"
+msgstr "Alt схеми"
+
+#: inc/acf.php:120
+msgid "Код планування"
+msgstr "Код планування"
+
+#: inc/acf.php:121
+msgid "Загальна площа"
+msgstr "Загальна площа"
+
+#: inc/acf.php:133
+#: inc/lead-notifications.php:225
+#: inc/leads.php:463
+#: inc/leads.php:534
+msgid "Телефон"
+msgstr "Телефон"
+
+#: inc/acf.php:134
+msgid "Посилання телефону"
+msgstr "Посилання телефону"
+
+#: inc/acf.php:139
+#: inc/acf.php:140
+msgid "Логотип header"
+msgstr "Логотип header"
+
+#: inc/acf.php:139
+msgid "Логотип і доступний текст посилання на початок сторінки."
+msgstr "Логотип і доступний текст посилання на початок сторінки."
+
+#: inc/acf.php:141
+msgid "Alt логотипу"
+msgstr "Alt логотипу"
+
+#: inc/acf.php:142
+msgid "Кнопка та вміст контактного dropdown. Телефони й адреса повторно використовуються у footer та попапі заявки."
+msgstr "Кнопка та вміст контактного dropdown. Телефони й адреса повторно використовуються у footer та попапі заявки."
+
+#: inc/acf.php:143
+msgid "Текст кнопки контактів"
+msgstr "Текст кнопки контактів"
+
+#: inc/acf.php:144
+msgid "Надзаголовок контактів"
+msgstr "Надзаголовок контактів"
+
+#: inc/acf.php:145
+msgid "Заголовок контактів"
+msgstr "Заголовок контактів"
+
+#: inc/acf.php:146
+msgid "Додати телефон"
+msgstr "Додати телефон"
+
+#: inc/acf.php:147
+#: inc/acf.php:286
+msgid "Підпис адреси"
+msgstr "Підпис адреси"
+
+#: inc/acf.php:149
+msgid "Посилання на карту"
+msgstr "Посилання на карту"
+
+#: inc/acf.php:150
+msgid "Кнопка header"
+msgstr "Кнопка header"
+
+#: inc/acf.php:150
+msgid "Контекст автоматично підставляється у форму заявки."
+msgstr "Контекст автоматично підставляється у форму заявки."
+
+#: inc/acf.php:151
+#: inc/acf.php:160
+#: inc/acf.php:334
+#: inc/acf.php:411
+#: inc/acf.php:433
+msgid "Текст кнопки"
+msgstr "Текст кнопки"
+
+#: inc/acf.php:152
+#: inc/acf.php:161
+#: inc/acf.php:335
+#: inc/acf.php:412
+#: inc/acf.php:434
+msgid "Інтерес у формі"
+msgstr "Інтерес у формі"
+
+#: inc/acf.php:153
+#: inc/acf.php:162
+#: inc/acf.php:336
+#: inc/acf.php:413
+#: inc/acf.php:435
+#: inc/leads.php:536
+msgid "Контекст заявки"
+msgstr "Контекст заявки"
+
+#: inc/acf.php:156
+msgid "Бренд і кнопка footer"
+msgstr "Бренд і кнопка footer"
+
+#: inc/acf.php:157
+msgid "Логотип footer"
+msgstr "Логотип footer"
+
+#: inc/acf.php:158
+msgid "Alt логотипу footer"
+msgstr "Alt логотипу footer"
+
+#: inc/acf.php:159
+#: inc/acf.php:178
+#: inc/acf.php:265
+#: inc/acf.php:273
+#: inc/acf.php:285
+#: inc/acf.php:310
+#: inc/acf.php:332
+#: inc/acf.php:368
+#: inc/acf.php:373
+#: inc/acf.php:391
+#: inc/acf.php:397
+#: inc/acf.php:410
+#: inc/acf.php:428
+#: inc/acf.php:432
+msgid "Опис"
+msgstr "Опис"
+
+#: inc/acf.php:163
+msgid "Контакти footer"
+msgstr "Контакти footer"
+
+#: inc/acf.php:164
+msgid "Заголовок телефонів"
+msgstr "Заголовок телефонів"
+
+#: inc/acf.php:165
+msgid "Заголовок адреси"
+msgstr "Заголовок адреси"
+
+#: inc/acf.php:166
+msgid "Заголовок меню"
+msgstr "Заголовок меню"
+
+#: inc/acf.php:167
+msgid "Адреса у footer"
+msgstr "Адреса у footer"
+
+#: inc/acf.php:168
+msgid "Посилання адреси"
+msgstr "Посилання адреси"
+
+#: inc/acf.php:169
+msgid "Текст посилання на карту"
+msgstr "Текст посилання на карту"
+
+#: inc/acf.php:170
+msgid "Нижній рядок footer"
+msgstr "Нижній рядок footer"
+
+#: inc/acf.php:171
+msgid "Копірайт"
+msgstr "Копірайт"
+
+#: inc/acf.php:171
+msgid "Маркер {year} автоматично замінюється поточним роком."
+msgstr "Маркер {year} автоматично замінюється поточним роком."
+
+#: inc/acf.php:172
+msgid "Посилання на забудовника"
+msgstr "Посилання на забудовника"
+
+#: inc/acf.php:174
+msgid "Попап заявки"
+msgstr "Попап заявки"
+
+#: inc/acf.php:175
+msgid "Тексти попапу"
+msgstr "Тексти попапу"
+
+#: inc/acf.php:176
+#: inc/acf.php:237
+#: inc/acf.php:263
+#: inc/acf.php:271
+#: inc/acf.php:282
+#: inc/acf.php:303
+#: inc/acf.php:323
+#: inc/acf.php:352
+#: inc/acf.php:366
+#: inc/acf.php:388
+#: inc/acf.php:408
+#: inc/acf.php:426
+msgid "Надзаголовок"
+msgstr "Надзаголовок"
+
+#: inc/acf.php:177
+#: inc/acf.php:238
+#: inc/acf.php:264
+#: inc/acf.php:272
+#: inc/acf.php:304
+#: inc/acf.php:309
+#: inc/acf.php:324
+#: inc/acf.php:353
+#: inc/acf.php:367
+#: inc/acf.php:372
+#: inc/acf.php:390
+#: inc/acf.php:396
+#: inc/acf.php:409
+#: inc/acf.php:427
+#: inc/acf.php:431
+msgid "Заголовок"
+msgstr "Заголовок"
+
+#: inc/acf.php:179
+msgid "Підпис контексту"
+msgstr "Підпис контексту"
+
+#: inc/acf.php:180
+msgid "Початковий контекст"
+msgstr "Початковий контекст"
+
+#: inc/acf.php:181
+msgid "Примітка під формою"
+msgstr "Примітка під формою"
+
+#: inc/acf.php:209
+msgid "Налаштування секції"
+msgstr "Налаштування секції"
+
+#: inc/acf.php:209
+msgid "Якір вводиться без символу #. Саме це значення використовуйте у пункті меню, наприклад #about."
+msgstr "Якір вводиться без символу #. Саме це значення використовуйте у пункті меню, наприклад #about."
+
+#: inc/acf.php:210
+msgid "Приховати секцію"
+msgstr "Приховати секцію"
+
+#: inc/acf.php:213
+msgid "ID секції (якір)"
+msgstr "ID секції (якір)"
+
+#: inc/acf.php:218
+msgid "Латинські літери, цифри, дефіс або підкреслення; без # і пробілів."
+msgstr "Латинські літери, цифри, дефіс або підкреслення; без # і пробілів."
+
+#: inc/acf.php:233
+msgid "Головний екран"
+msgstr "Головний екран"
+
+#: inc/acf.php:236
+msgid "Тексти й кнопки"
+msgstr "Тексти й кнопки"
+
+#: inc/acf.php:239
+msgid "Вступний текст"
+msgstr "Вступний текст"
+
+#: inc/acf.php:240
+msgid "Основна кнопка"
+msgstr "Основна кнопка"
+
+#: inc/acf.php:241
+msgid "Текст другої кнопки"
+msgstr "Текст другої кнопки"
+
+#: inc/acf.php:242
+msgid "Інтерес другої кнопки"
+msgstr "Інтерес другої кнопки"
+
+#: inc/acf.php:243
+msgid "Контекст другої кнопки"
+msgstr "Контекст другої кнопки"
+
+#: inc/acf.php:244
+msgid "Підпис забудовника"
+msgstr "Підпис забудовника"
+
+#: inc/acf.php:245
+msgid "Назва забудовника"
+msgstr "Назва забудовника"
+
+#: inc/acf.php:246
+msgid "Зображення й позначка"
+msgstr "Зображення й позначка"
+
+#: inc/acf.php:247
+#: inc/acf.php:267
+#: inc/acf.php:274
+#: inc/acf.php:347
+#: inc/acf.php:348
+msgid "Зображення"
+msgstr "Зображення"
+
+#: inc/acf.php:248
+#: inc/acf.php:275
+#: inc/acf.php:349
+msgid "Alt зображення"
+msgstr "Alt зображення"
+
+#: inc/acf.php:249
+#: inc/acf.php:350
+msgid "Підпис зображення"
+msgstr "Підпис зображення"
+
+#: inc/acf.php:250
+msgid "Значення позначки"
+msgstr "Значення позначки"
+
+#: inc/acf.php:251
+msgid "Підпис позначки"
+msgstr "Підпис позначки"
+
+#: inc/acf.php:252
+#: inc/acf.php:253
+#: inc/acf.php:414
+#: inc/acf.php:415
+msgid "Показники"
+msgstr "Показники"
+
+#: inc/acf.php:253
+#: inc/acf.php:415
+msgid "Значення"
+msgstr "Значення"
+
+#: inc/acf.php:253
+#: inc/acf.php:267
+#: inc/acf.php:415
+msgid "Підпис"
+msgstr "Підпис"
+
+#: inc/acf.php:259
+msgid "Про комплекс"
+msgstr "Про комплекс"
+
+#: inc/acf.php:262
+msgid "Вступ секції"
+msgstr "Вступ секції"
+
+#: inc/acf.php:266
+#: inc/template/about.php:70
+msgid "Візуалізації комплексу"
+msgstr "Візуалізації комплексу"
+
+#: inc/acf.php:267
+msgid "Галерея"
+msgstr "Галерея"
+
+#: inc/acf.php:267
+msgid "Alt"
+msgstr "Alt"
+
+#: inc/acf.php:267
+msgid "Широка картка"
+msgstr "Широка картка"
+
+#: inc/acf.php:268
+msgid "Підказка галереї"
+msgstr "Підказка галереї"
+
+#: inc/acf.php:269
+msgid "Територія комплексу"
+msgstr "Територія комплексу"
+
+#: inc/acf.php:270
+msgid "Внутрішній якір території"
+msgstr "Внутрішній якір території"
+
+#: inc/acf.php:276
+msgid "Надпис фото"
+msgstr "Надпис фото"
+
+#: inc/acf.php:277
+msgid "Заголовок фото"
+msgstr "Заголовок фото"
+
+#: inc/acf.php:278
+msgid "Опис фото"
+msgstr "Опис фото"
+
+#: inc/acf.php:279
+msgid "Переваги території"
+msgstr "Переваги території"
+
+#: inc/acf.php:279
+msgid "Текст"
+msgstr "Текст"
+
+#: inc/acf.php:280
+msgid "Локація"
+msgstr "Локація"
+
+#: inc/acf.php:281
+msgid "Внутрішній якір локації"
+msgstr "Внутрішній якір локації"
+
+#: inc/acf.php:283
+msgid "Відстань"
+msgstr "Відстань"
+
+#: inc/acf.php:284
+msgid "Текст після відстані"
+msgstr "Текст після відстані"
+
+#: inc/acf.php:288
+msgid "Кнопка маршруту"
+msgstr "Кнопка маршруту"
+
+#: inc/acf.php:289
+msgid "Початок маршруту"
+msgstr "Початок маршруту"
+
+#: inc/acf.php:290
+msgid "Відстань на карті"
+msgstr "Відстань на карті"
+
+#: inc/acf.php:291
+msgid "Кінець маршруту"
+msgstr "Кінець маршруту"
+
+#: inc/acf.php:292
+msgid "Доступна назва карти"
+msgstr "Доступна назва карти"
+
+#: inc/acf.php:293
+msgid "Google Maps embed URL"
+msgstr "Google Maps embed URL"
+
+#: inc/acf.php:299
+#: inc/acf.php:306
+msgid "Переваги"
+msgstr "Переваги"
+
+#: inc/acf.php:302
+#: inc/acf.php:322
+#: inc/acf.php:365
+msgid "Заголовок секції"
+msgstr "Заголовок секції"
+
+#: inc/acf.php:305
+msgid "Картки переваг"
+msgstr "Картки переваг"
+
+#: inc/acf.php:307
+msgid "Іконка"
+msgstr "Іконка"
+
+#: inc/acf.php:307
+msgid "Опалення"
+msgstr "Опалення"
+
+#: inc/acf.php:307
+msgid "Цегла"
+msgstr "Цегла"
+
+#: inc/acf.php:307
+msgid "Будинок"
+msgstr "Будинок"
+
+#: inc/acf.php:307
+msgid "Безпека"
+msgstr "Безпека"
+
+#: inc/acf.php:308
+#: inc/acf.php:395
+#: inc/acf.php:430
+msgid "Короткий підпис"
+msgstr "Короткий підпис"
+
+#: inc/acf.php:311
+msgid "Нижня позначка"
+msgstr "Нижня позначка"
+
+#: inc/acf.php:313
+#: inc/acf.php:338
+#: inc/acf.php:378
+msgid "Підказка слайдера"
+msgstr "Підказка слайдера"
+
+#: inc/acf.php:319
+#: inc/acf.php:326
+msgid "Квартири"
+msgstr "Квартири"
+
+#: inc/acf.php:325
+msgid "Типи квартир"
+msgstr "Типи квартир"
+
+#: inc/acf.php:327
+msgid "Внутрішній якір картки"
+msgstr "Внутрішній якір картки"
+
+#: inc/acf.php:328
+msgid "Кількість кімнат"
+msgstr "Кількість кімнат"
+
+#: inc/acf.php:329
+msgid "Підпис кімнат"
+msgstr "Підпис кімнат"
+
+#: inc/acf.php:330
+msgid "Назва типу"
+msgstr "Назва типу"
+
+#: inc/acf.php:331
+msgid "Діапазон площі"
+msgstr "Діапазон площі"
+
+#: inc/acf.php:333
+#: inc/acf.php:374
+#: inc/acf.php:416
+msgid "Примітка"
+msgstr "Примітка"
+
+#: inc/acf.php:344
+msgid "Оздоблення квартир"
+msgstr "Оздоблення квартир"
+
+#: inc/acf.php:351
+#: inc/acf.php:407
+msgid "Зміст секції"
+msgstr "Зміст секції"
+
+#: inc/acf.php:354
+msgid "Підпис висоти стелі"
+msgstr "Підпис висоти стелі"
+
+#: inc/acf.php:355
+msgid "Висота стелі"
+msgstr "Висота стелі"
+
+#: inc/acf.php:356
+msgid "Характеристики"
+msgstr "Характеристики"
+
+#: inc/acf.php:356
+msgid "Характеристика"
+msgstr "Характеристика"
+
+#: inc/acf.php:362
+#: inc/acf.php:370
+msgid "Документи"
+msgstr "Документи"
+
+#: inc/acf.php:369
+msgid "Картки документів"
+msgstr "Картки документів"
+
+#: inc/acf.php:371
+msgid "Категорія"
+msgstr "Категорія"
+
+#: inc/acf.php:375
+msgid "Файл"
+msgstr "Файл"
+
+#: inc/acf.php:376
+msgid "Текст посилання на файл"
+msgstr "Текст посилання на файл"
+
+#: inc/acf.php:384
+msgid "Забудовник"
+msgstr "Забудовник"
+
+#: inc/acf.php:387
+msgid "Основна інформація"
+msgstr "Основна інформація"
+
+#: inc/acf.php:389
+msgid "Назва компанії"
+msgstr "Назва компанії"
+
+#: inc/acf.php:392
+msgid "Основне посилання"
+msgstr "Основне посилання"
+
+#: inc/acf.php:393
+msgid "Картка надійності"
+msgstr "Картка надійності"
+
+#: inc/acf.php:394
+msgid "Доступна назва картки"
+msgstr "Доступна назва картки"
+
+#: inc/acf.php:398
+msgid "Додаткове посилання"
+msgstr "Додаткове посилання"
+
+#: inc/acf.php:415
+msgid "Префікс"
+msgstr "Префікс"
+
+#: inc/acf.php:415
+msgid "Суфікс"
+msgstr "Суфікс"
+
+#: inc/acf.php:422
+msgid "Заклик до консультації"
+msgstr "Заклик до консультації"
+
+#: inc/acf.php:425
+msgid "Основний текст"
+msgstr "Основний текст"
+
+#: inc/acf.php:429
+msgid "Картка консультації"
+msgstr "Картка консультації"
+
+#: inc/acf.php:441
+msgid "Конструктор сторінки"
+msgstr "Конструктор сторінки"
+
+#: inc/acf.php:446
+msgid "Секції сторінки"
+msgstr "Секції сторінки"
+
+#: inc/acf.php:449
+msgid "Додати секцію"
+msgstr "Додати секцію"
+
+#: inc/acf.php:477
+#: inc/acf.php:482
+msgid "Сповіщення заявок"
+msgstr "Сповіщення заявок"
+
+#: inc/acf.php:489
+msgid "Доставка сповіщень"
+msgstr "Доставка сповіщень"
+
+#: inc/acf.php:491
+msgid "Заявка спочатку зберігається в адмінці, а потім канали обробляються у фоновій черзі. Ці технічні налаштування доступні лише адміністратору."
+msgstr "Заявка спочатку зберігається в адмінці, а потім канали обробляються у фоновій черзі. Ці технічні налаштування доступні лише адміністратору."
+
+#: inc/acf.php:498
+msgid "Надсилати на пошту"
+msgstr "Надсилати на пошту"
+
+#: inc/acf.php:507
+msgid "Пошта для нових заявок"
+msgstr "Пошта для нових заявок"
+
+#: inc/acf.php:509
+msgid "Надсилання виконує WordPress через wp_mail(). Для реальної доставки налаштуйте SMTP окремим плагіном або на сервері."
+msgstr "Надсилання виконує WordPress через wp_mail(). Для реальної доставки налаштуйте SMTP окремим плагіном або на сервері."
+
+#: inc/acf.php:515
+msgid "Telegram-група"
+msgstr "Telegram-група"
+
+#: inc/acf.php:517
+msgid "Додайте бота до групи, дозвольте йому надсилати повідомлення та вкажіть токен BotFather і Chat ID. Для форум-групи можна додати ID теми."
+msgstr "Додайте бота до групи, дозвольте йому надсилати повідомлення та вкажіть токен BotFather і Chat ID. Для форум-групи можна додати ID теми."
+
+#: inc/acf.php:524
+msgid "Надсилати в Telegram"
+msgstr "Надсилати в Telegram"
+
+#: inc/acf.php:533
+msgid "Токен Telegram-бота"
+msgstr "Токен Telegram-бота"
+
+#: inc/acf.php:535
+msgid "Після збереження токен не показується. Щоб замінити його, введіть новий; порожнє поле залишає поточний токен."
+msgstr "Після збереження токен не показується. Щоб замінити його, введіть новий; порожнє поле залишає поточний токен."
+
+#: inc/acf.php:541
+msgid "Chat ID групи"
+msgstr "Chat ID групи"
+
+#: inc/acf.php:548
+msgid "ID теми (необов’язково)"
+msgstr "ID теми (необов’язково)"
+
+#: inc/acf.php:557
+msgid "Видалити збережений токен"
+msgstr "Видалити збережений токен"
+
+#: inc/acf.php:611
+msgid "Введіть ID без # і пробілів: латинські літери, цифри, дефіс або підкреслення; перший символ — літера."
+msgstr "Введіть ID без # і пробілів: латинські літери, цифри, дефіс або підкреслення; перший символ — літера."
+
+#: inc/dashboard.php:30
+#: inc/leads.php:20
+#: inc/leads.php:22
+msgid "Заявки"
+msgstr "Заявки"
+
+#: inc/dashboard.php:63
+#, php-format
+msgid "Переглянути заявки. Усього заявок: %s"
+msgstr "Переглянути заявки. Усього заявок: %s"
+
+#: inc/dashboard.php:68
+msgid "Усього заявок"
+msgstr "Усього заявок"
+
+#: inc/dashboard.php:71
+msgid "Переглянути заявки"
+msgstr "Переглянути заявки"
+
+#: inc/enqueue.php:59
+msgid "Закрити меню"
+msgstr "Закрити меню"
+
+#: inc/enqueue.php:60
+msgid "карусель"
+msgstr "карусель"
+
+#: inc/enqueue.php:66
+msgid "Надсилаємо заявку…"
+msgstr "Надсилаємо заявку…"
+
+#: inc/enqueue.php:67
+#: inc/leads.php:395
+msgid "Оновіть сторінку перед надсиланням заявки."
+msgstr "Оновіть сторінку перед надсиланням заявки."
+
+#: inc/enqueue.php:68
+msgid "Не вдалося надіслати заявку. Спробуйте ще раз."
+msgstr "Не вдалося надіслати заявку. Спробуйте ще раз."
+
+#: inc/enqueue.php:69
+msgid "Немає підтвердження від сервера. Дані залишилися у формі — повторіть надсилання."
+msgstr "Немає підтвердження від сервера. Дані залишилися у формі — повторіть надсилання."
+
+#: inc/enqueue.php:71
+#: inc/leads.php:433
+msgid "Ми отримали ваш запит. Менеджер відділу продажу ЖК «Затишний Бориспіль» зв’яжеться з вами найближчим часом."
+msgstr "Ми отримали ваш запит. Менеджер відділу продажу ЖК «Затишний Бориспіль» зв’яжеться з вами найближчим часом."
+
+#: inc/lead-notifications.php:76
+msgid "Збережено. Порожнє поле залишить токен без змін."
+msgstr "Збережено. Порожнє поле залишить токен без змін."
+
+#: inc/lead-notifications.php:77
+msgid "Введіть токен Telegram-бота"
+msgstr "Введіть токен Telegram-бота"
+
+#: inc/lead-notifications.php:167
+msgid "Перевірте формат токена Telegram-бота."
+msgstr "Перевірте формат токена Telegram-бота."
+
+#: inc/lead-notifications.php:177
+msgid "Вкажіть Chat ID групи, наприклад -100…, або її публічне @ім’я."
+msgstr "Вкажіть Chat ID групи, наприклад -100…, або її публічне @ім’я."
+
+#: inc/lead-notifications.php:223
+#: inc/lead-notifications.php:265
+msgid "Нова заявка"
+msgstr "Нова заявка"
+
+#: inc/lead-notifications.php:224
+#: inc/leads.php:533
+msgid "Ім’я"
+msgstr "Ім’я"
+
+#: inc/lead-notifications.php:226
+#: inc/leads.php:464
+#: inc/leads.php:535
+msgid "Інтерес"
+msgstr "Інтерес"
+
+#: inc/lead-notifications.php:227
+#: inc/leads.php:465
+msgid "Контекст"
+msgstr "Контекст"
+
+#: inc/lead-notifications.php:231
+#: inc/leads.php:537
+msgid "Тип квартири"
+msgstr "Тип квартири"
+
+#: inc/lead-notifications.php:235
+msgid "Повідомлення"
+msgstr "Повідомлення"
+
+#: inc/lead-notifications.php:239
+msgid "Сторінка"
+msgstr "Сторінка"
+
+#: inc/lead-notifications.php:259
+msgid "Не вказана коректна пошта одержувача."
+msgstr "Не вказана коректна пошта одержувача."
+
+#: inc/lead-notifications.php:273
+msgid "Поштовий транспорт прийняв лист. Це не підтверджує доставку до скриньки."
+msgstr "Поштовий транспорт прийняв лист. Це не підтверджує доставку до скриньки."
+
+#: inc/lead-notifications.php:277
+msgid "Поштовий транспорт відхилив лист. Перевірте SMTP."
+msgstr "Поштовий транспорт відхилив лист. Перевірте SMTP."
+
+#: inc/lead-notifications.php:286
+msgid "Заповніть токен бота й Chat ID у налаштуваннях."
+msgstr "Заповніть токен бота й Chat ID у налаштуваннях."
+
+#: inc/lead-notifications.php:308
+msgid "Перейти до замовлення"
+msgstr "Перейти до замовлення"
+
+#: inc/lead-notifications.php:336
+msgid "Немає підтвердження Telegram. Перевірте групу перед повтором."
+msgstr "Немає підтвердження Telegram. Перевірте групу перед повтором."
+
+#: inc/lead-notifications.php:345
+msgid "Telegram підтвердив надсилання."
+msgstr "Telegram підтвердив надсилання."
+
+#: inc/lead-notifications.php:351
+msgid "Telegram не прийняв токен бота (HTTP 401). Оновіть токен."
+msgstr "Telegram не прийняв токен бота (HTTP 401). Оновіть токен."
+
+#: inc/lead-notifications.php:357
+msgid "Telegram заборонив надсилання (HTTP 403). Перевірте участь і права бота у групі."
+msgstr "Telegram заборонив надсилання (HTTP 403). Перевірте участь і права бота у групі."
+
+#. translators: %d: Telegram HTTP status code.
+#: inc/lead-notifications.php:365
+#, php-format
+msgid "Telegram: HTTP %d. Перевірте налаштування та дозвіл бота писати у групу."
+msgstr "Telegram: HTTP %d. Перевірте налаштування та дозвіл бота писати у групу."
+
+#: inc/lead-notifications.php:396
+msgid "Не вдалося запустити фонову чергу. Повторіть надсилання з картки заявки."
+msgstr "Не вдалося запустити фонову чергу. Повторіть надсилання з картки заявки."
+
+#: inc/lead-notifications.php:450
+msgid "Надсилання почалося; підтвердження ще немає."
+msgstr "Надсилання почалося; підтвердження ще немає."
+
+#: inc/lead-notifications.php:461
+msgid "Внутрішня помилка доставки. Перевірте канал перед повтором."
+msgstr "Внутрішня помилка доставки. Перевірте канал перед повтором."
+
+#: inc/lead-notifications.php:491
+msgid "У черзі"
+msgstr "У черзі"
+
+#: inc/lead-notifications.php:492
+msgid "Вимкнено"
+msgstr "Вимкнено"
+
+#: inc/lead-notifications.php:493
+msgid "Надіслано"
+msgstr "Надіслано"
+
+#: inc/lead-notifications.php:494
+msgid "Прийнято поштовим транспортом"
+msgstr "Прийнято поштовим транспортом"
+
+#: inc/lead-notifications.php:495
+msgid "Помилка"
+msgstr "Помилка"
+
+#: inc/lead-notifications.php:496
+msgid "Потребує перевірки"
+msgstr "Потребує перевірки"
+
+#: inc/lead-notifications.php:511
+msgid "Перед повтором непідтвердженого надсилання перевірте скриньку або Telegram-групу, щоб уникнути дубля."
+msgstr "Перед повтором непідтвердженого надсилання перевірте скриньку або Telegram-групу, щоб уникнути дубля."
+
+#: inc/lead-notifications.php:517
+msgid "Повторити ненадіслані"
+msgstr "Повторити ненадіслані"
+
+#: inc/lead-notifications.php:524
+msgid "Сповіщення"
+msgstr "Сповіщення"
+
+#: inc/lead-notifications.php:537
+msgid "Недостатньо прав."
+msgstr "Недостатньо прав."
+
+#: inc/lead-notifications.php:543
+msgid "Заявка недоступна."
+msgstr "Заявка недоступна."
+
+#: inc/lead-notifications.php:548
+msgid "Сповіщення ще надсилається. Повторіть пізніше."
+msgstr "Сповіщення ще надсилається. Повторіть пізніше."
+
+#: inc/lead-notifications.php:570
+msgid "Не вдалося запустити фонову чергу. Повторіть спробу пізніше."
+msgstr "Не вдалося запустити фонову чергу. Повторіть спробу пізніше."
+
+#: inc/leads.php:21
+#: inc/leads.php:462
+msgid "Заявка"
+msgstr "Заявка"
+
+#: inc/leads.php:23
+#: inc/leads.php:24
+msgid "Переглянути заявку"
+msgstr "Переглянути заявку"
+
+#: inc/leads.php:25
+msgid "Шукати заявки"
+msgstr "Шукати заявки"
+
+#: inc/leads.php:26
+msgid "Заявок не знайдено."
+msgstr "Заявок не знайдено."
+
+#: inc/leads.php:122
+msgid "Перевірте заповнення форми."
+msgstr "Перевірте заповнення форми."
+
+#: inc/leads.php:127
+msgid "Заповніть обов’язкові поля."
+msgstr "Заповніть обов’язкові поля."
+
+#: inc/leads.php:147
+#: inc/leads.php:164
+#: inc/leads.php:177
+#: inc/leads.php:226
+msgid "Некоректне джерело заявки."
+msgstr "Некоректне джерело заявки."
+
+#: inc/leads.php:200
+msgid "Вкажіть коректний номер телефону."
+msgstr "Вкажіть коректний номер телефону."
+
+#: inc/leads.php:208
+msgid "Оберіть коректний тип запиту."
+msgstr "Оберіть коректний тип запиту."
+
+#: inc/leads.php:258
+msgid "Невірний ідентифікатор запиту."
+msgstr "Невірний ідентифікатор запиту."
+
+#: inc/leads.php:269
+msgid "Не вдалося підготувати заявку."
+msgstr "Не вдалося підготувати заявку."
+
+#: inc/leads.php:275
+msgid "Заявка ще обробляється. Спробуйте повторити надсилання."
+msgstr "Заявка ще обробляється. Спробуйте повторити надсилання."
+
+#: inc/leads.php:298
+msgid "Цей запит уже використано для іншої заявки."
+msgstr "Цей запит уже використано для іншої заявки."
+
+#. translators: 1: lead name, 2: submission date and time.
+#: inc/leads.php:311
+#, php-format
+msgid "Заявка — %1$s — %2$s"
+msgstr "Заявка — %1$s — %2$s"
+
+#: inc/leads.php:326
+msgid "Не вдалося зберегти заявку. Спробуйте ще раз."
+msgstr "Не вдалося зберегти заявку. Спробуйте ще раз."
+
+#: inc/leads.php:336
+msgid "Не вдалося зберегти дані заявки."
+msgstr "Не вдалося зберегти дані заявки."
+
+#: inc/leads.php:343
+msgid "Не вдалося поставити сповіщення в чергу."
+msgstr "Не вдалося поставити сповіщення в чергу."
+
+#: inc/leads.php:402
+msgid "Некоректний або завеликий запит."
+msgstr "Некоректний або завеликий запит."
+
+#: inc/leads.php:407
+#: inc/leads.php:412
+msgid "Некоректний запит."
+msgstr "Некоректний запит."
+
+#: inc/leads.php:416
+msgid "Забагато спроб. Спробуйте пізніше."
+msgstr "Забагато спроб. Спробуйте пізніше."
+
+#: inc/leads.php:447
+msgid "Нова"
+msgstr "Нова"
+
+#: inc/leads.php:448
+msgid "В роботі"
+msgstr "В роботі"
+
+#: inc/leads.php:449
+msgid "Завершена"
+msgstr "Завершена"
+
+#: inc/leads.php:450
+msgid "Скасована"
+msgstr "Скасована"
+
+#: inc/leads.php:466
+msgid "Статус"
+msgstr "Статус"
+
+#: inc/leads.php:467
+msgid "Створено"
+msgstr "Створено"
+
+#: inc/leads.php:509
+msgid "Дані заявки"
+msgstr "Дані заявки"
+
+#: inc/leads.php:528
+msgid "Дані заявки недоступні."
+msgstr "Дані заявки недоступні."
+
+#: inc/leads.php:538
+msgid "Коментар"
+msgstr "Коментар"
+
+#: inc/leads.php:548
+msgid "Джерело"
+msgstr "Джерело"
+
+#: inc/leads.php:563
+msgid "Статус заявки"
+msgstr "Статус заявки"
+
+#: inc/setup.php:24
+msgid "Головне меню"
+msgstr "Головне меню"
+
+#: inc/setup.php:25
+msgid "Меню у футері"
+msgstr "Меню у футері"
+
+#: inc/template/about.php:102
+msgid "Керування візуалізаціями"
+msgstr "Керування візуалізаціями"
+
+#: inc/template/about.php:103
+msgid "Попередня візуалізація"
+msgstr "Попередня візуалізація"
+
+#: inc/template/about.php:104
+msgid "Наступна візуалізація"
+msgstr "Наступна візуалізація"
+
+#: inc/template/apartments.php:29
+msgid "Планування однокімнатної квартири"
+msgstr "Планування однокімнатної квартири"
+
+#: inc/template/apartments.php:30
+msgid "Планування двокімнатної квартири"
+msgstr "Планування двокімнатної квартири"
+
+#: inc/template/apartments.php:31
+msgid "Планування трикімнатної квартири"
+msgstr "Планування трикімнатної квартири"
+
+#: inc/template/apartments.php:46
+#: inc/template/apartments.php:172
+#, php-format
+msgid "Планування квартири: %s"
+msgstr "Планування квартири: %s"
+
+#: inc/template/apartments.php:140
+msgid "Швидкий перехід до типів квартир"
+msgstr "Швидкий перехід до типів квартир"
+
+#: inc/template/apartments.php:174
+#, php-format
+msgid "%s-кімнатна квартира"
+msgstr "%s-кімнатна квартира"
+
+#: inc/template/apartments.php:189
+#, php-format
+msgid "Відкрити планування %s у повному розмірі"
+msgstr "Відкрити планування %s у повному розмірі"
+
+#: inc/template/apartments.php:190
+msgid "Відкрити планування у повному розмірі"
+msgstr "Відкрити планування у повному розмірі"
+
+#: inc/template/apartments.php:195
+msgid "Збільшити"
+msgstr "Збільшити"
+
+#: inc/template/apartments.php:207
+msgid "Вибір планування"
+msgstr "Вибір планування"
+
+#: inc/template/apartments.php:212
+#, php-format
+msgid "Показати планування %s"
+msgstr "Показати планування %s"
+
+#: inc/template/apartments.php:213
+#, php-format
+msgid "Показати планування %d"
+msgstr "Показати планування %d"
+
+#: inc/template/apartments.php:240
+msgid "Керування типами квартир"
+msgstr "Керування типами квартир"
+
+#: inc/template/apartments.php:241
+msgid "Попередній тип квартир"
+msgstr "Попередній тип квартир"
+
+#: inc/template/apartments.php:242
+msgid "Наступний тип квартир"
+msgstr "Наступний тип квартир"
+
+#: inc/template/apartments.php:253
+msgid "Планування квартири"
+msgstr "Планування квартири"
+
+#: inc/template/apartments.php:254
+msgid "Перегляд схеми"
+msgstr "Перегляд схеми"
+
+#: inc/template/apartments.php:257
+#: inc/template/apartments.php:258
+msgid "Масштаб 100%"
+msgstr "Масштаб 100%"
+
+#: inc/template/apartments.php:257
+msgid "Вписати"
+msgstr "Вписати"
+
+#: inc/template/apartments.php:260
+msgid "Закрити перегляд"
+msgstr "Закрити перегляд"
+
+#: inc/template/apartments.php:265
+msgid "Область перегляду планування"
+msgstr "Область перегляду планування"
+
+#: inc/template/apartments.php:269
+msgid "Попереднє планування"
+msgstr "Попереднє планування"
+
+#: inc/template/apartments.php:275
+msgid "Наступне планування"
+msgstr "Наступне планування"
+
+#: inc/template/benefits.php:38
+msgid "Переваги житлового комплексу"
+msgstr "Переваги житлового комплексу"
+
+#: inc/template/benefits.php:83
+msgid "Керування перевагами"
+msgstr "Керування перевагами"
+
+#: inc/template/benefits.php:84
+msgid "Попередня перевага"
+msgstr "Попередня перевага"
+
+#: inc/template/benefits.php:85
+msgid "Наступна перевага"
+msgstr "Наступна перевага"
+
+#: inc/template/documents.php:27
+msgid "Категорії документів"
+msgstr "Категорії документів"
+
+#: inc/template/documents.php:71
+msgid "Керування документами"
+msgstr "Керування документами"
+
+#: inc/template/documents.php:72
+msgid "Попередній документ"
+msgstr "Попередній документ"
+
+#: inc/template/documents.php:73
+msgid "Наступний документ"
+msgstr "Наступний документ"
+
+#. Template Name of the theme
+msgid "Constructor"
+msgstr "Constructor"

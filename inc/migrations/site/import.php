@@ -112,6 +112,86 @@ function project_theme_import_asset( string $filename, string $alt = '' ): int {
 }
 
 /**
+ * Client-supplied apartment plan previews grouped by room count.
+ *
+ * @return array<string,array<int,array{asset:string,code:string,area:string}>>
+ */
+function project_theme_apartment_plan_manifest(): array {
+	return array(
+		'1' => array(
+			array( 'asset' => 'apartment-plans/room-1/p1-2-3.jpg', 'code' => 'П1-2.3', 'area' => '46,80 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p1-2-4.jpg', 'code' => 'П1-2.4', 'area' => '46,69 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-1-1.jpg', 'code' => 'П2-1.1', 'area' => '37,31 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-1-3.jpg', 'code' => 'П2-1.3', 'area' => '36,73 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-1-4.jpg', 'code' => 'П2-1.4', 'area' => '39,20 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-1-5.jpg', 'code' => 'П2-1.5', 'area' => '39,20 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-1-6.jpg', 'code' => 'П2-1.6', 'area' => '36,73 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-2-1.jpg', 'code' => 'П2-2.1', 'area' => '39,35 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-2-3.jpg', 'code' => 'П2-2.3', 'area' => '38,66 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-2-4.jpg', 'code' => 'П2-2.4', 'area' => '41,93 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-2-5.jpg', 'code' => 'П2-2.5', 'area' => '42,05 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-2-6.jpg', 'code' => 'П2-2.6', 'area' => '39,51 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p2-2-8.jpg', 'code' => 'П2-2.8', 'area' => '39,36 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-1-1.jpg', 'code' => 'П3-1.1', 'area' => '37,17 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-1-3.jpg', 'code' => 'П3-1.3', 'area' => '36,73 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-1-4.jpg', 'code' => 'П3-1.4', 'area' => '39,20 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-1-5.jpg', 'code' => 'П3-1.5', 'area' => '39,20 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-1-6.jpg', 'code' => 'П3-1.6', 'area' => '36,73 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-2-1.jpg', 'code' => 'П3-2.1', 'area' => '38,54 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-2-3.jpg', 'code' => 'П3-2.3', 'area' => '38,14 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-2-4.jpg', 'code' => 'П3-2.4', 'area' => '41,49 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-2-5.jpg', 'code' => 'П3-2.5', 'area' => '41,62 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-2-6.jpg', 'code' => 'П3-2.6', 'area' => '39,27 м²' ),
+			array( 'asset' => 'apartment-plans/room-1/p3-2-8.jpg', 'code' => 'П3-2.8', 'area' => '39,06 м²' ),
+		),
+		'2' => array(
+			array( 'asset' => 'apartment-plans/room-2/p1-2-2.jpg', 'code' => 'П1-2.2', 'area' => '57,87 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p1-2-5.jpg', 'code' => 'П1-2.5', 'area' => '57,50 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p2-1-2.jpg', 'code' => 'П2-1.2', 'area' => '55,44 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p2-1-7.jpg', 'code' => 'П2-1.7', 'area' => '55,47 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p2-2-2.jpg', 'code' => 'П2-2.2', 'area' => '60,70 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p2-2-7.jpg', 'code' => 'П2-2.7', 'area' => '61,09 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p3-1-2.jpg', 'code' => 'П3-1.2', 'area' => '55,44 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p3-1-7.jpg', 'code' => 'П3-1.7', 'area' => '55,47 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p3-2-2.jpg', 'code' => 'П3-2.2', 'area' => '60,24 м²' ),
+			array( 'asset' => 'apartment-plans/room-2/p3-2-7.jpg', 'code' => 'П3-2.7', 'area' => '60,15 м²' ),
+		),
+		'3' => array(
+			array( 'asset' => 'apartment-plans/room-3/p1-2-1.jpg', 'code' => 'П1-2.1', 'area' => '85,99 м²' ),
+			array( 'asset' => 'apartment-plans/room-3/p1-2-6.jpg', 'code' => 'П1-2.6', 'area' => '83,26 м²' ),
+		),
+	);
+}
+
+/**
+ * Import all apartment plan previews and return ACF-ready repeater rows.
+ *
+ * @return array<string,array<int,array{image:int,image_alt:string,code:string,area:string}>>
+ */
+function project_theme_import_apartment_plans(): array {
+	$imported = array();
+
+	foreach ( project_theme_apartment_plan_manifest() as $rooms => $plans ) {
+		foreach ( $plans as $plan ) {
+			$alt = sprintf(
+				'Схема %1$s-кімнатної квартири, планування %2$s, загальна площа %3$s',
+				$rooms,
+				$plan['code'],
+				$plan['area']
+			);
+			$imported[ $rooms ][] = array(
+				'image'     => project_theme_import_asset( $plan['asset'], $alt ),
+				'image_alt' => $alt,
+				'code'      => $plan['code'],
+				'area'      => $plan['area'],
+			);
+		}
+	}
+
+	return $imported;
+}
+
+/**
  * Return or create the one requested page.
  */
 function project_theme_home_page(): int {
@@ -959,6 +1039,196 @@ function project_theme_upgrade_logo_v7(): bool {
 	return true;
 }
 
+/**
+ * Add the apartment plan repeater to an existing editable ACF group without
+ * replacing unrelated field definitions that an editor may have changed.
+ */
+function project_theme_upgrade_apartment_plan_schema_v8(): bool {
+	if (
+		! function_exists( 'project_theme_apartment_plan_fields' )
+		|| ! function_exists( 'acf_prepare_fields_for_import' )
+		|| ! function_exists( 'acf_update_field' )
+		|| ! function_exists( 'acf_get_field_post' )
+	) {
+		WP_CLI::warning( 'The apartment plan field schema API is unavailable.' );
+		return false;
+	}
+
+	$parent_key = 'field_zb_constructor_apartments_items';
+	if ( ! acf_get_field_post( $parent_key ) ) {
+		WP_CLI::warning( 'The apartment items field could not be found.' );
+		return false;
+	}
+
+	$fields = project_theme_acf_key_fields(
+		project_theme_apartment_plan_fields(),
+		'constructor_apartments_items'
+	);
+	foreach ( $fields as $field_index => &$field ) {
+		$field['parent']     = $parent_key;
+		$field['menu_order'] = 10 + (int) $field_index;
+	}
+	unset( $field );
+
+	$prepared_fields = acf_prepare_fields_for_import( $fields );
+	foreach ( $prepared_fields as $field ) {
+		$field_key = isset( $field['key'] ) ? (string) $field['key'] : '';
+		if ( '' === $field_key || acf_get_field_post( $field_key ) ) {
+			continue;
+		}
+
+		$updated = acf_update_field( $field );
+		if ( empty( $updated['ID'] ) ) {
+			WP_CLI::warning( 'An apartment plan field could not be created: ' . $field_key );
+			return false;
+		}
+	}
+
+	foreach ( $prepared_fields as $field ) {
+		$field_key = isset( $field['key'] ) ? (string) $field['key'] : '';
+		if ( '' !== $field_key && ! acf_get_field_post( $field_key ) ) {
+			WP_CLI::warning( 'An apartment plan field could not be verified: ' . $field_key );
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Import and attach all client-supplied apartment layouts to the matching room
+ * category while preserving any gallery that an editor has already populated.
+ */
+function project_theme_upgrade_apartment_plans_v8( int $home_id ): bool {
+	if ( ! project_theme_upgrade_apartment_plan_schema_v8() ) {
+		return false;
+	}
+
+	$plan_rows = project_theme_import_apartment_plans();
+	$sections  = get_field( 'constructor', $home_id );
+	if ( ! is_array( $sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable; apartment plans were not attached.' );
+		return false;
+	}
+
+	$normalize_plan = static function ( array $plan ): array {
+		$image = $plan['image'] ?? 0;
+		return array(
+			'image'     => is_array( $image ) ? (int) ( $image['ID'] ?? $image['id'] ?? 0 ) : (int) $image,
+			'image_alt' => (string) ( $plan['image_alt'] ?? '' ),
+			'code'      => (string) ( $plan['code'] ?? '' ),
+			'area'      => (string) ( $plan['area'] ?? '' ),
+		);
+	};
+	$normalize_plans = static function ( array $plans ) use ( $normalize_plan ): array {
+		return array_values(
+			array_map(
+				$normalize_plan,
+				array_filter( $plans, 'is_array' )
+			)
+		);
+	};
+
+	$changed   = false;
+	$preserved = 0;
+	$expected  = array();
+	$expected_copy = array();
+	foreach ( $sections as $section_index => &$section ) {
+		if (
+			! is_array( $section )
+			|| 'template-apartments' !== (string) ( $section['acf_fc_layout'] ?? '' )
+			|| ! isset( $section['items'] )
+			|| ! is_array( $section['items'] )
+		) {
+			continue;
+		}
+
+		foreach ( $section['items'] as $item_index => &$item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+
+			$rooms         = (string) ( $item['rooms_number'] ?? '' );
+			$current_plans = isset( $item['plans'] ) && is_array( $item['plans'] ) ? $item['plans'] : array();
+			if ( empty( $current_plans ) && ! empty( $plan_rows[ $rooms ] ) ) {
+				$item['plans'] = $plan_rows[ $rooms ];
+				$current_plans = $item['plans'];
+				$changed       = true;
+			} elseif ( ! empty( $current_plans ) ) {
+				++$preserved;
+			}
+
+			$expected[ $section_index ][ $item_index ] = $normalize_plans( $current_plans );
+			if ( '2' === $rooms ) {
+				$copy_updates = array(
+					'area'    => array( '55,44–60,70 м²', '55,44–61,09 м²' ),
+					'context' => array( 'Двокімнатні квартири · 55,44–60,70 м²', 'Двокімнатні квартири · 55,44–61,09 м²' ),
+				);
+				foreach ( $copy_updates as $copy_key => $copy_values ) {
+					if ( $copy_values[0] === (string) ( $item[ $copy_key ] ?? '' ) ) {
+						$item[ $copy_key ] = $copy_values[1];
+						$changed = true;
+					}
+					$expected_copy[ $section_index ][ $item_index ][ $copy_key ] = (string) ( $item[ $copy_key ] ?? '' );
+				}
+			}
+		}
+		unset( $item );
+	}
+	unset( $section );
+
+	if ( $changed ) {
+		update_field( 'field_zb_constructor', $sections, $home_id );
+		clean_post_cache( $home_id );
+		if ( function_exists( 'acf_flush_value_cache' ) ) {
+			acf_flush_value_cache( $home_id, 'constructor' );
+		}
+	}
+
+	$verified_sections = get_field( 'constructor', $home_id );
+	if ( ! is_array( $verified_sections ) ) {
+		WP_CLI::warning( 'Homepage constructor is unavailable after apartment plan update.' );
+		return false;
+	}
+
+	foreach ( $expected as $section_index => $items ) {
+		foreach ( $items as $item_index => $expected_plans ) {
+			$verified_plans = isset( $verified_sections[ $section_index ]['items'][ $item_index ]['plans'] )
+				&& is_array( $verified_sections[ $section_index ]['items'][ $item_index ]['plans'] )
+				? $normalize_plans( $verified_sections[ $section_index ]['items'][ $item_index ]['plans'] )
+				: array();
+			if ( $expected_plans !== $verified_plans ) {
+				WP_CLI::warning( 'Apartment plans could not be verified after import.' );
+				return false;
+			}
+		}
+	}
+	foreach ( $expected_copy as $section_index => $items ) {
+		foreach ( $items as $item_index => $copy_values ) {
+			foreach ( $copy_values as $copy_key => $expected_value ) {
+				if ( $expected_value !== (string) ( $verified_sections[ $section_index ]['items'][ $item_index ][ $copy_key ] ?? '' ) ) {
+					WP_CLI::warning( 'Apartment area summary could not be verified after import.' );
+					return false;
+				}
+			}
+		}
+	}
+	$verified_count = 0;
+	foreach ( $expected as $items ) {
+		$verified_count += array_sum( array_map( 'count', $items ) );
+	}
+
+	WP_CLI::log(
+		sprintf(
+			'Client content v8: %d supplied previews imported, %d attached plan(s) verified; %d editor-populated gallery set(s) preserved.',
+			array_sum( array_map( 'count', $plan_rows ) ),
+			$verified_count,
+			$preserved
+		)
+	);
+	return true;
+}
+
 $home_id = project_theme_home_page();
 update_post_meta( $home_id, '_wp_page_template', 'page-constructor.php' );
 update_option( 'show_on_front', 'page' );
@@ -1048,6 +1318,15 @@ if ( $seed_version >= 1 ) {
 			WP_CLI::error( 'Client content v7 was applied, but its seed version could not be recorded.' );
 		}
 	}
+	if ( $seed_version < 8 ) {
+		if ( ! project_theme_upgrade_apartment_plans_v8( $home_id ) ) {
+			WP_CLI::error( 'Client content v8 apartment plans upgrade was not completed.' );
+		}
+		update_option( 'zb_seed_version', 8, false );
+		if ( 8 !== (int) get_option( 'zb_seed_version', 0 ) ) {
+			WP_CLI::error( 'Client content v8 was applied, but its seed version could not be recorded.' );
+		}
+	}
 
 	flush_rewrite_rules();
 	WP_CLI::success( 'Existing editable content preserved; client corrections, lead notifications, page settings and menus verified.' );
@@ -1068,6 +1347,7 @@ $documents = array(
 	'permit' => project_theme_import_asset( 'documents/dozvil-na-vykonannia-budivelnykh-robit.pdf', 'Дозвіл на виконання будівельних робіт ЖК «Затишний Бориспіль»' ),
 	'lease'  => project_theme_import_asset( 'documents/vytiah-pro-reiestratsiiu-prava-orendy-kolomychivska-73.pdf', 'Витяг про реєстрацію права оренди земельної ділянки на вул. Коломичівській, 73' ),
 );
+$apartment_plans = project_theme_import_apartment_plans();
 
 $map_search_url = 'https://www.google.com/maps/search/?api=1&query=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073';
 $map_route_url  = 'https://www.google.com/maps/dir/?api=1&destination=%D0%BC.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BF%D1%96%D0%BB%D1%8C%2C%20%D0%B2%D1%83%D0%BB.%20%D0%9A%D0%BE%D0%BB%D0%BE%D0%BC%D0%B8%D1%87%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0%2C%2073';
@@ -1200,9 +1480,9 @@ $sections = array(
 		'eyebrow' => 'Оберіть свій формат',
 		'title' => 'Квартири для різних сценаріїв життя',
 		'items' => array(
-			array( 'anchor_id' => 'apartment-1', 'rooms_number' => '1', 'rooms_label' => 'кімната', 'label' => 'Однокімнатні квартири', 'area' => '36,73–46,80 м²', 'description' => 'Компактний простір для першого власного житла.', 'note' => 'Актуальну наявність уточнюйте', 'button_text' => 'Уточнити наявність', 'interest' => 'Квартира', 'context' => 'Однокімнатні квартири · 36,73–46,80 м²' ),
-			array( 'anchor_id' => 'apartment-2', 'rooms_number' => '2', 'rooms_label' => 'кімнати', 'label' => 'Двокімнатні квартири', 'area' => '55,44–60,70 м²', 'description' => 'Збалансоване планування для пари або молодої родини.', 'note' => 'Актуальну наявність уточнюйте', 'button_text' => 'Уточнити наявність', 'interest' => 'Квартира', 'context' => 'Двокімнатні квартири · 55,44–60,70 м²' ),
-			array( 'anchor_id' => 'apartment-3', 'rooms_number' => '3', 'rooms_label' => 'кімнати', 'label' => 'Трикімнатні квартири', 'area' => '83,26–85,99 м²', 'description' => 'Просторий формат для комфортного сімейного життя.', 'note' => 'Актуальну наявність уточнюйте', 'button_text' => 'Уточнити наявність', 'interest' => 'Квартира', 'context' => 'Трикімнатні квартири · 83,26–85,99 м²' ),
+			array( 'anchor_id' => 'apartment-1', 'rooms_number' => '1', 'rooms_label' => 'кімната', 'label' => 'Однокімнатні квартири', 'area' => '36,73–46,80 м²', 'description' => 'Компактний простір для першого власного житла.', 'note' => 'Актуальну наявність уточнюйте', 'button_text' => 'Уточнити наявність', 'interest' => 'Квартира', 'context' => 'Однокімнатні квартири · 36,73–46,80 м²', 'plans' => $apartment_plans['1'] ),
+			array( 'anchor_id' => 'apartment-2', 'rooms_number' => '2', 'rooms_label' => 'кімнати', 'label' => 'Двокімнатні квартири', 'area' => '55,44–61,09 м²', 'description' => 'Збалансоване планування для пари або молодої родини.', 'note' => 'Актуальну наявність уточнюйте', 'button_text' => 'Уточнити наявність', 'interest' => 'Квартира', 'context' => 'Двокімнатні квартири · 55,44–61,09 м²', 'plans' => $apartment_plans['2'] ),
+			array( 'anchor_id' => 'apartment-3', 'rooms_number' => '3', 'rooms_label' => 'кімнати', 'label' => 'Трикімнатні квартири', 'area' => '83,26–85,99 м²', 'description' => 'Просторий формат для комфортного сімейного життя.', 'note' => 'Актуальну наявність уточнюйте', 'button_text' => 'Уточнити наявність', 'interest' => 'Квартира', 'context' => 'Трикімнатні квартири · 83,26–85,99 м²', 'plans' => $apartment_plans['3'] ),
 		),
 		'hint' => 'Гортайте планування',
 	),
@@ -1232,9 +1512,6 @@ $sections = array(
 			array( 'type' => 'Ліцензійні дані', 'title' => 'Ліцензія на будівельну діяльність', 'description' => 'Ліцензія ДАБІУ Nº2013056536, видана 27.11.2018 р', 'note' => 'Відомості про ліцензію забудовника', 'file' => 0, 'button_text' => '' ),
 		),
 		'hint' => 'Гортайте документи',
-		'cta_text' => 'Запросити документи',
-		'cta_interest' => 'Документи',
-		'cta_context' => 'Документи на будівництво',
 	),
 	array(
 		'acf_fc_layout' => 'template-builder',
@@ -1286,7 +1563,7 @@ $sections = array(
 
 update_field( 'field_zb_constructor', $sections, $home_id );
 update_post_meta( $home_id, '_zb_content_import_version', 1 );
-update_option( 'zb_seed_version', 7, false );
+update_option( 'zb_seed_version', 8, false );
 flush_rewrite_rules();
 
 WP_CLI::success( 'Homepage, media, editable ACF content, menus and reading settings imported.' );

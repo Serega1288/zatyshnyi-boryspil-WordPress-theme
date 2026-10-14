@@ -93,7 +93,6 @@ function project_theme_lead_interests(): array {
 		__( 'Паркінг', 'project-theme' ),
 		__( 'Комора', 'project-theme' ),
 		__( 'Комерційне приміщення', 'project-theme' ),
-		__( 'Документи', 'project-theme' ),
 		__( 'Умови придбання', 'project-theme' ),
 		__( 'Питання про комплекс', 'project-theme' ),
 	);
