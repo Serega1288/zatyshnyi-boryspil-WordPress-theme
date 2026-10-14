@@ -343,7 +343,6 @@ if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-mot
 }
 
 const sliders = document.querySelectorAll("[data-slider]");
-const apartmentControllers = new Map();
 
 const scrollSlider = (slider, direction) => {
   const firstCard = slider.firstElementChild;
@@ -368,67 +367,295 @@ const updateSliderControls = (slider) => {
 };
 
 document.querySelectorAll(".apartments").forEach((section) => {
-  const slider = section.querySelector(".apartment-list[data-slider]");
-  const tabs = section.querySelector("[data-apartment-tabs]");
-  const links = [...section.querySelectorAll("[data-apartment-tab]")];
-  if (!slider || !tabs || !links.length) return;
+  const tabsContainer = section.querySelector("[role='tablist']");
+  const tabs = [...section.querySelectorAll("[data-apartment-tab]")];
+  const panels = tabs.map((tab) => {
+    const panel = document.getElementById(tab.getAttribute("aria-controls") || "");
+    return panel && section.contains(panel) ? panel : null;
+  });
+  const previousCategory = section.querySelector("[data-apartment-category-prev]");
+  const nextCategory = section.querySelector("[data-apartment-category-next]");
+  if (!tabsContainer || !tabs.length || panels.some((panel) => !panel)) return;
 
-  const isHorizontal = () => slider.scrollWidth > slider.clientWidth + 1;
-  const setActiveTab = (cardId, { center = false } = {}) => {
-    let activeLink = null;
-    links.forEach((link) => {
-      const isActive = decodeURIComponent(link.hash.slice(1)) === cardId;
-      if (isActive) {
-        link.setAttribute("aria-current", "true");
-        activeLink = link;
-      } else {
-        link.removeAttribute("aria-current");
-      }
-    });
+  let activeCategoryIndex = 0;
 
-    if (!center || !activeLink) return;
-    const tabsRect = tabs.getBoundingClientRect();
-    const linkRect = activeLink.getBoundingClientRect();
-    const maxLeft = Math.max(0, tabs.scrollWidth - tabs.clientWidth);
-    const centeredLeft = tabs.scrollLeft + linkRect.left - tabsRect.left - (tabs.clientWidth - linkRect.width) / 2;
-    tabs.scrollTo({
+  const centerCategoryTab = (tab) => {
+    const tabsRect = tabsContainer.getBoundingClientRect();
+    const tabRect = tab.getBoundingClientRect();
+    const maxLeft = Math.max(0, tabsContainer.scrollWidth - tabsContainer.clientWidth);
+    const centeredLeft = tabsContainer.scrollLeft + tabRect.left - tabsRect.left - (tabsContainer.clientWidth - tabRect.width) / 2;
+    tabsContainer.scrollTo({
       left: Math.max(0, Math.min(maxLeft, centeredLeft)),
       behavior: reducedMotionQuery.matches ? "auto" : "smooth",
     });
   };
 
-  const sync = () => {
-    if (!isHorizontal()) return;
-    const sliderLeft = slider.getBoundingClientRect().left;
-    const cards = [...slider.querySelectorAll(".apartment-row")];
-    const closestCard = cards.reduce((closest, card) => {
-      if (!closest) return card;
-      const currentDistance = Math.abs(card.getBoundingClientRect().left - sliderLeft);
-      const closestDistance = Math.abs(closest.getBoundingClientRect().left - sliderLeft);
-      return currentDistance < closestDistance ? card : closest;
-    }, null);
-    if (closestCard?.id) setActiveTab(closestCard.id, { center: true });
+  const activateCategory = (requestedIndex, { focus = false, updateHash = false, center = true } = {}) => {
+    const index = Math.max(0, Math.min(tabs.length - 1, requestedIndex));
+    activeCategoryIndex = index;
+
+    tabs.forEach((tab, tabIndex) => {
+      const isActive = tabIndex === index;
+      tab.setAttribute("aria-selected", String(isActive));
+      tab.tabIndex = isActive ? 0 : -1;
+      panels[tabIndex].hidden = !isActive;
+    });
+
+    section.classList.add("is-tabs-ready");
+    previousCategory?.toggleAttribute("disabled", index === 0);
+    nextCategory?.toggleAttribute("disabled", index === tabs.length - 1);
+    if (center) centerCategoryTab(tabs[index]);
+    if (focus) tabs[index].focus({ preventScroll: true });
+    if (updateHash) history.replaceState(null, "", `#${panels[index].id}`);
   };
 
-  links.forEach((link) => {
-    link.addEventListener("click", (event) => {
-      const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
-      if (!target || !section.contains(target)) return;
-      setActiveTab(target.id, { center: true });
-      if (!isHorizontal()) return;
-
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", (event) => {
       event.preventDefault();
-      const sliderRect = slider.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      slider.scrollTo({
-        left: slider.scrollLeft + targetRect.left - sliderRect.left,
-        behavior: reducedMotionQuery.matches ? "auto" : "smooth",
-      });
-      history.replaceState(null, "", link.hash);
+      activateCategory(index, { updateHash: true });
+    });
+
+    tab.addEventListener("keydown", (event) => {
+      let nextIndex = null;
+      if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = tabs.length - 1;
+      if (nextIndex === null) return;
+      event.preventDefault();
+      activateCategory(nextIndex, { focus: true, updateHash: true });
     });
   });
 
-  apartmentControllers.set(slider, { sync });
+  previousCategory?.addEventListener("click", () => {
+    activateCategory(activeCategoryIndex - 1, { updateHash: true });
+    if (previousCategory.disabled) nextCategory?.focus({ preventScroll: true });
+  });
+  nextCategory?.addEventListener("click", () => {
+    activateCategory(activeCategoryIndex + 1, { updateHash: true });
+    if (nextCategory.disabled) previousCategory?.focus({ preventScroll: true });
+  });
+
+  const activateCategoryFromHash = () => {
+    const hashId = decodeURIComponent(window.location.hash.slice(1));
+    const hashIndex = panels.findIndex((panel) => panel.id === hashId);
+    activateCategory(hashIndex >= 0 ? hashIndex : activeCategoryIndex, { center: hashIndex >= 0 });
+    if (hashIndex >= 0) {
+      requestAnimationFrame(() => panels[hashIndex].scrollIntoView({ block: "start" }));
+    }
+  };
+
+  const initialHashId = decodeURIComponent(window.location.hash.slice(1));
+  const initialIndex = panels.findIndex((panel) => panel.id === initialHashId);
+  activateCategory(initialIndex >= 0 ? initialIndex : 0, { center: initialIndex >= 0 });
+  if (initialIndex >= 0) {
+    requestAnimationFrame(() => panels[initialIndex].scrollIntoView({ block: "start" }));
+  }
+  window.addEventListener("hashchange", activateCategoryFromHash);
+
+  const galleryControllers = new Map();
+  section.querySelectorAll("[data-apartment-plan-gallery]").forEach((gallery) => {
+    const slides = [...gallery.querySelectorAll("[data-plan-slide]")];
+    const thumbnails = [...gallery.querySelectorAll("[data-plan-thumbnail]")];
+    const apartmentCta = gallery.closest("[data-apartment-panel]")?.querySelector(".apartment-card-cta[data-open-lead]");
+    if (!slides.length) return;
+
+    let activePlanIndex = 0;
+    const setActivePlan = (requestedIndex, { focus = false, center = true } = {}) => {
+      const index = Math.max(0, Math.min(slides.length - 1, requestedIndex));
+      activePlanIndex = index;
+      slides.forEach((slide, slideIndex) => {
+        slide.hidden = slideIndex !== index;
+      });
+      thumbnails.forEach((thumbnail, thumbnailIndex) => {
+        thumbnail.setAttribute("aria-pressed", String(thumbnailIndex === index));
+      });
+
+      if (apartmentCta) {
+        const activePlan = slides[index].querySelector("[data-plan-open]");
+        const planName = [activePlan?.dataset.planCode, activePlan?.dataset.planArea].filter(Boolean).join(", ");
+        const baseContext = apartmentCta.dataset.apartmentBaseContext || "";
+        const baseType = apartmentCta.dataset.apartmentBaseType || "";
+        apartmentCta.dataset.context = planName ? [baseContext, planName].filter(Boolean).join(": ") : baseContext;
+        apartmentCta.dataset.apartmentType = planName ? [baseType, planName].filter(Boolean).join(" — ") : baseType;
+      }
+
+      const activeThumbnail = thumbnails[index];
+      if (activeThumbnail && center) {
+        activeThumbnail.scrollIntoView({
+          behavior: reducedMotionQuery.matches ? "auto" : "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+      if (activeThumbnail && focus) activeThumbnail.focus({ preventScroll: true });
+    };
+
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener("click", () => setActivePlan(index));
+      thumbnail.addEventListener("keydown", (event) => {
+        let nextIndex = null;
+        if (event.key === "ArrowLeft") nextIndex = (index - 1 + thumbnails.length) % thumbnails.length;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % thumbnails.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = thumbnails.length - 1;
+        if (nextIndex === null) return;
+        event.preventDefault();
+        setActivePlan(nextIndex, { focus: true });
+      });
+    });
+
+    setActivePlan(0, { center: false });
+    galleryControllers.set(gallery, {
+      get activeIndex() { return activePlanIndex; },
+      setActive: setActivePlan,
+      slides,
+    });
+  });
+
+  const planDialog = section.querySelector("[data-apartment-plan-dialog]");
+  if (!planDialog) return;
+
+  const dialogImage = planDialog.querySelector("[data-plan-dialog-image]");
+  const dialogCode = planDialog.querySelector("[data-plan-dialog-code]");
+  const dialogArea = planDialog.querySelector("[data-plan-dialog-area]");
+  const dialogCounter = planDialog.querySelector("[data-plan-dialog-counter]");
+  const dialogPrevious = planDialog.querySelector("[data-plan-dialog-prev]");
+  const dialogNext = planDialog.querySelector("[data-plan-dialog-next]");
+  const dialogClose = planDialog.querySelector("[data-plan-dialog-close]");
+  const dialogFrame = planDialog.querySelector(".apartment-plan-dialog-frame");
+  const dialogZoom = planDialog.querySelector("[data-plan-dialog-zoom]");
+  const dialogZoomLabel = planDialog.querySelector("[data-plan-dialog-zoom-label]");
+  let activeGallery = null;
+  let activeDialogIndex = 0;
+  let planDialogReturnTarget = null;
+  let planDialogCloseTimer = 0;
+  let planDialogBackdropStarted = false;
+
+  const setPlanDialogZoom = (actualSize) => {
+    planDialog.classList.toggle("is-actual-size", actualSize);
+    dialogZoom?.setAttribute("aria-pressed", String(actualSize));
+    if (dialogZoomLabel && dialogZoom) {
+      dialogZoomLabel.textContent = actualSize ? dialogZoom.dataset.labelFit || "" : dialogZoom.dataset.labelActual || "";
+    }
+    requestAnimationFrame(() => {
+      if (!dialogFrame) return;
+      dialogFrame.scrollTo({
+        left: actualSize ? Math.max(0, (dialogFrame.scrollWidth - dialogFrame.clientWidth) / 2) : 0,
+        top: 0,
+        behavior: "auto",
+      });
+    });
+  };
+
+  const renderPlanDialog = (requestedIndex) => {
+    const controller = activeGallery ? galleryControllers.get(activeGallery) : null;
+    if (!controller) return;
+    const openers = [...activeGallery.querySelectorAll("[data-plan-open]")];
+    if (!openers.length) return;
+
+    activeDialogIndex = (requestedIndex + openers.length) % openers.length;
+    controller.setActive(activeDialogIndex, { center: false });
+    const opener = openers[activeDialogIndex];
+    planDialogReturnTarget = opener;
+    if (dialogImage) {
+      dialogImage.src = opener.dataset.planFull || "";
+      dialogImage.alt = opener.dataset.planAlt || "";
+      dialogImage.hidden = false;
+    }
+    if (dialogCode) {
+      dialogCode.textContent = opener.dataset.planCode || "";
+      dialogCode.hidden = !dialogCode.textContent;
+    }
+    if (dialogArea) {
+      dialogArea.textContent = opener.dataset.planArea || "";
+      dialogArea.hidden = !dialogArea.textContent;
+    }
+    if (dialogCounter) dialogCounter.textContent = `${activeDialogIndex + 1} / ${openers.length}`;
+    if (dialogPrevious) dialogPrevious.disabled = openers.length < 2;
+    if (dialogNext) dialogNext.disabled = openers.length < 2;
+  };
+
+  const openPlanDialog = (opener) => {
+    const gallery = opener.closest("[data-apartment-plan-gallery]");
+    if (!gallery) return;
+    if (typeof planDialog.showModal !== "function") return;
+    if (planDialog.open) return;
+
+    activeGallery = gallery;
+    planDialogReturnTarget = opener;
+    setPlanDialogZoom(false);
+    renderPlanDialog(Number.parseInt(opener.dataset.planIndex || "0", 10));
+    const scrollPosition = { left: window.scrollX, top: window.scrollY };
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "auto";
+    planDialog.classList.remove("is-visible", "is-closing");
+    planDialog.showModal();
+    window.scrollTo(scrollPosition.left, scrollPosition.top);
+    setModalScrollState(true);
+    requestAnimationFrame(() => {
+      planDialog.classList.add("is-visible");
+      dialogClose?.focus({ preventScroll: true });
+      document.documentElement.style.scrollBehavior = previousScrollBehavior;
+    });
+  };
+
+  const closePlanDialog = () => {
+    if (!planDialog.open || planDialog.classList.contains("is-closing")) return;
+    if (reducedMotionQuery.matches) {
+      planDialog.close();
+      return;
+    }
+    planDialog.classList.remove("is-visible");
+    planDialog.classList.add("is-closing");
+    planDialogCloseTimer = window.setTimeout(() => {
+      planDialogCloseTimer = 0;
+      if (planDialog.open) planDialog.close();
+    }, 260);
+  };
+
+  section.querySelectorAll("[data-plan-open]").forEach((opener) => {
+    opener.addEventListener("click", () => openPlanDialog(opener));
+  });
+  dialogPrevious?.addEventListener("click", () => renderPlanDialog(activeDialogIndex - 1));
+  dialogNext?.addEventListener("click", () => renderPlanDialog(activeDialogIndex + 1));
+  dialogZoom?.addEventListener("click", () => setPlanDialogZoom(dialogZoom.getAttribute("aria-pressed") !== "true"));
+  dialogClose?.addEventListener("click", closePlanDialog);
+  planDialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closePlanDialog();
+  });
+  planDialog.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    if (planDialog.classList.contains("is-actual-size") && dialogFrame?.contains(event.target)) return;
+    event.preventDefault();
+    renderPlanDialog(activeDialogIndex + (event.key === "ArrowRight" ? 1 : -1));
+  });
+  planDialog.addEventListener("pointerdown", (event) => {
+    planDialogBackdropStarted = event.target === planDialog;
+  });
+  planDialog.addEventListener("click", (event) => {
+    const shouldClose = planDialogBackdropStarted && event.target === planDialog;
+    planDialogBackdropStarted = false;
+    if (shouldClose) closePlanDialog();
+  });
+  planDialog.addEventListener("close", () => {
+    if (planDialogCloseTimer) {
+      window.clearTimeout(planDialogCloseTimer);
+      planDialogCloseTimer = 0;
+    }
+    planDialog.classList.remove("is-visible", "is-closing");
+    if (dialogImage) {
+      dialogImage.removeAttribute("src");
+      dialogImage.hidden = true;
+    }
+    setPlanDialogZoom(false);
+    setModalScrollState(false);
+    if (planDialogReturnTarget?.isConnected) {
+      requestAnimationFrame(() => planDialogReturnTarget?.focus({ preventScroll: true }));
+    }
+    activeGallery = null;
+  });
 });
 
 sliders.forEach((slider) => {
@@ -487,7 +714,6 @@ sliders.forEach((slider) => {
     cancelAnimationFrame(scrollFrame);
     scrollFrame = requestAnimationFrame(() => {
       updateSliderControls(slider);
-      apartmentControllers.get(slider)?.sync();
     });
   }, { passive: true });
 

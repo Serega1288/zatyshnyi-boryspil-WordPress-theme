@@ -9,6 +9,7 @@ yarn-error.log*
 
 database/
 plugins-archives/
+tmp/
 
 .DS_Store
 Thumbs.db

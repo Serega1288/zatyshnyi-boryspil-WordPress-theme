@@ -211,7 +211,6 @@ $footer_developer_target = isset( $footer_developer_link['target'] ) && '_blank'
 							<option><?php esc_html_e( 'Паркінг', 'project-theme' ); ?></option>
 							<option><?php esc_html_e( 'Комора', 'project-theme' ); ?></option>
 							<option><?php esc_html_e( 'Комерційне приміщення', 'project-theme' ); ?></option>
-							<option><?php esc_html_e( 'Документи', 'project-theme' ); ?></option>
 							<option><?php esc_html_e( 'Умови придбання', 'project-theme' ); ?></option>
 							<option><?php esc_html_e( 'Питання про комплекс', 'project-theme' ); ?></option>
 						</select>

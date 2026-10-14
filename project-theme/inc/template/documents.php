@@ -17,9 +17,6 @@ $intro       = (string) get_sub_field( 'intro' );
 $documents   = get_sub_field( 'documents' );
 $documents   = is_array( $documents ) ? $documents : array();
 $hint        = (string) get_sub_field( 'hint' );
-$cta_text    = (string) get_sub_field( 'cta_text' );
-$cta_interest = (string) get_sub_field( 'cta_interest' );
-$cta_context = (string) get_sub_field( 'cta_context' );
 ?>
 <section class="section documents" id="<?php echo esc_attr( $section_id ); ?>">
 	<div class="container">
@@ -76,7 +73,6 @@ $cta_context = (string) get_sub_field( 'cta_context' );
 					<button class="slider-control" type="button" data-slider-next="<?php echo esc_attr( $slider_id ); ?>" aria-controls="<?php echo esc_attr( $slider_id ); ?>" aria-label="<?php echo esc_attr__( 'Наступний документ', 'project-theme' ); ?>">→</button>
 				</div>
 			</div>
-			<button class="button button--outline" type="button" data-open-lead data-interest="<?php echo esc_attr( $cta_interest ); ?>" data-context="<?php echo esc_attr( $cta_context ); ?>"><?php echo esc_html( $cta_text ); ?></button>
 		</div>
 	</div>
 </section>
