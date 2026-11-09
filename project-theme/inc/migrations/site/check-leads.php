@@ -224,7 +224,16 @@ try {
 		'Optional Telegram topic ID does not accept the zero sentinel.'
 	);
 	$prepared = apply_filters( 'acf/prepare_field', $field );
-	$assert( is_array( $prepared ) && '' === ( $prepared['value'] ?? null ), 'Stored token is visible in the admin field.' );
+	$assert( is_array( $prepared ) && $fake_token === ( $prepared['value'] ?? null ) && 'text' === ( $prepared['type'] ?? '' ), 'Stored token is not visible to an administrator.' );
+	$legacy_field = $field;
+	$legacy_field['type'] = 'password';
+	$legacy_prepared = apply_filters( 'acf/prepare_field', $legacy_field );
+	$assert( 'text' === ( $legacy_prepared['type'] ?? '' ) && $fake_token === ( $legacy_prepared['value'] ?? null ), 'Previously imported password fields were not updated at render time.' );
+	$assert( '' === apply_filters( 'acf/load_value', '', 'option', $field ), 'Stored token leaked through generic ACF value loading.' );
+	ob_start();
+	acf_render_field_wrap( $field );
+	$token_html = ob_get_clean();
+	$assert( str_contains( $token_html, esc_attr( $fake_token ) ) && str_contains( $token_html, 'type="text"' ), 'The admin input did not render the stored token as text.' );
 	apply_filters( 'acf/update_value', '', 'option', $field );
 	$assert( $fake_token === get_option( 'zb_notify_token' ), 'An empty token field did not preserve the stored secret.' );
 	$clear_field = acf_get_field( 'field_zb_notify_clear_token' );
