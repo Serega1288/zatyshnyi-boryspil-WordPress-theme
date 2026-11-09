@@ -57,7 +57,7 @@ function project_theme_load_notification_topic_field( $field ) {
 add_filter( 'acf/load_field/key=field_zb_notify_topic', 'project_theme_load_notification_topic_field' );
 
 /**
- * Hide technical fields from non-administrators and never refill the token.
+ * Hide technical fields from non-administrators and show the stored token to administrators.
  *
  * @param mixed $field ACF field definition.
  * @return mixed
@@ -70,11 +70,12 @@ function project_theme_prepare_notification_field( $field ) {
 		return false;
 	}
 
-	if ( 'zb_notify_token' === ( $field['name'] ?? '' ) ) {
-		$field['value']       = '';
-		$field['placeholder'] = get_option( 'zb_notify_token' )
-			? __( 'Збережено. Порожнє поле залишить токен без змін.', 'project-theme' )
-			: __( 'Введіть токен Telegram-бота', 'project-theme' );
+	if ( 'field_zb_notify_token' === ( $field['key'] ?? '' ) ) {
+		// Override imported ACF password fields without requiring a database migration.
+		$field['type']         = 'text';
+		$field['value']        = (string) get_option( 'zb_notify_token', '' );
+		$field['placeholder']  = __( 'Введіть токен Telegram-бота', 'project-theme' );
+		$field['instructions'] = __( 'Збережений токен видимий адміністраторам у налаштуваннях теми. Щоб замінити його, введіть новий; порожнє поле залишає поточний токен. Не передавайте токен стороннім.', 'project-theme' );
 	}
 
 	return $field;

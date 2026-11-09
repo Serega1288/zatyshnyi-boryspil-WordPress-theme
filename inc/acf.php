@@ -531,8 +531,8 @@ function project_theme_notifications_group(): array {
 				'key'          => 'field_zb_notify_token',
 				'name'         => 'zb_notify_token',
 				'label'        => __( 'Токен Telegram-бота', 'project-theme' ),
-				'type'         => 'password',
-				'instructions' => __( 'Після збереження токен не показується. Щоб замінити його, введіть новий; порожнє поле залишає поточний токен.', 'project-theme' ),
+				'type'         => 'text',
+				'instructions' => __( 'Збережений токен видимий адміністраторам у налаштуваннях теми. Щоб замінити його, введіть новий; порожнє поле залишає поточний токен. Не передавайте токен стороннім.', 'project-theme' ),
 				'wrapper'      => array( 'width' => '75' ),
 			),
 			array(
