@@ -474,29 +474,28 @@ add_filter( 'manage_zb_lead_posts_columns', 'project_theme_lead_admin_columns' )
  * Render private lead inbox column values.
  */
 function project_theme_lead_admin_column( string $column, int $lead_id ): void {
+	echo nl2br( esc_html( project_theme_lead_column_value( $column, $lead_id ) ) );
+}
+
+/** Return the same plain-text values for the inbox and its CSV export. */
+function project_theme_lead_column_value( string $column, int $lead_id ): string {
 	$data = get_post_meta( $lead_id, '_zb_lead_data', true );
 	if ( ! is_array( $data ) ) {
-		return;
+		return '';
 	}
-
 	if ( 'lead_phone' === $column ) {
-		echo esc_html( (string) ( $data['phone'] ?? '' ) );
+		return (string) ( $data['phone'] ?? '' );
 	} elseif ( 'lead_interest' === $column ) {
-		echo esc_html( (string) ( $data['interest'] ?? '' ) );
+		return (string) ( $data['interest'] ?? '' );
 	} elseif ( 'lead_context' === $column ) {
 		$context   = (string) ( $data['request_context'] ?? '' );
 		$apartment = (string) ( $data['apartment_type'] ?? '' );
-		echo esc_html( $context );
-		if ( '' !== $context && '' !== $apartment ) {
-			echo '<br>';
-		}
-		if ( '' !== $apartment ) {
-			echo esc_html( $apartment );
-		}
+		return $context . ( '' !== $context && '' !== $apartment ? "\n" : '' ) . $apartment;
 	} elseif ( 'lead_status' === $column ) {
 		$status = (string) get_post_meta( $lead_id, '_zb_lead_status', true );
-		echo esc_html( project_theme_lead_statuses()[ $status ] ?? project_theme_lead_statuses()['new'] );
+		return project_theme_lead_statuses()[ $status ] ?? project_theme_lead_statuses()['new'];
 	}
+	return '';
 }
 add_action( 'manage_zb_lead_posts_custom_column', 'project_theme_lead_admin_column', 10, 2 );
 

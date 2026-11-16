@@ -1476,3 +1476,19 @@ msgstr "Наступний документ"
 #. Template Name of the theme
 msgid "Constructor"
 msgstr "Constructor"
+
+#: inc/lead-export.php
+msgid "Завантажити всі заявки (CSV)"
+msgstr "Завантажити всі заявки (CSV)"
+
+#: inc/lead-export.php
+msgid "Усі заявки з усіх сторінок, без кошика. Пошук і фільтри не враховуються."
+msgstr "Усі заявки з усіх сторінок, без кошика. Пошук і фільтри не враховуються."
+
+#: inc/lead-export.php
+msgid "Недостатньо прав для експорту заявок."
+msgstr "Недостатньо прав для експорту заявок."
+
+#: inc/lead-export.php
+msgid "Не вдалося створити CSV."
+msgstr "Не вдалося створити CSV."

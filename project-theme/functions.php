@@ -14,5 +14,6 @@ require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/enqueue.php';
 require_once get_template_directory() . '/inc/acf.php';
 require_once get_template_directory() . '/inc/leads.php';
+require_once get_template_directory() . '/inc/lead-export.php';
 require_once get_template_directory() . '/inc/lead-notifications.php';
 require_once get_template_directory() . '/inc/dashboard.php';
