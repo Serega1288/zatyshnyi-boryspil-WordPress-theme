@@ -10,16 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /** Add a native admin button, independent of the list's filters and pagination. */
-function project_theme_lead_export_button(): void {
+function project_theme_lead_export_button( string $which ): void {
 	$screen = get_current_screen();
-	if ( ! $screen || 'edit-zb_lead' !== $screen->id || ! current_user_can( 'manage_options' ) ) {
+	if ( 'top' !== $which || ! $screen || 'edit-zb_lead' !== $screen->id || ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 	$url = wp_nonce_url( admin_url( 'admin-post.php?action=zb_export_leads' ), 'zb_export_leads' );
-	echo '<div class="notice notice-info inline"><p><a class="button" href="' . esc_url( $url ) . '" aria-describedby="zb-export-description">' . esc_html__( 'Завантажити всі заявки (CSV)', 'project-theme' ) . '</a> ';
-	echo '<span id="zb-export-description">' . esc_html__( 'Усі заявки з усіх сторінок, без кошика. Пошук і фільтри не враховуються.', 'project-theme' ) . '</span></p></div>';
+	$description = __( 'Усі заявки з усіх сторінок, без кошика. Пошук і фільтри не враховуються.', 'project-theme' );
+	echo '<div class="alignleft actions"><a class="button" href="' . esc_url( $url ) . '" title="' . esc_attr( $description ) . '" aria-describedby="zb-export-description">' . esc_html__( 'Завантажити всі заявки (CSV)', 'project-theme' ) . '</a>';
+	echo '<span class="screen-reader-text" id="zb-export-description">' . esc_html( $description ) . '</span></div>';
 }
-add_action( 'all_admin_notices', 'project_theme_lead_export_button' );
+add_action( 'manage_posts_extra_tablenav', 'project_theme_lead_export_button' );
 
 /**
  * Treat formula-like values as text, including whitespace-prefixed formulas.
